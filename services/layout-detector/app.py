@@ -1,4 +1,4 @@
-import argparse, io
+import argparse, io, logging, os
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from ultralytics import YOLO
@@ -11,7 +11,10 @@ CLASSES = ["text","title","list","table","figure"]
 @app.on_event("startup")
 async def load_model():
     global model, args
+    logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
+    log=logging.getLogger('layout-detector')
     model = YOLO(args.weights)
+    log.info("model_loaded weights=%s", args.weights)
 
 @app.post("/detect")
 async def detect(file: UploadFile = File(...)):
@@ -24,6 +27,7 @@ async def detect(file: UploadFile = File(...)):
         cls = int(b.cls[0].item())
         conf = float(b.conf[0].item())
         bboxes.append({"bbox":[x1,y1,x2-x1,y2-y1], "cls": CLASSES[cls] if cls < len(CLASSES) else str(cls), "conf": conf})
+    logging.getLogger('layout-detector').info("detect boxes=%d", len(bboxes))
     return JSONResponse({"bboxes": bboxes})
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
-import os, json, pathlib, requests, cv2, numpy as np
-from services.ingest_worker.common.db import IMAGE, META
-from services.ingest_worker.common.utils import sha256_file, save_thumbnail
-from services.ingest_worker.pipelines.text import ingest_markdown
+import os, json, pathlib, requests, cv2, numpy as np, logging
+from common.db import IMAGE, META
+from common.utils import sha256_file, save_thumbnail
+from pipelines.text import ingest_markdown
+from domains.finanzamt import integrate_finanzamt
 
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
 QWEN=os.environ.get('QWEN_URL','http://qwen-vl-ocr:8001')
@@ -10,15 +11,18 @@ CLIP=os.environ.get('CLIP_URL','http://clip-embed:8003')
 
 def _layout(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{LAYOUT}/detect", files={'file': f}); r.raise_for_status(); return r.json()['bboxes']
+        r=requests.post(f"{LAYOUT}/detect", files={'file': f}, timeout=30)
+        r.raise_for_status(); return r.json()['bboxes']
 
 def _ocr(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{QWEN}/ocr", files={'file': f}, data={'mode':'text'}); r.raise_for_status(); return r.json()['text']
+        r=requests.post(f"{QWEN}/ocr", files={'file': f}, data={'mode':'text'}, timeout=120)
+        r.raise_for_status(); return r.json()['text']
 
 def _clip(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{CLIP}/embed_image", files={'file': f}); r.raise_for_status(); return r.json()['vector']
+        r=requests.post(f"{CLIP}/embed_image", files={'file': f}, timeout=30)
+        r.raise_for_status(); return r.json()['vector']
 
 def _heuristic_sketch(img_bgr, text_boxes):
     mask = np.ones(img_bgr.shape[:2], dtype=np.uint8)*255
@@ -58,7 +62,7 @@ def ingest_image(path: str):
             'page_sha': sha256_file(path),
             'primary_text_id': None,
             'nearest_heading': None,
-            'clip_embedding': vec,
+            'embedding': vec,
         }
         rec.update(META)
         image_records.append(rec)
@@ -76,4 +80,8 @@ def ingest_image(path: str):
     with open(md_path,'w',encoding='utf-8') as f:
         f.write('---\n'); f.write(json.dumps(fm, ensure_ascii=False, indent=2)); f.write('\n---\n\n')
         f.write('# OCR\n\n'); f.write(text.strip())
+    try:
+        integrate_finanzamt(md_path, text)
+    except Exception:
+        logging.getLogger('ingest-vision').warning('finanzamt_integration_failed path=%s', md_path, exc_info=True)
     ingest_markdown(md_path)

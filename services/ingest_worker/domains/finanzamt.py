@@ -1,6 +1,6 @@
 import re, os, json
 from datetime import datetime, timedelta
-from services.ingest_worker.common.ics import make_ics
+from common.ics import make_ics
 
 DATE_RX=r"(?:(?:31|30|[0-2]\d)\.(?:0\d|1[0-2])\.\d{4})"
 AMOUNT_RX=r"([+-]?\d{1,3}(?:\.\d{3})*,\d{2})\s*(?:EUR|€)"

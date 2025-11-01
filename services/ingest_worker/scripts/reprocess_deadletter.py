@@ -11,3 +11,4 @@ for entry in os.scandir(DEAD):
     print(f"→ {src} -> {dst}")
     shutil.move(src, dst); cnt+=1
 print(f"Re-queued {cnt} file(s)")
+

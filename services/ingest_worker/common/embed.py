@@ -8,3 +8,4 @@ def get_text_embedder():
 def embed_texts(texts):
     emb = get_text_embedder()
     return emb.encode(texts, normalize_embeddings=True).tolist()
+

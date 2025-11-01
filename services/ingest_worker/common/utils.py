@@ -27,3 +27,4 @@ def split_markdown_sections(text: str):
     if current:
         sections.append((header, "\n".join(current).strip()))
     return sections
+

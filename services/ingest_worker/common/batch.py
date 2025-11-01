@@ -21,3 +21,4 @@ class BatchProcessor:
         for r,e in zip(recs, embs): r['embedding']=e
         self.table.add(recs)
         self.buf=[]; self.last=time.time()
+

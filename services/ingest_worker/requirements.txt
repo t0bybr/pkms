@@ -9,3 +9,4 @@ lancedb==0.7.3
 pyarrow==17.0.0
 sentence-transformers==3.0.1
 rank-bm25==0.2.2
+

@@ -1,5 +1,8 @@
-import os, json, time, hashlib, sqlite3
-from fastapi import FastAPI, Query, Header, HTTPException, Response
+import os, json, time, hashlib, sqlite3, logging
+from collections import deque
+from fastapi import FastAPI, Query, Header, HTTPException, Response, Request
+from pydantic import BaseModel
+from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
 import lancedb
 from sentence_transformers import SentenceTransformer
@@ -10,6 +13,7 @@ from hybrid import HybridRetriever, cache
 
 API_KEY=os.environ.get('API_KEY')
 OLLAMA=os.environ.get('OLLAMA_URL','http://ollama:11434')
+CLIP_URL=os.environ.get('CLIP_URL','http://clip-embed:8003')
 INDEX_DIR=os.environ.get('INDEX_DIR','/app/index')
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
 REDIS_HOST=os.environ.get('REDIS_HOST','redis')
@@ -18,6 +22,11 @@ REDIS_PORT=int(os.environ.get('REDIS_PORT','6379'))
 app=FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
+log = logging.getLogger("rag-api")
+logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
+if API_KEY == 'change_me_local_only':
+    log.warning("weak API key in use; set API_KEY in environment for production")
+
 DB=lancedb.connect(INDEX_DIR)
 TEXT = DB.open_table('text_v2') if 'text_v2' in DB.table_names() else DB.open_table('text_v1')
 CODE = DB.open_table('code_v2') if 'code_v2' in DB.table_names() else (DB.open_table('code_v1') if 'code_v1' in DB.table_names() else None)
@@ -25,7 +34,7 @@ IMAGE= DB.open_table('image_v2') if 'image_v2' in DB.table_names() else (DB.open
 EMB=SentenceTransformer('BAAI/bge-m3')
 
 hybrid = HybridRetriever(TEXT)
-metrics = {"queries_total":0, "latencies":[]}
+metrics = {"queries_total":0, "latencies": deque(maxlen=1000)}
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
 
 def auth(x_api_key: str = Header(None)):
@@ -38,7 +47,7 @@ def health():
 
 @app.get('/metrics')
 def prom():
-    arr=sorted(metrics['latencies']); n=len(arr)
+    arr=sorted(list(metrics['latencies'])); n=len(arr)
     p50=arr[int(0.5*n)] if n else 0; p95=arr[int(0.95*n)] if n else 0
     body = f"queries_total {metrics['queries_total']}\nquery_latency_ms_p50 {p50}\nquery_latency_ms_p95 {p95}\n"
     return Response(body, media_type='text/plain')
@@ -55,15 +64,17 @@ def cache_stats(_=auth()):
 
 @app.post('/cache/flush')
 def cache_flush(_=auth()):
+    log.info("cache_flush triggered")
     r.flushall()
     return {"ok": True}
 
 @app.post('/bm25/rebuild')
 def bm25_rebuild(_=auth()):
+    log.info("bm25 rebuild triggered")
     hybrid.rebuild()
     return {"ok": True}
 
-@app.get('/ingest/status')
+@app.get('/ingest/status', response_model=IngestStatus)
 def ingest_status(_=auth()):
     state_db=os.path.join(INDEX_DIR,'ingest_state.sqlite')
     processed=retries=0
@@ -78,9 +89,26 @@ def ingest_status(_=auth()):
     dead_cnt=sum(1 for _ in os.scandir(dead_dir)) if os.path.isdir(dead_dir) else 0
     return {'processed': processed, 'retry_total': retries, 'deadletter_count': dead_cnt}
 
-@app.get('/query')
-def query(q: str = Query(...), k: int = 6, _=auth()):
+def _check_rate_limit(req: Request):
+    try:
+        limit=int(os.environ.get('RATE_LIMIT_PER_MIN','60'))
+        window=60
+        ip=(req.client.host if req and req.client else 'unknown')
+        key=f"rl:{ip}"
+        cnt=r.incr(key)
+        if cnt==1:
+            r.expire(key, window)
+        if cnt>limit:
+            raise HTTPException(429, "rate limit exceeded")
+    except HTTPException:
+        raise
+    except Exception:
+        pass
+
+@app.get('/query', response_model=QueryResponse, response_model_exclude_none=True)
+def query(q: str = Query(...), k: int = 6, request: Request = None, _=auth()):
     t0=time.perf_counter(); metrics['queries_total']+=1
+    _check_rate_limit(request)
     cache_key=f"query:{hashlib.md5(q.encode()).hexdigest()}:{k}"
     cached=cache.get(cache_key)
     if cached:
@@ -91,7 +119,17 @@ def query(q: str = Query(...), k: int = 6, _=auth()):
     text_hits_sparse = hybrid.search(q, k=50)
     code_hits = CODE.search(qvec).limit(50).to_list() if CODE else []
     wants_sketch = any(w in q.lower() for w in ['skizze','diagramm','ablauf','schema','block'])
-    image_hits = IMAGE.search(qvec).limit(30).to_list() if (IMAGE and wants_sketch) else []
+    image_hits = []
+    if IMAGE and wants_sketch:
+        try:
+            # Use CLIP text encoder to match CLIP image embeddings
+            resp = requests.post(f"{CLIP_URL}/embed_text", data={'text': q}, timeout=20)
+            resp.raise_for_status()
+            clip_vec = resp.json().get('vector')
+            if clip_vec:
+                image_hits = IMAGE.search(clip_vec).limit(30).to_list()
+        except Exception:
+            image_hits = []
 
     id2rec={}
     def tag(prefix, lst):
@@ -118,9 +156,41 @@ def query(q: str = Query(...), k: int = 6, _=auth()):
         resp = requests.post(f"{OLLAMA}/api/generate", json={"model":"llama3.1:8b-instruct-q4_K_M","prompt":prompt, "stream":False}, timeout=120)
         answer = resp.json().get('response','') if resp.ok else "[LLM-Fehler]"
     except Exception as e:
+        log.exception("LLM request failed")
         answer = f"[LLM-Fehler: {e}]"
 
-    result_json={"answer": answer, "hits": results}
+    def _sanitize(rec: dict):
+        r=dict(rec)
+        # Drop heavy fields
+        r.pop('embedding', None)
+        r.pop('clip_embedding', None)
+        # Trim bodies
+        if 'text' in r and isinstance(r['text'], str):
+            r['text']=r['text'][:800]
+        if 'code' in r and isinstance(r['code'], str):
+            r['code']=r['code'][:800]
+        return r
+    result_json={"answer": answer, "hits": [_sanitize(r_) for r_ in results]}
     cache.setex(cache_key, 3600, json.dumps(result_json))
     metrics['latencies'].append((time.perf_counter()-t0)*1000)
     return result_json
+class Hit(BaseModel):
+    id: Optional[str] = None
+    path: Optional[str] = None
+    title: Optional[str] = None
+    text: Optional[str] = None
+    code: Optional[str] = None
+    path_crop: Optional[str] = None
+    bbox: Optional[List[float]] = None
+    page_sha: Optional[str] = None
+    primary_text_id: Optional[str] = None
+    nearest_heading: Optional[str] = None
+
+class QueryResponse(BaseModel):
+    answer: str
+    hits: List[Hit]
+
+class IngestStatus(BaseModel):
+    processed: int
+    retry_total: int
+    deadletter_count: int

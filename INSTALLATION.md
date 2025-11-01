@@ -18,8 +18,10 @@ cp .env.example .env
 
 ## 2) Build & Start
 ```bash
-docker compose build
-docker compose up -d
+# mit Docker:
+docker compose build && docker compose up -d
+# oder mit Podman:
+podman compose build && podman compose up -d
 ```
 
 ## 3) Smoke-Tests
@@ -32,8 +34,14 @@ docker compose up -d
 - BM25 rebuild: `POST /bm25/rebuild`
 - Reprocess Dead-Letter:
 ```bash
-docker compose exec ingest-worker python services/ingest-worker/scripts/reprocess_deadletter.py
+docker compose exec ingest-worker python services/ingest_worker/scripts/reprocess_deadletter.py
+# mit Podman entsprechend:
+podman compose exec ingest-worker python services/ingest_worker/scripts/reprocess_deadletter.py
 ```
+
+## 6) Optionen
+- `RATE_LIMIT_PER_MIN`: einfache IP-Rate-Limitierung für `/query` (Default: 60)
+- `LOG_LEVEL`: `DEBUG|INFO|WARN|ERROR` für alle Services (Default: INFO)
 
 ## 5) Backups
 - laufen täglich, Ziel: `/pkms/backups/pkms`. Restore siehe README.

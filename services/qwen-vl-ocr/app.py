@@ -1,4 +1,4 @@
-import argparse, io
+import argparse, io, logging, os
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from PIL import Image
@@ -32,6 +32,8 @@ qwen: Optional[QwenVLGateway] = None
 @app.on_event("startup")
 async def init_model():
     global qwen, args
+    logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
+    logging.getLogger('qwen-vl-ocr').info("loading model id=%s", args.model)
     qwen = QwenVLGateway(args.model)
 
 @app.post("/ocr")
@@ -39,6 +41,7 @@ async def ocr_endpoint(file: UploadFile = File(...), mode: str = Form("text")):
     img_bytes = await file.read()
     img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
     result = qwen.ocr(img, mode=mode)
+    logging.getLogger('qwen-vl-ocr').info("ocr len=%d", len(result.get('text','')))
     return JSONResponse(result)
 
 if __name__ == "__main__":

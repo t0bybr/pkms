@@ -9,3 +9,4 @@ def make_ics(summary: str, dt: datetime, description: str = "", location: str = 
            f"DESCRIPTION:{description}\nLOCATION:{location}\nUID:{uid}\n"
            "END:VEVENT\nEND:VCALENDAR\n")
     return ics
+

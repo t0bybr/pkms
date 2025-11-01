@@ -1,4 +1,4 @@
-import argparse, tempfile, subprocess, os
+import argparse, tempfile, subprocess, os, logging
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 import whisper
@@ -10,6 +10,8 @@ model = None
 def load_model():
     global model
     model = whisper.load_model("small")
+    logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
+    logging.getLogger('speech-to-text').info("model_loaded name=small")
 
 def _to_wav(bytes_buf: bytes) -> str:
     fd, raw = tempfile.mkstemp(suffix=".bin"); os.write(fd, bytes_buf); os.close(fd)
@@ -24,7 +26,9 @@ async def transcribe(file: UploadFile = File(...)):
     wav = _to_wav(data)
     try:
         result = model.transcribe(wav, language="de")
-        return JSONResponse({"text": result.get("text"," ").strip()})
+        text = result.get("text"," ").strip()
+        logging.getLogger('speech-to-text').info("transcribe len=%d", len(text))
+        return JSONResponse({"text": text})
     finally:
         if os.path.exists(wav): os.remove(wav)
 

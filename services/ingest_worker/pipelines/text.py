@@ -1,7 +1,7 @@
 import os, pathlib
-from services.ingest_worker.common.utils import split_markdown_sections
-from services.ingest_worker.common.db import TEXT, META
-from services.ingest_worker.common.batch import BatchProcessor
+from common.utils import split_markdown_sections
+from common.db import TEXT, META
+from common.batch import BatchProcessor
 
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
 

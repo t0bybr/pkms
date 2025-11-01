@@ -7,3 +7,4 @@ COPY . .
 EXPOSE 9000
 USER 1000:1000
 CMD ["python","worker.py"]
+

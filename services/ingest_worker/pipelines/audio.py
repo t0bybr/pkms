@@ -1,15 +1,14 @@
 import os, json, pathlib, requests, time
-from services.ingest_worker.common.db import TEXT
-from services.ingest_worker.common.batch import BatchProcessor
-from services.ingest_worker.common.db import META
-from services.ingest_worker.common.embed import embed_texts
+from common.db import TEXT, META
+from common.batch import BatchProcessor
+from common.embed import embed_texts
 
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
 STT_URL=os.environ.get('STT_URL','http://speech-to-text:8004')
 
 def ingest_audio(path: str):
     with open(path,'rb') as f:
-        resp = requests.post(f"{STT_URL}/transcribe", files={'file': f})
+        resp = requests.post(f"{STT_URL}/transcribe", files={'file': f}, timeout=180)
     resp.raise_for_status()
     text = resp.json().get('text','').strip()
     if not text: return

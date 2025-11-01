@@ -1,4 +1,4 @@
-import argparse, io, torch
+import argparse, io, torch, logging, os
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 from PIL import Image
@@ -10,8 +10,10 @@ model=None; preprocess=None; tokenizer=None; device="cuda" if torch.cuda.is_avai
 @app.on_event("startup")
 async def init():
     global model, preprocess, tokenizer, args
+    logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
     model, _, preprocess = open_clip.create_model_and_transforms(args.model, pretrained=args.pretrained, device=device)
     tokenizer = open_clip.get_tokenizer(args.model)
+    logging.getLogger('clip-embed').info("model_ready name=%s pretrained=%s device=%s", args.model, args.pretrained, device)
 
 @app.post("/embed_image")
 async def embed_image(file: UploadFile = File(...)):
@@ -21,7 +23,9 @@ async def embed_image(file: UploadFile = File(...)):
         im = preprocess(img).unsqueeze(0).to(device)
         feats = model.encode_image(im)
         feats = feats / feats.norm(dim=-1, keepdim=True)
-    return JSONResponse({"vector": feats.cpu().tolist()[0]})
+    vec = feats.cpu().tolist()[0]
+    logging.getLogger('clip-embed').info("embed_image dim=%d", len(vec))
+    return JSONResponse({"vector": vec})
 
 @app.post("/embed_text")
 async def embed_text(text: str = Form(...)):
@@ -29,7 +33,9 @@ async def embed_text(text: str = Form(...)):
         tok = tokenizer([text]).to(device)
         feats = model.encode_text(tok)
         feats = feats / feats.norm(dim=-1, keepdim=True)
-    return JSONResponse({"vector": feats.cpu().tolist()[0]})
+    vec = feats.cpu().tolist()[0]
+    logging.getLogger('clip-embed').info("embed_text dim=%d", len(vec))
+    return JSONResponse({"vector": vec})
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

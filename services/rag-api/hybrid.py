@@ -12,7 +12,8 @@ class HybridRetriever:
     def __init__(self, db_text):
         self.db_text=db_text
         self.bm25=None
-        self.cache_path=os.path.join(INDEX_DIR,'bm25_index.pkl')
+        # Write BM25 cache to a writable path (rag-api runs read-only mounts)
+        self.cache_path=os.path.join('/tmp','bm25_index.pkl')
         self._load_or_build()
 
     def _load_or_build(self):

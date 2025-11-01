@@ -1,6 +1,6 @@
 import os, pathlib
 from pdf2image import convert_from_path
-from services.ingest_worker.pipelines.vision import ingest_image
+from pipelines.vision import ingest_image
 
 DATA_DIR = os.environ.get('DATA_DIR','/app/data')
 

@@ -50,3 +50,4 @@ def move_dead(path:str):
     dst=os.path.join(DEAD_DIR, pathlib.Path(path).name)
     shutil.move(path, dst)
     return dst
+

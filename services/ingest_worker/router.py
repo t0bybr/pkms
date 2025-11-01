@@ -1,9 +1,9 @@
 import pathlib
-from services.ingest_worker.pipelines.text import ingest_markdown
-from services.ingest_worker.pipelines.code import ingest_code
-from services.ingest_worker.pipelines.vision import ingest_image
-from services.ingest_worker.pipelines.audio import ingest_audio
-from services.ingest_worker.pipelines.pdf import ingest_pdf
+from pipelines.text import ingest_markdown
+from pipelines.code import ingest_code
+from pipelines.vision import ingest_image
+from pipelines.audio import ingest_audio
+from pipelines.pdf import ingest_pdf
 
 IMAGE_EXT={'.png','.jpg','.jpeg'}
 AUDIO_EXT={'.wav','.mp3','.m4a'}

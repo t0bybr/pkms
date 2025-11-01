@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   ingest-worker:
-    build: ./services/ingest-worker
+    build: ./services/ingest_worker
     environment:
       - QWEN_URL=http://qwen-vl-ocr:8001
       - LAYOUT_URL=http://layout-detector:8002
@@ -83,6 +83,7 @@ services:
     ports: ["127.0.0.1:8080:8080"]
     environment:
       - OLLAMA_URL=http://ollama:11434
+      - CLIP_URL=http://clip-embed:8003
       - INDEX_DIR=/app/index
       - DATA_DIR=/app/data
       - API_KEY=${API_KEY:-change_me_local_only}
@@ -94,10 +95,9 @@ services:
     user: "1000:1000"
     read_only: true
     depends_on:
-      redis:
-        condition: service_healthy
+      - redis
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
       interval: 30s
       timeout: 3s
       retries: 3

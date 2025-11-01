@@ -1,6 +1,6 @@
 import pathlib
-from services.ingest_worker.common.db import CODE, META
-from services.ingest_worker.common.batch import BatchProcessor
+from common.db import CODE, META
+from common.batch import BatchProcessor
 
 batch = BatchProcessor(
     table=CODE,
