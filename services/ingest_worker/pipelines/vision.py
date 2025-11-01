@@ -1,5 +1,5 @@
-import os, json, pathlib, requests, cv2, numpy as np, logging
-from common.db import IMAGE, META
+import os, json, pathlib, requests, cv2, numpy as np, logging, re, hashlib
+from common.db import IMAGE, IMAGE_META
 from common.utils import sha256_file, save_thumbnail, http_post, ensure_free_space
 from pipelines.text import ingest_markdown
 from domains.finanzamt import integrate_finanzamt
@@ -50,7 +50,11 @@ def ingest_image(path: str):
         fig_boxes=_heuristic_sketch(img, text_boxes)
     image_records=[]
     base_name = pathlib.Path(path).name
-    base_stem = pathlib.Path(base_name).stem
+    base_stem_raw = pathlib.Path(base_name).stem
+    base_stem = re.sub(r'[^\w\-.]','_', base_stem_raw)
+    if base_stem in ('', '.', '..'):
+        base_stem = f"unnamed_{hashlib.sha256(path.encode()).hexdigest()[:8]}"
+    base_stem = base_stem[:200]
     for b in fig_boxes:
         x,y,w,h=map(int,b['bbox'])
         crop=img[y:y+h,x:x+w]
@@ -67,7 +71,7 @@ def ingest_image(path: str):
             'nearest_heading': None,
             'embedding': vec,
         }
-        rec.update(META)
+        rec.update(IMAGE_META)
         image_records.append(rec)
     if image_records:
         IMAGE.add(image_records)

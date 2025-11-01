@@ -1,5 +1,5 @@
 import pathlib
-from common.db import CODE, META
+from common.db import CODE, CODE_META
 from common.batch import BatchProcessor
 
 batch = BatchProcessor(
@@ -22,6 +22,6 @@ def ingest_code(path: str):
         if ch.strip(): chunks.append(ch)
     for ch in chunks:
         rec={'path': path, 'code': ch}
-        rec.update(META)
+        rec.update(CODE_META)
         batch.add(rec)
     batch.flush()

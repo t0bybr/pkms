@@ -124,7 +124,8 @@ def query(q: str = Query(...), k: int = 6, request: Request = None, _=auth()):
     if IMAGE and wants_sketch:
         try:
             # Use CLIP text encoder to match CLIP image embeddings
-            resp = requests.post(f"{CLIP_URL}/embed_text", data={'text': q}, timeout=20)
+            headers = {'X-API-Key': API_KEY} if API_KEY else {}
+            resp = requests.post(f"{CLIP_URL}/embed_text", data={'text': q}, headers=headers, timeout=20)
             resp.raise_for_status()
             clip_vec = resp.json().get('vector')
             if clip_vec:

@@ -1,4 +1,4 @@
-import re, os, json
+import re, os, json, logging
 from datetime import datetime, timedelta
 from common.ics import make_ics
 
@@ -29,13 +29,21 @@ def parse_finanzamt(text: str):
 def integrate_finanzamt(md_path: str, ocr_text: str):
     meta=parse_finanzamt(ocr_text)
     if not meta: return
-    with open(md_path,'r+',encoding='utf-8') as f:
-        content=f.read()
-        parts=content.split('---\n')
-        data=json.loads(parts[1])
-        data.update({'doc_domain':'finanzamt', **meta})
-        parts[1]=json.dumps(data, ensure_ascii=False, indent=2)+"\n"
-        f.seek(0); f.write('---\n'.join(parts)); f.truncate()
+    try:
+        with open(md_path,'r+',encoding='utf-8') as f:
+            content=f.read()
+            parts=content.split('---\n')
+            if len(parts) < 3:
+                raise ValueError('invalid frontmatter')
+            data=json.loads(parts[1])
+            if not isinstance(data, dict):
+                raise ValueError('frontmatter must be dict')
+            data.update({'doc_domain':'finanzamt', **meta})
+            parts[1]=json.dumps(data, ensure_ascii=False, indent=2)+"\n"
+            f.seek(0); f.write('---\n'.join(parts)); f.truncate()
+    except (json.JSONDecodeError, ValueError, IndexError) as e:
+        logging.getLogger('ingest-finanzamt').warning('frontmatter_update_failed path=%s err=%s', md_path, e)
+        return
     if meta.get('einspruchsfrist_bis'):
         dt=datetime.strptime(meta['einspruchsfrist_bis'],'%Y-%m-%d')
         ics=make_ics('Einspruchsfrist Finanzamt', dt, description=os.path.basename(md_path))

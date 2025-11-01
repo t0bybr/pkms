@@ -1,6 +1,6 @@
 import os, pathlib
 from common.utils import split_markdown_sections
-from common.db import TEXT, META
+from common.db import TEXT, TEXT_META
 from common.batch import BatchProcessor
 
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
@@ -19,6 +19,6 @@ def ingest_markdown(path: str):
     for header, body in sections:
         if not body.strip(): continue
         rec={'path': path, 'title': header or pathlib.Path(path).stem, 'text': body}
-        rec.update(META)
+        rec.update(TEXT_META)
         batch.add(rec)
     batch.flush()

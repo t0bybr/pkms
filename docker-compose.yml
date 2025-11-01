@@ -9,6 +9,13 @@ services:
     volumes:
       - ${MODELS:-/pkms/models}/llm:/root/.ollama
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 12g
+        reservations:
+          memory: 4g
 
   qwen-vl-ocr:
     build: ./services/qwen-vl-ocr
@@ -22,6 +29,13 @@ services:
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16g
+        reservations:
+          memory: 8g
 
   layout-detector:
     build: ./services/layout-detector
@@ -34,6 +48,13 @@ services:
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4g
+        reservations:
+          memory: 2g
 
   clip-embed:
     build: ./services/clip-embed
@@ -46,6 +67,13 @@ services:
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8g
+        reservations:
+          memory: 4g
 
   speech-to-text:
     build: ./services/speech-to-text
@@ -57,6 +85,13 @@ services:
       - API_KEY=${API_KEY:-change_me_local_only}
     user: "1000:1000"
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8g
+        reservations:
+          memory: 4g
 
   ingest-worker:
     build: ./services/ingest_worker
@@ -78,6 +113,13 @@ services:
       - clip-embed
       - speech-to-text
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4g
+        reservations:
+          memory: 2g
 
   redis:
     image: redis:7-alpine
@@ -93,6 +135,13 @@ services:
       interval: 30s
       timeout: 3s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512m
+        reservations:
+          memory: 256m
 
   rag-api:
     build: ./services/rag-api
@@ -119,6 +168,13 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2g
+        reservations:
+          memory: 1g
 
   dashboard:
     image: nginx:alpine
@@ -126,6 +182,13 @@ services:
     volumes:
       - ./services/dashboard:/usr/share/nginx/html:ro
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256m
+        reservations:
+          memory: 128m
 
   backup:
     build: ./services/backup
@@ -139,6 +202,13 @@ services:
       - ${INDEX:-/pkms/index}:/index:ro
       - /pkms/backups:/backups
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512m
+        reservations:
+          memory: 256m
 
 volumes:
   redis_data:

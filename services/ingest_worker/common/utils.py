@@ -2,13 +2,17 @@ import hashlib, os, re, time, shutil
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 
-import requests
+import requests, os
 
-def http_post(url, *, files=None, data=None, json=None, timeout=30, retries=3, backoff=0.5):
+def http_post(url, *, files=None, data=None, json=None, timeout=30, retries=3, backoff=0.5, headers=None):
     last_err=None
+    api_key=os.environ.get('API_KEY')
+    base_headers={'X-API-Key': api_key} if api_key else {}
+    if headers:
+        base_headers.update(headers)
     for i in range(retries):
         try:
-            resp = requests.post(url, files=files, data=data, json=json, timeout=timeout)
+            resp = requests.post(url, files=files, data=data, json=json, headers=base_headers, timeout=timeout)
             resp.raise_for_status()
             return resp
         except Exception as e:

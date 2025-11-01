@@ -58,3 +58,5 @@ podman compose exec ingest-worker python services/ingest_worker/scripts/migrate_
 - `MAX_UPLOAD_MB`: Upload-Größenlimit in MB (Default: 10)
 - `MAX_IMAGE_PIXELS`: Limit für Bildgröße (Pillow) (Default: 178956970)
 - `MIN_FREE_MB`: Mindest-freier Speicher vor großen Writes (Default: 100)
+- `IMAGE_EMBED_MODEL_ID`: Metadatenfeld für Bild‑Embeddings (Default: open_clip/ViT-L-14@openai)
+- `IMAGE_EMBED_DIM`: Dimensionalität der Bild‑Embeddings (Default: 768)

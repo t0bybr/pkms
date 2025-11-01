@@ -1,5 +1,5 @@
 import os, json, pathlib, requests, time
-from common.db import TEXT, META
+from common.db import TEXT, TEXT_META
 from common.batch import BatchProcessor
 from common.embed import embed_texts
 from common.utils import http_post
@@ -24,4 +24,4 @@ def ingest_audio(path: str):
         f.write('---\n'); f.write(json.dumps(frontmatter, ensure_ascii=False, indent=2)); f.write('\n---\n\n')
         f.write(text)
     embs = embed_texts([text])
-    TEXT.add([{ 'path': md_path, 'title': pathlib.Path(md_path).stem, 'text': text, 'embedding': embs[0], **META }])
+    TEXT.add([{ 'path': md_path, 'title': pathlib.Path(md_path).stem, 'text': text, 'embedding': embs[0], **TEXT_META }])

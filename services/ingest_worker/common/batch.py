@@ -24,5 +24,8 @@ class BatchProcessor:
             self.buf=[]
         except Exception:
             logging.getLogger('ingest-batch').error('batch_add_failed size=%d', len(recs), exc_info=True)
+            # clear to avoid memory growth / duplicates; re-raise to trigger retry path
+            self.buf=[]
+            raise
         finally:
             self.last=time.time()
