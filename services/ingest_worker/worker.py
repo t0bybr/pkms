@@ -1,4 +1,4 @@
-import os, time, logging, errno
+import os, time, logging, errno, hashlib
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from router import dispatch
@@ -34,7 +34,8 @@ class Handler(FileSystemEventHandler):
             return
         lockdir=os.path.join(os.environ.get('INDEX_DIR','/app/index'),'locks')
         os.makedirs(lockdir, exist_ok=True)
-        lockfile=os.path.join(lockdir, os.path.basename(path) + '.lock')
+        lockname=hashlib.sha256(path.encode()).hexdigest()+'.lock'
+        lockfile=os.path.join(lockdir, lockname)
         fd=None
         try:
             fd=os.open(lockfile, os.O_CREAT|os.O_EXCL|os.O_RDWR)
