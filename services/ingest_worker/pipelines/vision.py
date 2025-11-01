@@ -41,7 +41,7 @@ def _heuristic_sketch(img_bgr, text_boxes):
 
 def ingest_image(path: str):
     try: boxes=_layout(path)
-    except: boxes=[]
+    except Exception: boxes=[]
     text_boxes=[b for b in boxes if b.get('cls') in ('text','title','list')]
     fig_boxes=[b for b in boxes if b.get('cls') in ('figure','table')]
     text=_ocr(path)
@@ -49,10 +49,12 @@ def ingest_image(path: str):
     if not fig_boxes:
         fig_boxes=_heuristic_sketch(img, text_boxes)
     image_records=[]
+    base_name = pathlib.Path(path).name
+    base_stem = pathlib.Path(base_name).stem
     for b in fig_boxes:
         x,y,w,h=map(int,b['bbox'])
         crop=img[y:y+h,x:x+w]
-        crop_path=os.path.join(DATA_DIR,'thumbs',f"{pathlib.Path(path).stem}_crop_{x}_{y}_{w}_{h}.jpg")
+        crop_path=os.path.join(DATA_DIR,'thumbs',f"{base_stem}_crop_{x}_{y}_{w}_{h}.jpg")
         os.makedirs(os.path.dirname(crop_path), exist_ok=True)
         cv2.imwrite(crop_path,crop)
         vec=_clip(crop_path)
@@ -71,7 +73,7 @@ def ingest_image(path: str):
     sha=sha256_file(path)
     md_dir=os.path.join(DATA_DIR,'notes','_ingested'); os.makedirs(md_dir, exist_ok=True)
     md_path=os.path.join(md_dir, pathlib.Path(path).stem + '.md')
-    thumb_path=os.path.join(DATA_DIR,'thumbs', pathlib.Path(path).stem + '_256.jpg')
+    thumb_path=os.path.join(DATA_DIR,'thumbs', base_stem + '_256.jpg')
     save_thumbnail(path, thumb_path)
     fm={
         'source_type':'image_ocr','orig_path':path,'image_sha256':sha,'page':1,

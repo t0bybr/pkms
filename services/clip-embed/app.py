@@ -6,6 +6,7 @@ import open_clip
 
 app = FastAPI()
 model=None; preprocess=None; tokenizer=None; device="cuda" if torch.cuda.is_available() else "cpu"
+Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 
 @app.on_event("startup")
 async def init():
@@ -17,7 +18,11 @@ async def init():
 
 @app.post("/embed_image")
 async def embed_image(file: UploadFile = File(...)):
-    img_bytes = await file.read()
+    max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
+    MAX_SIZE = max_mb * 1024 * 1024
+    img_bytes = await file.read(MAX_SIZE + 1)
+    if len(img_bytes) > MAX_SIZE:
+        return JSONResponse({"error":"file too large"}, status_code=413)
     img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
     with torch.no_grad():
         im = preprocess(img).unsqueeze(0).to(device)

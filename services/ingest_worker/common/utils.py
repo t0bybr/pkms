@@ -1,5 +1,6 @@
 import hashlib, os, re
 from PIL import Image
+Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 
 def sha256_file(path: str) -> str:
     h = hashlib.sha256()
@@ -27,4 +28,3 @@ def split_markdown_sections(text: str):
     if current:
         sections.append((header, "\n".join(current).strip()))
     return sections
-

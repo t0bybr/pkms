@@ -18,6 +18,7 @@ INDEX_DIR=os.environ.get('INDEX_DIR','/app/index')
 DATA_DIR=os.environ.get('DATA_DIR','/app/data')
 REDIS_HOST=os.environ.get('REDIS_HOST','redis')
 REDIS_PORT=int(os.environ.get('REDIS_PORT','6379'))
+REDIS_PASSWORD=os.environ.get('REDIS_PASSWORD')
 
 app=FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -35,7 +36,7 @@ EMB=SentenceTransformer('BAAI/bge-m3')
 
 hybrid = HybridRetriever(TEXT)
 metrics = {"queries_total":0, "latencies": deque(maxlen=1000)}
-r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True, password=REDIS_PASSWORD)
 
 def auth(x_api_key: str = Header(None)):
     if API_KEY and x_api_key != API_KEY:

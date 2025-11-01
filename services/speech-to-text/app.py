@@ -16,13 +16,17 @@ def load_model():
 def _to_wav(bytes_buf: bytes) -> str:
     fd, raw = tempfile.mkstemp(suffix=".bin"); os.write(fd, bytes_buf); os.close(fd)
     wav = raw + ".wav"
-    subprocess.run(["ffmpeg","-loglevel","error","-y","-i",raw,"-ac","1","-ar","16000", wav], check=True)
+    subprocess.run(["ffmpeg","-loglevel","error","-y","-i",raw,"-ac","1","-ar","16000", wav], check=True, timeout=30)
     os.remove(raw)
     return wav
 
 @app.post("/transcribe")
 async def transcribe(file: UploadFile = File(...)):
-    data = await file.read()
+    max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
+    MAX_SIZE = max_mb * 1024 * 1024
+    data = await file.read(MAX_SIZE + 1)
+    if len(data) > MAX_SIZE:
+        return JSONResponse({"error":"file too large"}, status_code=413)
     wav = _to_wav(data)
     try:
         result = model.transcribe(wav, language="de")

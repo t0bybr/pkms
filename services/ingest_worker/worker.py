@@ -1,4 +1,4 @@
-import os, time, logging
+import os, time, logging, errno
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from router import dispatch
@@ -26,13 +26,24 @@ class Handler(FileSystemEventHandler):
         if event.is_directory: return
         path=event.src_path
         time.sleep(0.2)
-        checksum = sha256_file(path)
+        try:
+            checksum = sha256_file(path)
+        except (FileNotFoundError, PermissionError):
+            return
         if tracker.is_processed(path, checksum):
+            return
+        lockdir=os.path.join(os.environ.get('INDEX_DIR','/app/index'),'locks')
+        os.makedirs(lockdir, exist_ok=True)
+        lockfile=os.path.join(lockdir, os.path.basename(path) + '.lock')
+        fd=None
+        try:
+            fd=os.open(lockfile, os.O_CREAT|os.O_EXCL|os.O_RDWR)
+        except FileExistsError:
             return
         try:
             dispatch(path)
             tracker.mark_processed(path, checksum)
-            log.info(f"ingested file=%s", path)
+            log.info("ingested file=%s", path)
         except Exception:
             tries = tracker.add_retry(path)
             if tries>=MAX_RETRIES:
@@ -41,6 +52,14 @@ class Handler(FileSystemEventHandler):
             else:
                 move_retry(path, tries)
                 log.warning("retry file=%s tries=%s", path, tries, exc_info=True)
+        finally:
+            try:
+                if fd is not None:
+                    os.close(fd)
+                if os.path.exists(lockfile):
+                    os.unlink(lockfile)
+            except Exception:
+                pass
 
 if __name__=="__main__":
     os.makedirs(INBOX, exist_ok=True)

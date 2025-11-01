@@ -7,6 +7,7 @@ import torch
 from transformers import AutoProcessor, AutoModelForCausalLM
 
 app = FastAPI()
+Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 
 class QwenVLGateway:
     def __init__(self, model_id: str):
@@ -38,7 +39,11 @@ async def init_model():
 
 @app.post("/ocr")
 async def ocr_endpoint(file: UploadFile = File(...), mode: str = Form("text")):
-    img_bytes = await file.read()
+    max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
+    MAX_SIZE = max_mb * 1024 * 1024
+    img_bytes = await file.read(MAX_SIZE + 1)
+    if len(img_bytes) > MAX_SIZE:
+        return JSONResponse({"error":"file too large"}, status_code=413)
     img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
     result = qwen.ocr(img, mode=mode)
     logging.getLogger('qwen-vl-ocr').info("ocr len=%d", len(result.get('text','')))

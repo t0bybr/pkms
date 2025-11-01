@@ -1,4 +1,4 @@
-import time
+import time, logging
 from .embed import embed_texts
 
 class BatchProcessor:
@@ -19,6 +19,10 @@ class BatchProcessor:
         texts=[r['text'] if 'text' in r else r.get('code','') for r in recs]
         embs=embed_texts(texts)
         for r,e in zip(recs, embs): r['embedding']=e
-        self.table.add(recs)
-        self.buf=[]; self.last=time.time()
-
+        try:
+            self.table.add(recs)
+            self.buf=[]
+        except Exception:
+            logging.getLogger('ingest-batch').error('batch_add_failed size=%d', len(recs), exc_info=True)
+        finally:
+            self.last=time.time()
