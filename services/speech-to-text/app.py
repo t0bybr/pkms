@@ -5,6 +5,7 @@ import whisper
 
 app = FastAPI()
 model = None
+API_KEY=os.getenv('API_KEY')
 
 @app.on_event("startup")
 def load_model():
@@ -21,8 +22,6 @@ def _to_wav(bytes_buf: bytes) -> str:
     return wav
 
 @app.post("/transcribe")
-API_KEY=os.getenv('API_KEY')
-
 async def transcribe(file: UploadFile = File(...), x_api_key: str = Header(None)):
     if API_KEY and x_api_key != API_KEY:
         return JSONResponse({"error":"unauthorized"}, status_code=401)
