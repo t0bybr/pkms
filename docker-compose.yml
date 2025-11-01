@@ -1,0 +1,127 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    environment:
+      - OLLAMA_KEEP_ALIVE=5m
+    volumes:
+      - ${MODELS:-/pkms/models}/llm:/root/.ollama
+    restart: unless-stopped
+
+  qwen-vl-ocr:
+    build: ./services/qwen-vl-ocr
+    command: ["python","app.py","--host","0.0.0.0","--port","8001","--model","Qwen/Qwen2.5-VL-7B-Instruct"]
+    ports: ["8001:8001"]
+    volumes:
+      - ${MODELS:-/pkms/models}/ocr:/models
+      - ${DATA:-/pkms/data}:/data
+    user: "1000:1000"
+    # network_mode: none
+    restart: unless-stopped
+
+  layout-detector:
+    build: ./services/layout-detector
+    command: ["python","app.py","--host","0.0.0.0","--port","8002","--weights","/models/doclaynet.pt"]
+    ports: ["8002:8002"]
+    volumes:
+      - ${MODELS:-/pkms/models}/layout:/models
+    user: "1000:1000"
+    # network_mode: none
+    restart: unless-stopped
+
+  clip-embed:
+    build: ./services/clip-embed
+    command: ["python","app.py","--host","0.0.0.0","--port","8003","--model","ViT-L-14","--pretrained","openai"]
+    ports: ["8003:8003"]
+    volumes:
+      - ${MODELS:-/pkms/models}/clip:/models
+    user: "1000:1000"
+    # network_mode: none
+    restart: unless-stopped
+
+  speech-to-text:
+    build: ./services/speech-to-text
+    command: ["python","app.py","--host","0.0.0.0","--port","8004"]
+    ports: ["8004:8004"]
+    volumes:
+      - ${MODELS:-/pkms/models}/stt:/models
+    user: "1000:1000"
+    restart: unless-stopped
+
+  ingest-worker:
+    build: ./services/ingest-worker
+    environment:
+      - QWEN_URL=http://qwen-vl-ocr:8001
+      - LAYOUT_URL=http://layout-detector:8002
+      - CLIP_URL=http://clip-embed:8003
+      - STT_URL=http://speech-to-text:8004
+      - INDEX_DIR=/app/index
+      - DATA_DIR=/app/data
+    volumes:
+      - ${DATA:-/pkms/data}:/app/data
+      - ${INDEX:-/pkms/index}:/app/index
+      - ${MODELS:-/pkms/models}:/app/models
+    user: "1000:1000"
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    user: "1000:1000"
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+
+  rag-api:
+    build: ./services/rag-api
+    ports: ["127.0.0.1:8080:8080"]
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - INDEX_DIR=/app/index
+      - DATA_DIR=/app/data
+      - API_KEY=${API_KEY:-change_me_local_only}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ${INDEX:-/pkms/index}:/app/index:ro
+      - ${DATA:-/pkms/data}:/app/data:ro
+    user: "1000:1000"
+    read_only: true
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+  dashboard:
+    image: nginx:alpine
+    ports: ["127.0.0.1:3000:80"]
+    volumes:
+      - ./services/dashboard:/usr/share/nginx/html:ro
+    restart: unless-stopped
+
+  backup:
+    build: ./services/backup
+    environment:
+      - RESTIC_REPO=/backups/pkms
+      - RESTIC_PASSWORD=${RESTIC_PASSWORD:-change_me}
+      - RESTIC_INCLUDE_DATA=/data
+      - RESTIC_INCLUDE_INDEX=/index
+    volumes:
+      - ${DATA:-/pkms/data}:/data:ro
+      - ${INDEX:-/pkms/index}:/index:ro
+      - /pkms/backups:/backups
+    restart: unless-stopped
+
+volumes:
+  redis_data:

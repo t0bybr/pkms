@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PKMS Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box} body{font-family:Inter,system-ui,Arial;margin:0;background:#0b0f14;color:#e6eef5}
+    header{padding:16px 24px;border-bottom:1px solid #1b2430;display:flex;gap:12px;align-items:center}
+    .tag{background:#13202f;border:1px solid #1f3448;color:#b8d0e6;padding:4px 8px;border-radius:999px;font-size:12px}
+    main{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:#0f1622;border:1px solid #1b2430;border-radius:16px;padding:16px;box-shadow:0 0 0 1px rgba(255,255,255,0.02) inset}
+    h2{margin:0 0 12px 0;font-size:16px}
+    button,input,textarea,select{background:#0b0f14;color:#e6eef5;border:1px solid #1b2430;border-radius:10px;padding:10px}
+    button{cursor:pointer}
+    .row{display:flex;gap:8px;align-items:center}
+    pre{white-space:pre-wrap;background:#0b0f14;border:1px solid #1b2430;border-radius:12px;padding:12px;max-height:320px;overflow:auto}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .muted{color:#9bb3c7}
+  </style>
+</head>
+<body>
+<header>
+  <strong>PKMS Dashboard</strong>
+  <span class="tag">localhost</span>
+  <span class="tag">RAG API :8080</span>
+</header>
+<main>
+  <section class="card">
+    <h2>Systemstatus</h2>
+    <div class="grid">
+      <div>
+        <div class="muted">RAG /health</div>
+        <div id="health">–</div>
+      </div>
+      <div>
+        <div class="muted">Ingest Status</div>
+        <div id="ingest">–</div>
+      </div>
+      <div>
+        <div class="muted">Cache</div>
+        <div id="cache">–</div>
+      </div>
+      <div>
+        <div class="muted">/metrics</div>
+        <pre id="metrics" style="min-height:64px">–</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Query Tester</h2>
+    <div class="row" style="margin-bottom:8px">
+      <input id="apikey" placeholder="X-API-Key (rag-api)" style="flex:1" />
+    </div>
+    <div class="row">
+      <input id="query" placeholder="Frage eingeben…" style="flex:1" />
+      <button id="btn">Suchen</button>
+    </div>
+    <h3 class="muted" style="margin-top:12px">Antwort</h3>
+    <pre id="answer">–</pre>
+    <h3 class="muted">Treffer</h3>
+    <pre id="hits">–</pre>
+  </section>
+
+  <section class="card">
+    <h2>Aktionen</h2>
+    <div class="row">
+      <button id="refresh">Neu laden</button>
+      <button id="flush">Cache flush</button>
+      <button id="bm25">BM25 rebuild</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Hinweise</h2>
+    <ul>
+      <li>rag-api auf <code>127.0.0.1:8080</code>, Dashboard auf <code>127.0.0.1:3000</code>.</li>
+      <li>Setze den <code>X-API-Key</code> in der UI.</li>
+      <li>BM25/Cache bauen beim ersten Start.</li>
+    </ul>
+  </section>
+</main>
+<script>
+const API = 'http://127.0.0.1:8080';
+const $ = sel => document.querySelector(sel);
+
+async function fetchJSON(path, method='GET'){
+  const key = $('#apikey').value.trim();
+  const res = await fetch(API+path, { method, headers: key? { 'X-API-Key': key } : {} });
+  if(!res.ok) throw new Error(await res.text());
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('application/json')) return res.json();
+  return { raw: await res.text() };
+}
+
+async function loadAll(){
+  try { const h = await fetchJSON('/health'); $('#health').textContent = JSON.stringify(h); } catch(e){ $('#health').textContent = e.message }
+  try { const s = await fetchJSON('/ingest/status'); $('#ingest').textContent = `processed: ${s.processed}, retries: ${s.retry_total}, deadletters: ${s.deadletter_count}`; } catch(e){ $('#ingest').textContent = e.message }
+  try { const c = await fetchJSON('/cache/stats'); $('#cache').textContent = `hits: ${c.hits}, misses: ${c.misses}, mem: ${c.used_memory_human}`; } catch(e){ $('#cache').textContent = e.message }
+  try { const m = await fetch(API+'/metrics'); $('#metrics').textContent = await m.text(); } catch(e){ $('#metrics').textContent = e.message }
+}
+
+$('#refresh').onclick = loadAll;
+
+$('#btn').onclick = async () => {
+  const q = $('#query').value.trim();
+  if(!q) return;
+  try {
+    const data = await fetchJSON('/query?q='+encodeURIComponent(q));
+    $('#answer').textContent = data.answer || '—';
+    $('#hits').textContent = JSON.stringify(data.hits, null, 2);
+  } catch(e){
+    $('#answer').textContent = e.message; $('#hits').textContent='—';
+  }
+};
+
+$('#flush').onclick = async () => {
+  try { const r = await fetchJSON('/cache/flush','POST'); alert('Cache flushed'); } catch(e){ alert(e.message); }
+};
+$('#bm25').onclick = async () => {
+  try { const r = await fetchJSON('/bm25/rebuild','POST'); alert('BM25 rebuild triggered'); } catch(e){ alert(e.message); }
+};
+
+loadAll();
+</script>
+</body>
+</html>

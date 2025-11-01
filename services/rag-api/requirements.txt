@@ -1,0 +1,9 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+lancedb==0.7.3
+pyarrow==17.0.0
+numpy==1.26.4
+requests==2.32.3
+sentence-transformers==3.0.1
+redis==5.0.7
+rank-bm25==0.2.2
