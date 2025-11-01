@@ -32,12 +32,15 @@ cp .env.example .env
 ## Start
 
 ```bash
-docker compose build
-docker compose up -d
+# Docker
+docker compose build && docker compose up -d
+# Podman
+podman compose build && podman compose up -d
 ```
 
 * Dashboard: `http://127.0.0.1:3000`
 * API-Health: `curl -H 'X-API-Key: change_me_local_only' http://127.0.0.1:8080/health`
+* OpenAPI/Swagger: `http://127.0.0.1:8080/docs`
 
 ## Ingest – so fließt es
 
@@ -49,7 +52,7 @@ docker compose up -d
 ## Retrieval
 
 * **Dense** mit `BAAI/bge-m3`.
-* **Sparse** mit **BM25** (persistiert als `bm25_index.pkl`).
+* **Sparse** mit **BM25** (Token‑Cache: `/tmp/bm25_tokens.json`, wird bei Bedarf neu aufgebaut).
 * **Fusion** via Reciprocal Rank Fusion (RRF).
 * **Bildtreffer** optional (Heuristik: Query enthält „skizze/diagramm/ablauf/schema/block“).
 
@@ -65,6 +68,7 @@ docker compose up -d
 
 * **rag-api** bindet nur `127.0.0.1:8080`, API-Key-Header `X-API-Key`.
 * **Rate Limit**: einfache IP‑Begrenzung über `RATE_LIMIT_PER_MIN` (Default 60/min).
+* **OCR/Layout/CLIP/STT**: nur `127.0.0.1` und API‑Key erforderlich (`X-API-Key`).
 * Modell-Container können **ohne Egress** laufen (Netz nur zum Download der Weights kurz zulassen).
 * PII: Domain-Parser (z. B. Finanzamt) maskieren IBAN/Steuernummer; erweitere bei Bedarf.
 

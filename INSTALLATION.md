@@ -27,6 +27,7 @@ podman compose build && podman compose up -d
 ## 3) Smoke-Tests
 - `http://127.0.0.1:3000` (Dashboard)
 - `curl -H 'X-API-Key: change_me_local_only' 'http://127.0.0.1:8080/health'`
+- `http://127.0.0.1:8080/docs` (OpenAPI/Swagger)
 - Drop: PDF/JPG/WAV nach `/pkms/data/inbox/` → check `/pkms/data/notes/`
 
 ## 4) Admin
@@ -47,6 +48,9 @@ docker compose exec ingest-worker python services/ingest_worker/scripts/migrate_
 podman compose exec ingest-worker python services/ingest_worker/scripts/migrate_image_v2.py
 ```
 
+## 5) Backups
+- laufen täglich, Ziel: `/pkms/backups/pkms`. Restore siehe README.
+
 ## 6) Optionen
 - `RATE_LIMIT_PER_MIN`: einfache IP-Rate-Limitierung für `/query` (Default: 60)
 - `LOG_LEVEL`: `DEBUG|INFO|WARN|ERROR` für alle Services (Default: INFO)
@@ -54,6 +58,3 @@ podman compose exec ingest-worker python services/ingest_worker/scripts/migrate_
 - `MAX_UPLOAD_MB`: Upload-Größenlimit in MB (Default: 10)
 - `MAX_IMAGE_PIXELS`: Limit für Bildgröße (Pillow) (Default: 178956970)
 - `MIN_FREE_MB`: Mindest-freier Speicher vor großen Writes (Default: 100)
-
-## 5) Backups
-- laufen täglich, Ziel: `/pkms/backups/pkms`. Restore siehe README.
