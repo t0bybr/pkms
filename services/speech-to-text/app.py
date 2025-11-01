@@ -1,5 +1,5 @@
 import argparse, tempfile, subprocess, os, logging
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Header, HTTPException
 from fastapi.responses import JSONResponse
 import whisper
 
@@ -21,7 +21,11 @@ def _to_wav(bytes_buf: bytes) -> str:
     return wav
 
 @app.post("/transcribe")
-async def transcribe(file: UploadFile = File(...)):
+API_KEY=os.getenv('API_KEY')
+
+async def transcribe(file: UploadFile = File(...), x_api_key: str = Header(None)):
+    if API_KEY and x_api_key != API_KEY:
+        return JSONResponse({"error":"unauthorized"}, status_code=401)
     max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
     MAX_SIZE = max_mb * 1024 * 1024
     data = await file.read(MAX_SIZE + 1)

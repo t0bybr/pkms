@@ -1,6 +1,27 @@
-import hashlib, os, re
+import hashlib, os, re, time, shutil
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
+
+import requests
+
+def http_post(url, *, files=None, data=None, json=None, timeout=30, retries=3, backoff=0.5):
+    last_err=None
+    for i in range(retries):
+        try:
+            resp = requests.post(url, files=files, data=data, json=json, timeout=timeout)
+            resp.raise_for_status()
+            return resp
+        except Exception as e:
+            last_err=e
+            time.sleep(backoff*(2**i))
+    raise last_err
+
+def ensure_free_space(dir_path: str, min_free_mb: int = None):
+    if min_free_mb is None:
+        min_free_mb = int(os.getenv('MIN_FREE_MB','100'))
+    free = shutil.disk_usage(dir_path).free
+    if free < min_free_mb*1024*1024:
+        raise OSError(f"insufficient disk space in {dir_path}: {free} bytes free")
 
 def sha256_file(path: str) -> str:
     h = hashlib.sha256()

@@ -39,9 +39,21 @@ docker compose exec ingest-worker python services/ingest_worker/scripts/reproces
 podman compose exec ingest-worker python services/ingest_worker/scripts/reprocess_deadletter.py
 ```
 
+### Migration: image_v1 → image_v2 (CLIP → embedding)
+Falls ältere Bild-Embeddings noch in `clip_embedding` gespeichert sind:
+```bash
+docker compose exec ingest-worker python services/ingest_worker/scripts/migrate_image_v2.py
+# Podman:
+podman compose exec ingest-worker python services/ingest_worker/scripts/migrate_image_v2.py
+```
+
 ## 6) Optionen
 - `RATE_LIMIT_PER_MIN`: einfache IP-Rate-Limitierung für `/query` (Default: 60)
 - `LOG_LEVEL`: `DEBUG|INFO|WARN|ERROR` für alle Services (Default: INFO)
+- `REDIS_PASSWORD`: optionales Passwort für Redis (Compose setzt `--requirepass` wenn gesetzt)
+- `MAX_UPLOAD_MB`: Upload-Größenlimit in MB (Default: 10)
+- `MAX_IMAGE_PIXELS`: Limit für Bildgröße (Pillow) (Default: 178956970)
+- `MIN_FREE_MB`: Mindest-freier Speicher vor großen Writes (Default: 100)
 
 ## 5) Backups
 - laufen täglich, Ziel: `/pkms/backups/pkms`. Restore siehe README.

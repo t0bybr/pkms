@@ -1,5 +1,5 @@
 import argparse, io, torch, logging, os
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, Header, HTTPException
 from fastapi.responses import JSONResponse
 from PIL import Image
 import open_clip
@@ -7,6 +7,7 @@ import open_clip
 app = FastAPI()
 model=None; preprocess=None; tokenizer=None; device="cuda" if torch.cuda.is_available() else "cpu"
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
+API_KEY=os.getenv('API_KEY')
 
 @app.on_event("startup")
 async def init():
@@ -17,7 +18,9 @@ async def init():
     logging.getLogger('clip-embed').info("model_ready name=%s pretrained=%s device=%s", args.model, args.pretrained, device)
 
 @app.post("/embed_image")
-async def embed_image(file: UploadFile = File(...)):
+async def embed_image(file: UploadFile = File(...), x_api_key: str = Header(None)):
+    if API_KEY and x_api_key != API_KEY:
+        raise HTTPException(401, "unauthorized")
     max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
     MAX_SIZE = max_mb * 1024 * 1024
     img_bytes = await file.read(MAX_SIZE + 1)
@@ -33,7 +36,9 @@ async def embed_image(file: UploadFile = File(...)):
     return JSONResponse({"vector": vec})
 
 @app.post("/embed_text")
-async def embed_text(text: str = Form(...)):
+async def embed_text(text: str = Form(...), x_api_key: str = Header(None)):
+    if API_KEY and x_api_key != API_KEY:
+        raise HTTPException(401, "unauthorized")
     with torch.no_grad():
         tok = tokenizer([text]).to(device)
         feats = model.encode_text(tok)

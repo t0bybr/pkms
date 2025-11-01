@@ -1,5 +1,5 @@
 import argparse, io, logging, os
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Header, HTTPException
 from fastapi.responses import JSONResponse
 from ultralytics import YOLO
 from PIL import Image
@@ -8,6 +8,7 @@ app = FastAPI()
 model = None
 CLASSES = ["text","title","list","table","figure"]
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
+API_KEY=os.getenv('API_KEY')
 
 @app.on_event("startup")
 async def load_model():
@@ -18,7 +19,9 @@ async def load_model():
     log.info("model_loaded weights=%s", args.weights)
 
 @app.post("/detect")
-async def detect(file: UploadFile = File(...)):
+async def detect(file: UploadFile = File(...), x_api_key: str = Header(None)):
+    if API_KEY and x_api_key != API_KEY:
+        raise HTTPException(401, "unauthorized")
     max_mb = int(os.getenv('MAX_UPLOAD_MB', '10'))
     MAX_SIZE = max_mb * 1024 * 1024
     img_bytes = await file.read(MAX_SIZE + 1)

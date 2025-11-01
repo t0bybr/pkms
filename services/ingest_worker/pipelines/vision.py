@@ -1,6 +1,6 @@
 import os, json, pathlib, requests, cv2, numpy as np, logging
 from common.db import IMAGE, META
-from common.utils import sha256_file, save_thumbnail
+from common.utils import sha256_file, save_thumbnail, http_post, ensure_free_space
 from pipelines.text import ingest_markdown
 from domains.finanzamt import integrate_finanzamt
 
@@ -11,18 +11,18 @@ CLIP=os.environ.get('CLIP_URL','http://clip-embed:8003')
 
 def _layout(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{LAYOUT}/detect", files={'file': f}, timeout=30)
-        r.raise_for_status(); return r.json()['bboxes']
+        r=http_post(f"{LAYOUT}/detect", files={'file': f}, timeout=30)
+        return r.json()['bboxes']
 
 def _ocr(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{QWEN}/ocr", files={'file': f}, data={'mode':'text'}, timeout=120)
-        r.raise_for_status(); return r.json()['text']
+        r=http_post(f"{QWEN}/ocr", files={'file': f}, data={'mode':'text'}, timeout=120)
+        return r.json()['text']
 
 def _clip(path):
     with open(path,'rb') as f:
-        r=requests.post(f"{CLIP}/embed_image", files={'file': f}, timeout=30)
-        r.raise_for_status(); return r.json()['vector']
+        r=http_post(f"{CLIP}/embed_image", files={'file': f}, timeout=30)
+        return r.json()['vector']
 
 def _heuristic_sketch(img_bgr, text_boxes):
     mask = np.ones(img_bgr.shape[:2], dtype=np.uint8)*255
@@ -56,6 +56,7 @@ def ingest_image(path: str):
         crop=img[y:y+h,x:x+w]
         crop_path=os.path.join(DATA_DIR,'thumbs',f"{base_stem}_crop_{x}_{y}_{w}_{h}.jpg")
         os.makedirs(os.path.dirname(crop_path), exist_ok=True)
+        ensure_free_space(os.path.dirname(crop_path))
         cv2.imwrite(crop_path,crop)
         vec=_clip(crop_path)
         rec={
@@ -74,6 +75,7 @@ def ingest_image(path: str):
     md_dir=os.path.join(DATA_DIR,'notes','_ingested'); os.makedirs(md_dir, exist_ok=True)
     md_path=os.path.join(md_dir, pathlib.Path(path).stem + '.md')
     thumb_path=os.path.join(DATA_DIR,'thumbs', base_stem + '_256.jpg')
+    ensure_free_space(os.path.dirname(thumb_path))
     save_thumbnail(path, thumb_path)
     fm={
         'source_type':'image_ocr','orig_path':path,'image_sha256':sha,'page':1,

@@ -17,6 +17,8 @@ services:
     volumes:
       - ${MODELS:-/pkms/models}/ocr:/models
       - ${DATA:-/pkms/data}:/data
+    environment:
+      - API_KEY=${API_KEY:-change_me_local_only}
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -27,6 +29,8 @@ services:
     ports: ["127.0.0.1:8002:8002"]
     volumes:
       - ${MODELS:-/pkms/models}/layout:/models
+    environment:
+      - API_KEY=${API_KEY:-change_me_local_only}
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -37,6 +41,8 @@ services:
     ports: ["127.0.0.1:8003:8003"]
     volumes:
       - ${MODELS:-/pkms/models}/clip:/models
+    environment:
+      - API_KEY=${API_KEY:-change_me_local_only}
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -47,6 +53,8 @@ services:
     ports: ["127.0.0.1:8004:8004"]
     volumes:
       - ${MODELS:-/pkms/models}/stt:/models
+    environment:
+      - API_KEY=${API_KEY:-change_me_local_only}
     user: "1000:1000"
     restart: unless-stopped
 
@@ -64,6 +72,11 @@ services:
       - ${INDEX:-/pkms/index}:/app/index
       - ${MODELS:-/pkms/models}:/app/models
     user: "1000:1000"
+    depends_on:
+      - qwen-vl-ocr
+      - layout-detector
+      - clip-embed
+      - speech-to-text
     restart: unless-stopped
 
   redis:
