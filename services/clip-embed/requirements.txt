@@ -1,6 +1,5 @@
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-Pillow==10.4.0
-torch==2.3.1
+# Common packages already in base image:
+# - fastapi, uvicorn, python-multipart, pillow, torch, numpy
+
+# Service-specific packages
 open_clip_torch==2.24.0
-numpy==1.26.4

@@ -4,17 +4,18 @@ from fastapi.responses import JSONResponse
 from PIL import Image
 from typing import Optional
 import torch
-from transformers import AutoProcessor, AutoModelForCausalLM
+from transformers import AutoProcessor, AutoModelForVision2Seq
 
 app = FastAPI()
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 API_KEY=os.getenv('API_KEY')
+QWEN_MODEL=os.getenv('QWEN_MODEL','Qwen/Qwen2.5-VL-7B-Instruct')
 
 class QwenVLGateway:
     def __init__(self, model_id: str):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.processor = AutoProcessor.from_pretrained(model_id, trust_remote_code=True)
-        self.model = AutoModelForCausalLM.from_pretrained(
+        self.model = AutoModelForVision2Seq.from_pretrained(
             model_id, torch_dtype=torch.float16 if self.device=='cuda' else torch.float32,
             trust_remote_code=True
         ).to(self.device)
@@ -33,10 +34,10 @@ qwen: Optional[QwenVLGateway] = None
 
 @app.on_event("startup")
 async def init_model():
-    global qwen, args
+    global qwen
     logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
-    logging.getLogger('qwen-vl-ocr').info("loading model id=%s", args.model)
-    qwen = QwenVLGateway(args.model)
+    logging.getLogger('qwen-vl-ocr').info("loading model id=%s", QWEN_MODEL)
+    qwen = QwenVLGateway(QWEN_MODEL)
 
 @app.post("/ocr")
 async def ocr_endpoint(file: UploadFile = File(...), mode: str = Form("text"), x_api_key: str = Header(None)):

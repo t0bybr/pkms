@@ -8,14 +8,16 @@ app = FastAPI()
 model=None; preprocess=None; tokenizer=None; device="cuda" if torch.cuda.is_available() else "cpu"
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 API_KEY=os.getenv('API_KEY')
+MODEL_NAME=os.getenv('CLIP_MODEL','ViT-L-14')
+MODEL_PRETRAINED=os.getenv('CLIP_PRETRAINED','openai')
 
 @app.on_event("startup")
 async def init():
-    global model, preprocess, tokenizer, args
+    global model, preprocess, tokenizer
     logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
-    model, _, preprocess = open_clip.create_model_and_transforms(args.model, pretrained=args.pretrained, device=device)
-    tokenizer = open_clip.get_tokenizer(args.model)
-    logging.getLogger('clip-embed').info("model_ready name=%s pretrained=%s device=%s", args.model, args.pretrained, device)
+    model, _, preprocess = open_clip.create_model_and_transforms(MODEL_NAME, pretrained=MODEL_PRETRAINED, device=device)
+    tokenizer = open_clip.get_tokenizer(MODEL_NAME)
+    logging.getLogger('clip-embed').info("model_ready name=%s pretrained=%s device=%s", MODEL_NAME, MODEL_PRETRAINED, device)
 
 @app.post("/embed_image")
 async def embed_image(file: UploadFile = File(...), x_api_key: str = Header(None)):

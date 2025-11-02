@@ -1,5 +1,17 @@
 ## Architektur
 
+### 🏗️ Base-Image & Shared Dependencies
+
+Das System nutzt ein **Shared Base-Image** (`Dockerfile.base`) mit allen gemeinsamen Dependencies:
+* **PyTorch 2.3.1 mit CUDA-Support** – GPU-ready für zukünftige Nutzung (z.B. RTX 3060)
+* **Transformers, Sentence-Transformers, Accelerate** – ML-Basis-Stack
+* **FastAPI, Uvicorn, Python-Multipart** – API-Framework
+* **System-Libraries** – ffmpeg, libgl1, poppler-utils, tesseract-ocr
+
+**Vorteil**: PyTorch (~4GB) wird nur **1x heruntergeladen** statt 6x. Build-Cache macht spätere Rebuilds **10-20x schneller**.
+
+### 📦 Microservices
+
 * **ollama** – lokales LLM (z. B. Llama 3.1 8B) für Antworten.
 * **qwen-vl-ocr** – OCR/Caption mit Qwen2.5-VL.
 * **layout-detector** – YOLO/DocLayNet für Dokument-Layout.
@@ -72,6 +84,22 @@ podman compose build && podman compose up -d
 * Modell-Container können **ohne Egress** laufen (Netz nur zum Download der Weights kurz zulassen).
 * PII: Domain-Parser (z. B. Finanzamt) maskieren IBAN/Steuernummer; erweitere bei Bedarf.
 
+## Modelle & Caching
+
+- Qwen‑VL Modell-ID per Env `QWEN_MODEL` (Default: `Qwen/Qwen2.5-VL-7B-Instruct`).
+- Layout‑Detector: `doclaynet.pt` nach `MODELS/layout/doclaynet.pt`.
+- Ollama: Modelle via `ollama pull …` in `MODELS/llm`.
+- Caches/Downloads:
+  - rag-api: nutzt `INDEX/cache` als HF/Transformer‑Cache (gemountet nach `/app/cache`).
+  - qwen-vl-ocr, clip-embed, speech-to-text: cachen unter `MODELS/*` (HOME/HF/TORCH auf `/models`).
+- Erster Start: Internetzugang erlauben, bis Modelle geladen sind.
+
+## Volumes, Ownership & SELinux (Podman)
+
+- Host‑Pfadvariablen: `DATA`, `INDEX`, `MODELS`, `BACKUPS` (in `.env`).
+- Compose nutzt Podman‑Volumes mit Suffix `:U` (Ownership‑Anpassung für UID 1000).
+- Bei „Permission denied“: Verzeichnisse anlegen und `chown -R 1000:1000` setzen.
+
 ## Idempotenz & Migration
 
 * LanceDB-Tabellen mit **Metadaten**: `schema_version`, `embedding_model_id`, `embedding_dim`.
@@ -88,7 +116,8 @@ podman compose build && podman compose up -d
 
 ## Backups (lokal)
 
-* Service `backup` sichert täglich `/pkms/data` & `/pkms/index` nach `/pkms/backups/pkms` (restic).
+* Service `backup` sichert täglich `DATA` & `INDEX` nach `${BACKUPS}/pkms` (restic).
+* Passe `BACKUPS` in `.env` an, um auf eine andere Platte zu sichern (Default: `/pkms/backups`).
 * Restore-Beispiel:
 
 ```bash
@@ -99,5 +128,6 @@ docker run --rm -e RESTIC_PASSWORD=change_me -v /pkms/backups:/backups -v /resto
 ## Häufige Stolpersteine
 
 * **Erster Start dauert**, weil Modelle geladen werden.
-* **Healthcheck-Binary**: `rag-api` enthält jetzt `curl` für Healthcheck.
+* **Healthcheck-Binary**: `rag-api` enthält `curl` für Healthcheck.
 * **GPU**: Nicht nötig für Start; später via `--gpus`/NVIDIA Runtime nachrüstbar.
+* **Transformer/HF Caches**: `rag-api` nutzt `INDEX/cache`, ML‑Services nutzen `MODELS/*` – stelle Schreibrechte für UID 1000 sicher.

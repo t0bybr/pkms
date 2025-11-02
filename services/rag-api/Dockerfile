@@ -1,9 +1,9 @@
-FROM python:3.11-slim
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-WORKDIR /app
+FROM pkms-base:latest
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 COPY . .
+# create writable mountpoint for cache (used when container root is read-only)
+RUN mkdir -p /app/cache && chown -R 1000:1000 /app/cache
 EXPOSE 8080
 USER 1000:1000
 CMD ["python","app.py"]

@@ -10,9 +10,10 @@ API_KEY=os.getenv('API_KEY')
 @app.on_event("startup")
 def load_model():
     global model
-    model = whisper.load_model("small")
+    download_root = os.getenv('WHISPER_CACHE', '/models')
+    model = whisper.load_model("small", download_root=download_root)
     logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
-    logging.getLogger('speech-to-text').info("model_loaded name=small")
+    logging.getLogger('speech-to-text').info("model_loaded name=small cache=%s", download_root)
 
 def _to_wav(bytes_buf: bytes) -> str:
     fd, raw = tempfile.mkstemp(suffix=".bin"); os.write(fd, bytes_buf); os.close(fd)

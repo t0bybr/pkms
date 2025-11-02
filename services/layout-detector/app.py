@@ -9,14 +9,15 @@ model = None
 CLASSES = ["text","title","list","table","figure"]
 Image.MAX_IMAGE_PIXELS = int(os.getenv('MAX_IMAGE_PIXELS','178956970'))
 API_KEY=os.getenv('API_KEY')
+WEIGHTS_PATH=os.getenv('WEIGHTS_PATH','/models/doclaynet.pt')
 
 @app.on_event("startup")
 async def load_model():
-    global model, args
+    global model
     logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(asctime)s %(levelname)s %(name)s %(message)s')
     log=logging.getLogger('layout-detector')
-    model = YOLO(args.weights)
-    log.info("model_loaded weights=%s", args.weights)
+    model = YOLO(WEIGHTS_PATH)
+    log.info("model_loaded weights=%s", WEIGHTS_PATH)
 
 @app.post("/detect")
 async def detect(file: UploadFile = File(...), x_api_key: str = Header(None)):

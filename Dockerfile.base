@@ -1,0 +1,32 @@
+FROM python:3.11-slim
+
+# Install common system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    libgl1 \
+    libglib2.0-0 \
+    libsndfile1 \
+    ffmpeg \
+    poppler-utils \
+    tesseract-ocr \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PyTorch with CUDA support (for future GPU use)
+RUN pip install \
+    torch==2.3.1 \
+    torchvision==0.18.1 \
+    torchaudio==2.3.1
+
+# Install common ML/API packages
+RUN pip install \
+    fastapi==0.115.0 \
+    uvicorn[standard]==0.30.6 \
+    python-multipart==0.0.9 \
+    Pillow==10.4.0 \
+    numpy==1.26.4 \
+    transformers==4.49.0 \
+    accelerate==0.34.2 \
+    sentence-transformers==3.0.1
+
+WORKDIR /app

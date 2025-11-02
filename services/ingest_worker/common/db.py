@@ -1,4 +1,6 @@
 import os, lancedb
+from lancedb import vector
+import pyarrow as pa
 INDEX_DIR=os.environ.get('INDEX_DIR','/app/index')
 DB = lancedb.connect(INDEX_DIR)
 
@@ -19,13 +21,59 @@ IMAGE_META = {
     "embedding_dim": IMAGE_EMBED_DIM
 }
 
-def table(name: str, schema: dict=None):
-    if name in DB.table_names():
-        return DB.open_table(name)
-    return DB.create_table(name, data=[], schema=schema or None)
+def _to_pa_type(t):
+    if isinstance(t, pa.DataType):
+        return t
+    if t is str:
+        return pa.string()
+    if t is int:
+        return pa.int64()
+    if t is float:
+        return pa.float64()
+    # lancedb.vector(...) returns a valid Arrow extension type
+    return t
 
-TEXT = table('text_v1')
-CODE = table('code_v1')
-IMAGE= table('image_v1')
+def _to_pa_schema(d: dict) -> pa.Schema:
+    # d maps field_name -> python types, pyarrow types, or lancedb.vector types
+    return pa.schema([pa.field(k, _to_pa_type(v)) for k, v in d.items()])
+
+def table(name: str, schema: dict=None):
+    names = DB.table_names()
+    if name in names:
+        return DB.open_table(name)
+    if schema is None:
+        raise ValueError(f"Schema required to create table '{name}'")
+    pa_schema = _to_pa_schema(schema) if isinstance(schema, dict) else schema
+    return DB.create_table(name, schema=pa_schema)
+
+# Schemas
+_TEXT_DIM = TEXT_META.get("embedding_dim", 1024)
+TEXT_SCHEMA = {
+    "path": str,
+    "title": str,
+    "text": str,
+    "embedding": vector(_TEXT_DIM)
+}
+
+_CODE_DIM = CODE_META.get("embedding_dim", 1024)
+CODE_SCHEMA = {
+    "path": str,
+    "code": str,
+    "embedding": vector(_CODE_DIM)
+}
+
+_IMG_DIM = IMAGE_META.get("embedding_dim", 768)
+IMAGE_SCHEMA = {
+    "path_crop": str,
+    "bbox": pa.list_(pa.float32()),
+    "page_sha": str,
+    "primary_text_id": str,
+    "nearest_heading": str,
+    "embedding": vector(_IMG_DIM)
+}
+
+TEXT = table('text_v1', TEXT_SCHEMA)
+CODE = table('code_v1', CODE_SCHEMA)
+IMAGE= table('image_v1', IMAGE_SCHEMA)
 
 __all__=["DB","TEXT","CODE","IMAGE","TEXT_META","CODE_META","IMAGE_META","table"]

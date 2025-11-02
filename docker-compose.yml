@@ -1,13 +1,22 @@
 version: "3.9"
 
 services:
+  # Base image with shared dependencies (built first)
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: pkms-base:latest
+    command: /bin/true
+    restart: "no"
+
   ollama:
     image: ollama/ollama:latest
     ports: ["11434:11434"]
     environment:
       - OLLAMA_KEEP_ALIVE=5m
     volumes:
-      - ${MODELS:-/pkms/models}/llm:/root/.ollama
+      - ${MODELS:-/pkms/models}/llm:/root/.ollama:U
     restart: unless-stopped
     deploy:
       resources:
@@ -19,13 +28,17 @@ services:
 
   qwen-vl-ocr:
     build: ./services/qwen-vl-ocr
-    command: ["python","app.py","--host","0.0.0.0","--port","8001","--model","Qwen/Qwen2.5-VL-7B-Instruct"]
+    command: ["python","app.py","--host","0.0.0.0","--port","8001"]
     ports: ["127.0.0.1:8001:8001"]
     volumes:
-      - ${MODELS:-/pkms/models}/ocr:/models
-      - ${DATA:-/pkms/data}:/data
+      - ${MODELS:-/pkms/models}/ocr:/models:U
+      - ${DATA:-/pkms/data}:/data:U
     environment:
       - API_KEY=${API_KEY:-change_me_local_only}
+      - QWEN_MODEL=Qwen/Qwen2.5-VL-7B-Instruct
+      - HOME=/models
+      - HF_HOME=/models/huggingface
+      - TRANSFORMERS_CACHE=/models/huggingface
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -39,12 +52,15 @@ services:
 
   layout-detector:
     build: ./services/layout-detector
-    command: ["python","app.py","--host","0.0.0.0","--port","8002","--weights","/models/doclaynet.pt"]
+    command: ["python","app.py","--host","0.0.0.0","--port","8002"]
     ports: ["127.0.0.1:8002:8002"]
     volumes:
-      - ${MODELS:-/pkms/models}/layout:/models
+      - ${MODELS:-/pkms/models}/layout:/models:U
     environment:
       - API_KEY=${API_KEY:-change_me_local_only}
+      - WEIGHTS_PATH=/models/doclaynet.pt
+      - MPLCONFIGDIR=/tmp/matplotlib
+      - YOLO_CONFIG_DIR=/tmp/Ultralytics
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -58,12 +74,18 @@ services:
 
   clip-embed:
     build: ./services/clip-embed
-    command: ["python","app.py","--host","0.0.0.0","--port","8003","--model","ViT-L-14","--pretrained","openai"]
+    command: ["python","app.py","--host","0.0.0.0","--port","8003"]
     ports: ["127.0.0.1:8003:8003"]
     volumes:
-      - ${MODELS:-/pkms/models}/clip:/models
+      - ${MODELS:-/pkms/models}/clip:/models:U
     environment:
       - API_KEY=${API_KEY:-change_me_local_only}
+      - CLIP_MODEL=ViT-L-14
+      - CLIP_PRETRAINED=openai
+      - HOME=/models
+      - HF_HOME=/models/huggingface
+      - TRANSFORMERS_CACHE=/models/huggingface
+      - TORCH_HOME=/models/torch
     user: "1000:1000"
     # network_mode: none
     restart: unless-stopped
@@ -80,9 +102,10 @@ services:
     command: ["python","app.py","--host","0.0.0.0","--port","8004"]
     ports: ["127.0.0.1:8004:8004"]
     volumes:
-      - ${MODELS:-/pkms/models}/stt:/models
+      - ${MODELS:-/pkms/models}/stt:/models:U
     environment:
       - API_KEY=${API_KEY:-change_me_local_only}
+      - WHISPER_CACHE=/models
     user: "1000:1000"
     restart: unless-stopped
     deploy:
@@ -103,10 +126,13 @@ services:
       - STT_URL=http://speech-to-text:8004
       - INDEX_DIR=/app/index
       - DATA_DIR=/app/data
+      - HF_HOME=/app/models/huggingface
+      - TRANSFORMERS_CACHE=/app/models/huggingface
+      - SENTENCE_TRANSFORMERS_HOME=/app/models/sentence-transformers
     volumes:
-      - ${DATA:-/pkms/data}:/app/data
-      - ${INDEX:-/pkms/index}:/app/index
-      - ${MODELS:-/pkms/models}:/app/models
+      - ${DATA:-/pkms/data}:/app/data:U
+      - ${INDEX:-/pkms/index}:/app/index:U
+      - ${MODELS:-/pkms/models}:/app/models:U
     user: "1000:1000"
     depends_on:
       - qwen-vl-ocr
@@ -156,11 +182,14 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - HF_HOME=/app/models/huggingface
+      - TRANSFORMERS_CACHE=/app/models/huggingface
+      - SENTENCE_TRANSFORMERS_HOME=/app/models/sentence-transformers
     volumes:
-      - ${INDEX:-/pkms/index}:/app/index:ro
-      - ${DATA:-/pkms/data}:/app/data:ro
+      - ${INDEX:-/pkms/index}:/app/index:ro,U
+      - ${DATA:-/pkms/data}:/app/data:ro,U
+      - ${MODELS:-/pkms/models}:/app/models:U
     user: "1000:1000"
-    read_only: true
     depends_on:
       - redis
     healthcheck:
@@ -173,15 +202,15 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 2g
+          memory: 4g
         reservations:
-          memory: 1g
+          memory: 2g
 
   dashboard:
     image: nginx:alpine
     ports: ["127.0.0.1:3000:80"]
     volumes:
-      - ./services/dashboard:/usr/share/nginx/html:ro
+      - ./services/dashboard:/usr/share/nginx/html:ro,z
     restart: unless-stopped
     deploy:
       resources:
@@ -199,9 +228,9 @@ services:
       - RESTIC_INCLUDE_DATA=/data
       - RESTIC_INCLUDE_INDEX=/index
     volumes:
-      - ${DATA:-/pkms/data}:/data:ro
-      - ${INDEX:-/pkms/index}:/index:ro
-      - /pkms/backups:/backups
+      - ${DATA:-/pkms/data}:/data:ro,U
+      - ${INDEX:-/pkms/index}:/index:ro,U
+      - ${BACKUPS:-/pkms/backups}:/backups:U
     restart: unless-stopped
     deploy:
       resources:

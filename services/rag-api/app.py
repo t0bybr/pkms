@@ -1,6 +1,6 @@
 import os, json, time, hashlib, sqlite3, logging
 from collections import deque
-from fastapi import FastAPI, Query, Header, HTTPException, Response, Request
+from fastapi import FastAPI, Query, Header, HTTPException, Response, Request, Depends
 from pydantic import BaseModel
 from typing import Optional, List
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,6 +10,28 @@ import requests
 import redis
 from rrf import reciprocal_rank_fusion
 from hybrid import HybridRetriever, cache
+
+# Pydantic Models
+class Hit(BaseModel):
+    id: Optional[str] = None
+    path: Optional[str] = None
+    title: Optional[str] = None
+    text: Optional[str] = None
+    code: Optional[str] = None
+    path_crop: Optional[str] = None
+    bbox: Optional[List[float]] = None
+    page_sha: Optional[str] = None
+    primary_text_id: Optional[str] = None
+    nearest_heading: Optional[str] = None
+
+class QueryResponse(BaseModel):
+    answer: str
+    hits: List[Hit]
+
+class IngestStatus(BaseModel):
+    processed: int
+    retry_total: int
+    deadletter_count: int
 
 API_KEY=os.environ.get('API_KEY')
 OLLAMA=os.environ.get('OLLAMA_URL','http://ollama:11434')
@@ -29,12 +51,13 @@ if API_KEY == 'change_me_local_only':
     log.warning("weak API key in use; set API_KEY in environment for production")
 
 DB=lancedb.connect(INDEX_DIR)
-TEXT = DB.open_table('text_v2') if 'text_v2' in DB.table_names() else DB.open_table('text_v1')
+_names = DB.table_names()
+TEXT = DB.open_table('text_v2') if 'text_v2' in _names else (DB.open_table('text_v1') if 'text_v1' in _names else None)
 CODE = DB.open_table('code_v2') if 'code_v2' in DB.table_names() else (DB.open_table('code_v1') if 'code_v1' in DB.table_names() else None)
 IMAGE= DB.open_table('image_v2') if 'image_v2' in DB.table_names() else (DB.open_table('image_v1') if 'image_v1' in DB.table_names() else None)
 EMB=SentenceTransformer('BAAI/bge-m3')
 
-hybrid = HybridRetriever(TEXT)
+hybrid = HybridRetriever(TEXT) if TEXT else None
 metrics = {"queries_total":0, "latencies": deque(maxlen=1000)}
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True, password=REDIS_PASSWORD)
 
@@ -54,7 +77,7 @@ def prom():
     return Response(body, media_type='text/plain')
 
 @app.get('/cache/stats')
-def cache_stats(_=auth()):
+def cache_stats(_=Depends(auth)):
     info=r.info()
     return {
         'db0': info.get('db0',{}),
@@ -64,19 +87,21 @@ def cache_stats(_=auth()):
     }
 
 @app.post('/cache/flush')
-def cache_flush(_=auth()):
+def cache_flush(_=Depends(auth)):
     log.info("cache_flush triggered")
     r.flushall()
     return {"ok": True}
 
 @app.post('/bm25/rebuild')
-def bm25_rebuild(_=auth()):
+def bm25_rebuild(_=Depends(auth)):
+    if not hybrid:
+        raise HTTPException(503, "No text table available")
     log.info("bm25 rebuild triggered")
     hybrid.rebuild()
     return {"ok": True}
 
 @app.get('/ingest/status', response_model=IngestStatus)
-def ingest_status(_=auth()):
+def ingest_status(_=Depends(auth)):
     state_db=os.path.join(INDEX_DIR,'ingest_state.sqlite')
     processed=retries=0
     if os.path.exists(state_db):
@@ -107,7 +132,7 @@ def _check_rate_limit(req: Request):
         pass
 
 @app.get('/query', response_model=QueryResponse, response_model_exclude_none=True)
-def query(q: str = Query(...), k: int = 6, request: Request = None, _=auth()):
+def query(q: str = Query(...), k: int = 6, request: Request = None, _=Depends(auth)):
     t0=time.perf_counter(); metrics['queries_total']+=1
     _check_rate_limit(request)
     cache_key=f"query:{hashlib.md5(q.encode()).hexdigest()}:{k}"
@@ -117,7 +142,7 @@ def query(q: str = Query(...), k: int = 6, request: Request = None, _=auth()):
 
     qvec = EMB.encode([q], normalize_embeddings=True)[0]
     text_hits_dense = TEXT.search(qvec).limit(50).to_list() if TEXT else []
-    text_hits_sparse = hybrid.search(q, k=50)
+    text_hits_sparse = hybrid.search(q, k=50) if hybrid else []
     code_hits = CODE.search(qvec).limit(50).to_list() if CODE else []
     wants_sketch = any(w in q.lower() for w in ['skizze','diagramm','ablauf','schema','block'])
     image_hits = []
@@ -176,23 +201,7 @@ def query(q: str = Query(...), k: int = 6, request: Request = None, _=auth()):
     cache.setex(cache_key, 3600, json.dumps(result_json))
     metrics['latencies'].append((time.perf_counter()-t0)*1000)
     return result_json
-class Hit(BaseModel):
-    id: Optional[str] = None
-    path: Optional[str] = None
-    title: Optional[str] = None
-    text: Optional[str] = None
-    code: Optional[str] = None
-    path_crop: Optional[str] = None
-    bbox: Optional[List[float]] = None
-    page_sha: Optional[str] = None
-    primary_text_id: Optional[str] = None
-    nearest_heading: Optional[str] = None
 
-class QueryResponse(BaseModel):
-    answer: str
-    hits: List[Hit]
-
-class IngestStatus(BaseModel):
-    processed: int
-    retry_total: int
-    deadletter_count: int
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8080, reload=False)
