@@ -32,7 +32,11 @@ from lib.search.search_engine import SearchEngine
 from lib.embeddings import get_embedding
 from lib.config import get_config_value, get_chunks_dir, get_path
 
-app = typer.Typer(help="PKMS Hybrid Search CLI")
+app = typer.Typer(
+    help="PKMS Hybrid Search CLI",
+    add_completion=False,
+    no_args_is_help=True,
+)
 
 
 def _get_search_engine() -> SearchEngine:
@@ -120,7 +124,6 @@ def _format_json(results: list[dict], limit: int) -> None:
     print(json.dumps(output, indent=2, ensure_ascii=False))
 
 
-@app.command()
 def search(
     query: str = typer.Argument(..., help="Search query"),
     limit: int = typer.Option(10, "--limit", "-l", help="Maximum number of results"),
@@ -207,7 +210,6 @@ def search(
         _format_human(results, query, limit)
 
 
-@app.command()
 def info():
     """Show search engine configuration and statistics."""
     try:
@@ -243,7 +245,13 @@ def info():
 
 def main():
     """Entry point for CLI."""
-    app()
+    # If first arg is 'info', call info command
+    # Otherwise, call search (default)
+    if len(sys.argv) > 1 and sys.argv[1] == "info":
+        info()
+    else:
+        # Remove 'info' from being treated as a query if accidentally passed
+        typer.run(search)
 
 
 if __name__ == "__main__":
