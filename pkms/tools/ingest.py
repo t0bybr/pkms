@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import os
 import sys
-import hashlib
 from pathlib import Path
 from typing import Optional
 from datetime import datetime, timezone
@@ -32,42 +31,13 @@ from pkms.lib.fs.ids import new_id, is_valid_ulid
 from pkms.lib.fs.slug import make_slug
 from pkms.lib.frontmatter.core import parse_file, write_file, FrontmatterModel
 
-# Language detection
-try:
-    from langdetect import detect, LangDetectException
-except ImportError:
-    print("[ingest] WARN: langdetect not installed, language auto-detection disabled")
-    print("  Install with: pip install langdetect")
-    detect = None
-    LangDetectException = Exception
+# Utilities
+from pkms.lib.utils import compute_sha256, detect_language
 
 
 # Config
 NOTES_DIR = os.getenv("PKMS_NOTES_DIR", "notes")
 RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
-
-
-def compute_sha256(text: str) -> str:
-    """Compute SHA256 hash of text"""
-    return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
-
-
-def detect_language(text: str, fallback: str = "en") -> str:
-    """Auto-detect language from text"""
-    if not detect:
-        return fallback
-
-    # Remove code blocks and short texts
-    clean_text = text.strip()
-    if len(clean_text) < 20:
-        return fallback
-
-    try:
-        lang = detect(clean_text)
-        # langdetect returns ISO 639-1 codes (de, en, fr, ...)
-        return lang[:2].lower()
-    except (LangDetectException, Exception):
-        return fallback
 
 
 def normalize_note(file_path: Path, notes_root: Path) -> tuple[Path, FrontmatterModel, str]:

@@ -12,33 +12,11 @@ Plan v0.3:
 from __future__ import annotations
 
 import re
-import hashlib
 from typing import List, Dict, Optional
 from dataclasses import dataclass
 
-# Try to import xxhash (faster), fallback to hashlib
-try:
-    import xxhash
-    def compute_chunk_hash(text: str) -> str:
-        """Compute xxhash64 and return first 12 hex chars"""
-        h = xxhash.xxh64(text.encode("utf-8")).hexdigest()
-        return h[:12]
-except ImportError:
-    def compute_chunk_hash(text: str) -> str:
-        """Fallback: Use SHA256 and return first 12 hex chars"""
-        h = hashlib.sha256(text.encode("utf-8")).hexdigest()
-        return h[:12]
-
-# Try to import tiktoken for token counting
-try:
-    import tiktoken
-    _tokenizer = tiktoken.get_encoding("cl100k_base")  # GPT-4 encoding
-    def count_tokens(text: str) -> int:
-        return len(_tokenizer.encode(text))
-except ImportError:
-    # Fallback: word count * 1.3 (rough estimate)
-    def count_tokens(text: str) -> int:
-        return int(len(text.split()) * 1.3)
+# Utilities
+from pkms.lib.utils import compute_chunk_hash, count_tokens
 
 
 @dataclass
