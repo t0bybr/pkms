@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import sys
 import json
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -26,6 +27,28 @@ from whoosh.fields import Schema, TEXT, ID, STORED
 from lib.config import get_chunks_dir, get_path
 
 app = typer.Typer(help="PKMS Search Index Management")
+
+
+def _strip_wikilinks(text: str) -> str:
+    """
+    Remove wikilinks from text, keeping display text if present.
+
+    Examples:
+    - [[target]] → "" (removed)
+    - [[target|display]] → "display" (keep display text)
+    - Text with [[link]] → "Text with "
+
+    This prevents link targets from being searchable in BM25 index.
+    """
+    # Pattern: [[target|display]] or [[target]]
+    # Group 1: target, Group 2: |display (optional)
+    pattern = r'\[\[([^\]|]+)(?:\|([^\]]+))?\]\]'
+
+    def replace_link(match):
+        display_text = match.group(2)  # Optional display text
+        return display_text if display_text else ""
+
+    return re.sub(pattern, replace_link, text)
 
 
 def _get_schema() -> Schema:
@@ -111,7 +134,10 @@ def _index_chunks(chunks_dir: str, index_dir: str, rebuild: bool = False) -> dic
                         # Combine section + text for searchability
                         section = chunk.get("section", "")
                         text = chunk["text"]
-                        searchable_text = f"{section}\n{text}" if section else text
+                        combined = f"{section}\n{text}" if section else text
+
+                        # Strip wikilinks from searchable text
+                        searchable_text = _strip_wikilinks(combined)
 
                         chunk_data.append({
                             "chunk_id": chunk_id,

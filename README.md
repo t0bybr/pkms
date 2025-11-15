@@ -542,9 +542,10 @@ model = "nomic-embed-text"
 ollama_url = "http://localhost:11434"
 
 [search]
-bm25_weight = 0.5
-semantic_weight = 0.5
-min_similarity = 0.3
+bm25_weight = 0.5           # Weight for BM25 in hybrid search (0.0-1.0)
+semantic_weight = 0.5       # Weight for semantic in hybrid search (0.0-1.0)
+min_similarity = 0.3        # Minimum semantic similarity threshold
+min_rrf_score = 0.0         # Minimum RRF score to show (0.01 filters noise)
 max_keyword_hits = 50       # Max BM25 results before fusion
 max_semantic_hits = 50      # Max semantic results before fusion
 rrf_k = 60                  # RRF parameter (higher = smoother fusion)

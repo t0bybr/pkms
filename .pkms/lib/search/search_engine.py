@@ -10,6 +10,7 @@ Plan v0.3 compliant search engine:
 
 import os
 import json
+import re
 from typing import Callable, List, Dict, Optional, Tuple
 from pathlib import Path
 
@@ -17,6 +18,32 @@ import numpy as np
 from whoosh.index import create_in, open_dir, exists_in
 from whoosh.fields import Schema, TEXT, ID, STORED
 from whoosh.qparser import MultifieldParser
+
+
+# ------------------------------------------------------------
+# Wikilink Processing
+# ------------------------------------------------------------
+
+def _strip_wikilinks(text: str) -> str:
+    """
+    Remove wikilinks from text, keeping display text if present.
+
+    Examples:
+    - [[target]] → "" (removed)
+    - [[target|display]] → "display" (keep display text)
+    - Text with [[link]] → "Text with "
+
+    This prevents link targets from being searchable in BM25 index.
+    """
+    # Pattern: [[target|display]] or [[target]]
+    # Group 1: target, Group 2: |display (optional)
+    pattern = r'\[\[([^\]|]+)(?:\|([^\]]+))?\]\]'
+
+    def replace_link(match):
+        display_text = match.group(2)  # Optional display text
+        return display_text if display_text else ""
+
+    return re.sub(pattern, replace_link, text)
 
 
 # ------------------------------------------------------------
@@ -100,7 +127,10 @@ def _build_or_open_chunk_index(chunks_dir: str, index_dir: str):
                                 # Combine section + text for searchability
                                 section = chunk.get("section", "")
                                 text = chunk["text"]
-                                searchable_text = f"{section}\n{text}" if section else text
+                                combined = f"{section}\n{text}" if section else text
+
+                                # Strip wikilinks from searchable text
+                                searchable_text = _strip_wikilinks(combined)
 
                                 writer.add_document(
                                     chunk_id=chunk["chunk_id"],
@@ -268,6 +298,7 @@ class SearchEngine:
         group_limit: int = 3,
         bm25_weight: float = 0.5,
         semantic_weight: float = 0.5,
+        min_rrf_score: float = 0.0,
     ):
         """
         :param chunks_dir: Directory with chunk NDJSON files (data/chunks/)
@@ -280,6 +311,7 @@ class SearchEngine:
         :param group_limit: Max chunks per doc_id in results
         :param bm25_weight: Weight for BM25 results in fusion (0.0-1.0)
         :param semantic_weight: Weight for semantic results in fusion (0.0-1.0)
+        :param min_rrf_score: Minimum RRF score to include in results (0.0 = no filtering)
         """
         self.chunks_dir = chunks_dir
         self.emb_dir = emb_dir
@@ -291,6 +323,7 @@ class SearchEngine:
         self.group_limit = group_limit
         self.bm25_weight = bm25_weight
         self.semantic_weight = semantic_weight
+        self.min_rrf_score = min_rrf_score
 
         # Build caches with error handling
         try:
@@ -524,6 +557,13 @@ class SearchEngine:
 
         # 4) Grouping (max N chunks per doc)
         final_results = self._apply_grouping(fused_pairs, kw_dict, sem_dict)
+
+        # 5) Filter by minimum RRF score
+        if self.min_rrf_score > 0:
+            final_results = [
+                r for r in final_results
+                if r.get("rrf_score", 0) >= self.min_rrf_score
+            ]
 
         return final_results[:k]
 
