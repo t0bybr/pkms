@@ -405,7 +405,7 @@ pkms-embed --force                    # Re-embed all
 **Build or update the Whoosh search index.**
 
 ```bash
-pkms-index              # Incremental update (add new chunks)
+pkms-index              # Incremental update (default)
 pkms-index --rebuild    # Rebuild entire index from scratch
 pkms-index stats        # Show index statistics
 ```

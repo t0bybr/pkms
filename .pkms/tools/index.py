@@ -197,6 +197,42 @@ def _index_chunks(chunks_dir: str, index_dir: str, rebuild: bool = False) -> dic
 
 
 @app.command()
+def stats():
+    """Show index statistics."""
+    try:
+        index_dir = str(get_path("index"))
+    except (FileNotFoundError, KeyError):
+        index_dir = "data/index"
+
+    if not exists_in(index_dir):
+        print(f"❌ No index found at: {index_dir}", file=sys.stderr)
+        print("Run: pkms-index", file=sys.stderr)
+        sys.exit(1)
+
+    ix = open_dir(index_dir)
+
+    print(f"\n📊 Index Statistics")
+    print(f"{'=' * 60}")
+    print(f"Location:     {index_dir}")
+    print(f"Documents:    {ix.doc_count_all()}")
+    print(f"Last updated: {ix.last_modified()}")
+    print(f"{'=' * 60}\n")
+
+    # Sample some documents
+    with ix.searcher() as searcher:
+        doc_ids = set()
+        for doc in searcher.all_stored_fields():
+            doc_ids.add(doc.get("doc_id"))
+
+        print(f"Unique documents: {len(doc_ids)}")
+        print(f"Total chunks:     {ix.doc_count_all()}")
+
+        if doc_ids:
+            print(f"\nSample documents:")
+            for doc_id in list(doc_ids)[:5]:
+                print(f"  - {doc_id}")
+
+
 def build(
     rebuild: bool = typer.Option(False, "--rebuild", "-r", help="Rebuild index from scratch"),
 ):
@@ -251,52 +287,15 @@ def build(
         print("\n⚠️  No chunks found. Run: pkms-chunk")
 
 
-@app.command()
-def stats():
-    """Show index statistics."""
-    try:
-        index_dir = str(get_path("index"))
-    except (FileNotFoundError, KeyError):
-        index_dir = "data/index"
-
-    if not exists_in(index_dir):
-        print(f"❌ No index found at: {index_dir}", file=sys.stderr)
-        print("Run: pkms-index", file=sys.stderr)
-        sys.exit(1)
-
-    ix = open_dir(index_dir)
-
-    print(f"\n📊 Index Statistics")
-    print(f"{'=' * 60}")
-    print(f"Location:     {index_dir}")
-    print(f"Documents:    {ix.doc_count_all()}")
-    print(f"Last updated: {ix.last_modified()}")
-    print(f"{'=' * 60}\n")
-
-    # Sample some documents
-    with ix.searcher() as searcher:
-        doc_ids = set()
-        for doc in searcher.all_stored_fields():
-            doc_ids.add(doc.get("doc_id"))
-
-        print(f"Unique documents: {len(doc_ids)}")
-        print(f"Total chunks:     {ix.doc_count_all()}")
-
-        if doc_ids:
-            print(f"\nSample documents:")
-            for doc_id in list(doc_ids)[:5]:
-                print(f"  - {doc_id}")
-
-
 def main():
     """Entry point for CLI."""
-    # If no arguments, run build
-    # Otherwise use typer app
-    if len(sys.argv) == 1:
-        # No args → run build (incremental)
-        build(rebuild=False)
+    # If first arg is 'stats', call stats command
+    # Otherwise, call build (default)
+    if len(sys.argv) > 1 and sys.argv[1] == "stats":
+        stats()
     else:
-        app()
+        # Use typer.run for build command (handles --rebuild flag)
+        typer.run(build)
 
 
 if __name__ == "__main__":
