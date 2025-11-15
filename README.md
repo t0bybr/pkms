@@ -56,7 +56,7 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 | **Markdown Ingestion** | Parse frontmatter, auto-detect language | `pkms-ingest` |
 | **Semantic Chunking** | Hierarchical (by headings) + semantic splitting | `pkms-chunk` |
 | **Wikilink Resolution** | Bidirectional links with multiple resolution strategies | `pkms-link` |
-| **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with RRF fusion | SearchEngine |
+| **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with RRF fusion | `pkms-search` |
 | **Relevance Scoring** | Formula-based: `0.4*recency + 0.3*links + 0.2*quality + 0.1*user` | `pkms-relevance` |
 | **Archive Policy** | Automated archiving based on score + age thresholds | `pkms-archive` |
 | **Embeddings** | Ollama integration with LRU caching and incremental updates | `pkms-embed` |
@@ -109,17 +109,16 @@ pkms/
 │   ├── config.toml              # Centralized configuration
 │   ├── pyproject.toml           # Python package config
 │   ├── requirements.txt         # Dependencies
-│   └── pkms/                    # Python package
-│       ├── models/              # Pydantic models (Record, Chunk, etc.)
-│       ├── lib/                 # Shared libraries
-│       │   ├── config.py        # Configuration loader
-│       │   ├── fs/              # Filesystem utilities (ULID, slug, paths)
-│       │   ├── frontmatter/     # Frontmatter parsing
-│       │   ├── chunking/        # Hierarchical + semantic chunking
-│       │   ├── search/          # Hybrid search engine
-│       │   ├── utils/           # Hashing, language detection, tokens
-│       │   └── records_io.py    # Central metadata I/O
-│       └── tools/               # CLI tools (ingest, chunk, embed, etc.)
+│   ├── models/                  # Pydantic models (Record, Chunk, etc.)
+│   ├── lib/                     # Shared libraries
+│   │   ├── config.py            # Configuration loader
+│   │   ├── fs/                  # Filesystem utilities (ULID, slug, paths)
+│   │   ├── frontmatter/         # Frontmatter parsing
+│   │   ├── chunking/            # Hierarchical + semantic chunking
+│   │   ├── search/              # Hybrid search engine
+│   │   ├── utils/               # Hashing, language detection, tokens
+│   │   └── records_io.py        # Central metadata I/O
+│   └── tools/                   # CLI tools (ingest, chunk, embed, search, etc.)
 │
 ├── inbox/                       # 📥 Staging (gitignored)
 │   └── *.md                     # Unnormalized notes
@@ -151,11 +150,12 @@ pkms/
 ```
 
 **Key Changes in v0.3:**
-- ✨ `.pkms/` - Application code separated from content
+- ✨ `.pkms/` - Application code separated from content (flat structure: lib/, models/, tools/)
 - ✨ `inbox/` - Staging area for unnormalized notes (gitignored)
 - ✨ `vault/` - Normalized notes organized by date (YYYY-MM)
 - ✨ `data/metadata/` - Renamed from `data/records/` for clarity
 - ✨ ULID **only in filename**, never in frontmatter
+- ✨ Centralized `config.toml` with ENV variable override support
 
 ---
 
@@ -257,20 +257,15 @@ ls data/metadata/
 
 ### 3. Search
 
-```python
-from pkms.lib.search.search_engine import SearchEngine
-from pkms.lib.embeddings import get_embedding
-from pkms.lib.config import get_path
+```bash
+# Simple search
+pkms-search "pizza teig fermentieren"
 
-engine = SearchEngine(
-    chunks_dir=str(get_path("chunks")),
-    emb_dir=str(get_path("embeddings") / "nomic-embed-text"),
-    embed_fn=get_embedding
-)
+# Limit results
+pkms-search "embeddings" --limit 5
 
-results = engine.search("Pizza Teig fermentieren", k=5)
-for hit in results:
-    print(f"[{hit['score']:.3f}] {hit['text'][:100]}...")
+# JSON output
+pkms-search "machine learning" --format json
 ```
 
 ---
@@ -291,7 +286,10 @@ pkms-chunk
 pkms-link
 pkms-embed
 
-# 4. Commit vault/ to git (inbox/ is gitignored)
+# 4. Search your notes
+pkms-search "my topic"
+
+# 5. Commit vault/ to git (inbox/ is gitignored)
 git add vault/ data/metadata/
 git commit -m "Add new idea"
 git push
@@ -397,6 +395,32 @@ pkms-embed --force                    # Re-embed all
 
 ---
 
+### pkms-search
+
+**Hybrid search CLI (BM25 + Semantic).**
+
+```bash
+pkms-search "pizza teig fermentieren"            # Hybrid search (default)
+pkms-search "embeddings" --limit 5               # Limit results
+pkms-search "python async" --keyword-only        # BM25 only
+pkms-search "machine learning" --semantic-only   # Semantic only
+pkms-search "git workflow" --format json         # JSON output
+pkms-search info                                 # Show engine stats
+```
+
+**Search Modes:**
+- **Hybrid (default):** Combines BM25 + semantic with RRF fusion
+- **Keyword-only (`-k`):** Only BM25 search (fast, exact matches)
+- **Semantic-only (`-s`):** Only vector similarity (conceptual matches)
+
+**Output Formats:**
+- **Human (default):** Pretty-printed results with scores
+- **JSON (`--format json`):** Machine-readable output
+
+**Configuration:** See `[search]` in `.pkms/config.toml`
+
+---
+
 ### pkms-relevance
 
 **Compute relevance scores using formula.**
@@ -459,7 +483,14 @@ pkms-synth --create 0        # Create synthesis
 
 ### .pkms/config.toml
 
-Centralized configuration file:
+Centralized configuration file with **ENV variable override support**.
+
+**Priority chain:** `ENV variable > config.toml > hardcoded default`
+
+This allows you to:
+- Configure defaults in `config.toml` for local development
+- Override with ENV variables in Docker/CI environments
+- Fall back to sensible defaults if neither is set
 
 ```toml
 [paths]
@@ -484,6 +515,10 @@ ollama_url = "http://localhost:11434"
 bm25_weight = 0.5
 semantic_weight = 0.5
 min_similarity = 0.3
+max_keyword_hits = 50       # Max BM25 results before fusion
+max_semantic_hits = 50      # Max semantic results before fusion
+rrf_k = 60                  # RRF parameter (higher = smoother fusion)
+group_limit = 3             # Max results per document
 
 [relevance]
 weight_recency = 0.4
@@ -506,7 +541,7 @@ auto_push = false
 ### Accessing Configuration in Code
 
 ```python
-from pkms.lib.config import get_path, get_vault_config, get_embeddings_config
+from lib.config import get_path, get_vault_config, get_embeddings_config
 
 # Get paths (resolved to absolute Path objects)
 inbox_path = get_path("inbox")
@@ -519,6 +554,11 @@ vault_config = get_vault_config()
 
 emb_config = get_embeddings_config()
 # => {"model": "nomic-embed-text", "ollama_url": "http://..."}
+
+# Get config values with ENV override support
+from lib.config import get_config_value
+model = get_config_value("embeddings", "model", "PKMS_EMBED_MODEL", "nomic-embed-text")
+# Priority: PKMS_EMBED_MODEL env var > config.toml [embeddings] model > "nomic-embed-text"
 ```
 
 ---
