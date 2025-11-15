@@ -23,6 +23,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Dict, List
 
 from pkms.models import Record
+from pkms.lib.records_io import load_all_records, save_records
 
 
 # Config
@@ -32,21 +33,6 @@ RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
 DEFAULT_MIN_SCORE = 0.3
 DEFAULT_MIN_AGE_DAYS = 365  # 1 year
 DEFAULT_BACKLINK_WARNING_THRESHOLD = 5
-
-
-def load_all_records(records_dir: Path) -> Dict[str, Record]:
-    """Lädt alle Records"""
-    records = {}
-    for record_file in records_dir.glob("*.json"):
-        try:
-            with open(record_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                record = Record(**data)
-                records[record.id] = record
-        except Exception as e:
-            print(f"[archive] WARN: Could not load {record_file}: {e}", file=sys.stderr)
-
-    return records
 
 
 def find_archiveable_records(
@@ -125,17 +111,6 @@ def archive_records(
         archived_count += 1
 
     return archived_count
-
-
-def save_records(records: Dict[str, Record], records_dir: Path):
-    """Speichert alle Records zurück"""
-    for ulid, record in records.items():
-        out_path = records_dir / f"{ulid}.json"
-
-        record_json = record.model_dump(mode="json", exclude_none=True)
-
-        with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
 
 
 def main():
@@ -222,12 +197,12 @@ def main():
     print("[3/4] Archiving...")
     archived_count = archive_records(records, archiveable_ids, dry_run=args.dry_run)
 
-    # Save
+    # Save (only archived records for efficiency)
     if not args.dry_run:
         print()
         print("[4/4] Saving records...")
-        save_records(records, records_dir)
-        print(f"  → {len(records)} records saved")
+        save_records(records, records_dir, only_ids=set(archiveable_ids))
+        print(f"  → {archived_count} records saved")
 
     print()
     print("[archive] ✓ Done!")

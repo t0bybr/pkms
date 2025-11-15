@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from typing import Dict
 
 from pkms.models import Record
+from pkms.lib.records_io import load_all_records, save_records
 
 
 # Config
@@ -49,7 +50,14 @@ def compute_recency_score(record: Record, now: datetime) -> float:
     """
     HALF_LIFE_DAYS = 180.0
 
-    age_seconds = (now - record.updated).total_seconds()
+    # Ensure timezone-aware comparison
+    updated = record.updated
+    if updated.tzinfo is None:
+        updated = updated.replace(tzinfo=timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+
+    age_seconds = (now - updated).total_seconds()
     age_days = age_seconds / 86400.0
 
     # Exponential decay
@@ -127,12 +135,12 @@ def compute_user_score(record: Record) -> float:
     """
     score = 0.0
 
-    # Human edited
-    if record.status.human_edited:
+    # Human edited (explicit True check for optional bool)
+    if record.status.human_edited is True:
         score += 0.5
 
     # Agent reviewed
-    if record.agent and record.agent.reviewed:
+    if record.agent and record.agent.reviewed is True:
         score += 0.3
 
     # TODO: Starred/bookmarked
@@ -150,6 +158,9 @@ def compute_relevance_score(record: Record, now: datetime) -> float:
       relevance = 0.4*recency + 0.3*links + 0.2*quality + 0.1*user
 
     Returns: 0.0 - 1.0
+
+    Note: MIN_SCORE_THRESHOLD is NOT applied here - it's only used for archiving policy.
+    Artificially raising scores would defeat the purpose of relevance scoring.
     """
     recency = compute_recency_score(record, now)
     links = compute_link_score(record)
@@ -163,25 +174,10 @@ def compute_relevance_score(record: Record, now: datetime) -> float:
         WEIGHT_USER * user
     )
 
-    # Clamp to [MIN_SCORE_THRESHOLD, 1.0]
-    relevance = max(MIN_SCORE_THRESHOLD, min(1.0, relevance))
+    # Clamp to [0.0, 1.0] - no artificial minimum
+    relevance = max(0.0, min(1.0, relevance))
 
     return relevance
-
-
-def load_all_records(records_dir: Path) -> Dict[str, Record]:
-    """Lädt alle Records"""
-    records = {}
-    for record_file in records_dir.glob("*.json"):
-        try:
-            with open(record_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                record = Record(**data)
-                records[record.id] = record
-        except Exception as e:
-            print(f"[relevance] WARN: Could not load {record_file}: {e}", file=sys.stderr)
-
-    return records
 
 
 def update_relevance_scores(records: Dict[str, Record], now: datetime, verbose: bool = False):
@@ -198,17 +194,6 @@ def update_relevance_scores(records: Dict[str, Record], now: datetime, verbose: 
 
         if verbose and abs(new_score - old_score) > 0.01:
             print(f"[relevance] {ulid[:8]}... {old_score:.3f} → {new_score:.3f}")
-
-
-def save_records(records: Dict[str, Record], records_dir: Path):
-    """Speichert alle Records zurück"""
-    for ulid, record in records.items():
-        out_path = records_dir / f"{ulid}.json"
-
-        record_json = record.model_dump(mode="json", exclude_none=True)
-
-        with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
 
 
 def main():
@@ -234,8 +219,9 @@ def main():
 
     args = parser.parse_args()
 
-    global MIN_SCORE_THRESHOLD
-    MIN_SCORE_THRESHOLD = args.min_score
+    # Note: MIN_SCORE_THRESHOLD is for documentation/archiving policy only.
+    # It's NOT used in score computation (see compute_relevance_score).
+    min_score_threshold = args.min_score
 
     records_dir = Path(args.records_dir)
 
@@ -245,7 +231,7 @@ def main():
 
     print(f"[relevance] Plan v0.3 Relevance Scoring")
     print(f"  Records: {records_dir}")
-    print(f"  Min threshold: {args.min_score}")
+    print(f"  Archive threshold: {min_score_threshold} (used by archive.py, not by scoring)")
     print(f"  Weights: recency={WEIGHT_RECENCY}, links={WEIGHT_LINKS}, quality={WEIGHT_QUALITY}, user={WEIGHT_USER}")
     print()
 
@@ -260,14 +246,17 @@ def main():
     now = datetime.now(timezone.utc)
     update_relevance_scores(records, now, verbose=args.verbose)
 
-    # Stats
-    scores = [r.status.relevance_score for r in records.values()]
-    avg_score = sum(scores) / len(scores) if scores else 0.0
-    min_score = min(scores) if scores else 0.0
-    max_score = max(scores) if scores else 0.0
+    # Stats (with error handling)
+    try:
+        scores = [r.status.relevance_score for r in records.values() if r.status]
+        avg_score = sum(scores) / len(scores) if scores else 0.0
+        min_score_val = min(scores) if scores else 0.0
+        max_score_val = max(scores) if scores else 0.0
 
-    print(f"  → Average score: {avg_score:.3f}")
-    print(f"  → Range: {min_score:.3f} - {max_score:.3f}")
+        print(f"  → Average score: {avg_score:.3f}")
+        print(f"  → Range: {min_score_val:.3f} - {max_score_val:.3f}")
+    except Exception as e:
+        print(f"[relevance] WARN: Could not compute stats: {e}", file=sys.stderr)
 
     # Save
     print()

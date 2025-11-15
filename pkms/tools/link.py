@@ -23,6 +23,7 @@ from typing import List, Dict, Optional
 from collections import defaultdict
 
 from pkms.models import Record, Link
+from pkms.lib.records_io import load_all_records, save_records
 
 
 # Config
@@ -60,25 +61,6 @@ def extract_wikilinks(text: str) -> List[Dict]:
         })
 
     return links
-
-
-def load_all_records(records_dir: Path) -> Dict[str, Record]:
-    """
-    Lädt alle Records und erstellt Lookup-Maps.
-
-    Returns: dict[ulid -> Record]
-    """
-    records = {}
-    for record_file in records_dir.glob("*.json"):
-        try:
-            with open(record_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                record = Record(**data)
-                records[record.id] = record
-        except Exception as e:
-            print(f"[link] WARN: Could not load {record_file}: {e}", file=sys.stderr)
-
-    return records
 
 
 def build_lookup_maps(records: Dict[str, Record]) -> Dict[str, Dict[str, str]]:
@@ -215,17 +197,6 @@ def process_links(records: Dict[str, Record], validate: bool = False) -> tuple[i
                     target_record.backlinks.append(backlink)
 
     return total_links, broken_links
-
-
-def save_records(records: Dict[str, Record], records_dir: Path):
-    """Speichert alle Records zurück"""
-    for ulid, record in records.items():
-        out_path = records_dir / f"{ulid}.json"
-
-        record_json = record.model_dump(mode="json", exclude_none=True)
-
-        with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
 
 
 def main():

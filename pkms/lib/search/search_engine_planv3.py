@@ -243,19 +243,40 @@ class SearchEngine:
         self.rrf_k = rrf_k
         self.group_limit = group_limit
 
-        # Build caches
-        self.ix = _build_or_open_chunk_index(chunks_dir, index_dir)
-        self.chunk_hashes, self.embeddings_normed = _load_chunk_embeddings(emb_dir)
-        self.hash_to_chunkid = _build_hash_to_chunkid_map(chunks_dir)
+        # Build caches with error handling
+        try:
+            self.ix = _build_or_open_chunk_index(chunks_dir, index_dir)
+        except Exception as e:
+            print(f"[SearchEngine] ERROR: Failed to build Whoosh index: {e}", file=sys.stderr)
+            print(f"[SearchEngine] Keyword search will be unavailable", file=sys.stderr)
+            self.ix = None
+
+        try:
+            self.chunk_hashes, self.embeddings_normed = _load_chunk_embeddings(emb_dir)
+        except Exception as e:
+            print(f"[SearchEngine] ERROR: Failed to load embeddings: {e}", file=sys.stderr)
+            print(f"[SearchEngine] Semantic search will be unavailable", file=sys.stderr)
+            self.chunk_hashes = []
+            self.embeddings_normed = np.array([])
+
+        try:
+            self.hash_to_chunkid = _build_hash_to_chunkid_map(chunks_dir)
+        except Exception as e:
+            print(f"[SearchEngine] ERROR: Failed to build chunk map: {e}", file=sys.stderr)
+            self.hash_to_chunkid = {}
 
         print(f"[SearchEngine] Initialized:")
         print(f"  - {len(self.chunk_hashes)} embeddings loaded")
-        print(f"  - Whoosh index: {index_dir}")
+        print(f"  - Whoosh index: {index_dir if self.ix else 'UNAVAILABLE'}")
 
     # ---------- Keyword Search (BM25 via Whoosh) ----------
 
     def _keyword_search(self, query_text: str, limit: int) -> List[Dict]:
         """BM25-Suche über Chunks."""
+        if self.ix is None:
+            print("[SearchEngine] WARN: Whoosh index unavailable, skipping keyword search", file=sys.stderr)
+            return []
+
         results_list = []
         with self.ix.searcher() as searcher:
             parser = MultifieldParser(["text"], self.ix.schema)

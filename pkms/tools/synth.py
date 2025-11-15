@@ -29,6 +29,7 @@ from typing import Dict, List, Optional
 from pkms.models import Record
 from pkms.lib.fs.ids import new_id
 from pkms.lib.fs.slug import make_slug
+from pkms.lib.records_io import load_all_records
 
 
 # Config
@@ -51,21 +52,6 @@ def run_git_command(cmd: List[str], check: bool = True) -> subprocess.CompletedP
         print(f"  stdout: {e.stdout}", file=sys.stderr)
         print(f"  stderr: {e.stderr}", file=sys.stderr)
         raise
-
-
-def load_all_records(records_dir: Path) -> Dict[str, Record]:
-    """Lädt alle Records"""
-    records = {}
-    for record_file in records_dir.glob("*.json"):
-        try:
-            with open(record_file, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                record = Record(**data)
-                records[record.id] = record
-        except Exception as e:
-            print(f"[synth] WARN: Could not load {record_file}: {e}", file=sys.stderr)
-
-    return records
 
 
 def find_related_notes(records: Dict[str, Record], min_cluster_size: int = 3) -> List[Dict]:
@@ -93,10 +79,11 @@ def find_related_notes(records: Dict[str, Record], min_cluster_size: int = 3) ->
     tag_groups = {}
 
     for ulid, record in records.items():
-        if record.status.archived:
+        if record.status and record.status.archived:
             continue
 
-        for tag in record.tags:
+        # Defensive: tags could be None in old records
+        for tag in (record.tags or []):
             if tag not in tag_groups:
                 tag_groups[tag] = []
             tag_groups[tag].append(ulid)
@@ -120,15 +107,20 @@ def create_synth_branch(topic: str, synth_id: str) -> str:
     Erstellt Git-Branch für Synthese.
 
     Returns: branch_name
+    Raises: CalledProcessError if git operations fail
     """
     slug = make_slug(topic)
     branch_name = f"synth/{slug}-{synth_id[:8]}"
 
     # Check if branch already exists
-    result = run_git_command(["git", "branch", "--list", branch_name], check=False)
-    if branch_name in result.stdout:
-        print(f"[synth] Branch already exists: {branch_name}")
-        return branch_name
+    try:
+        result = run_git_command(["git", "branch", "--list", branch_name], check=True)
+        if branch_name in result.stdout:
+            print(f"[synth] Branch already exists: {branch_name}")
+            return branch_name
+    except subprocess.CalledProcessError:
+        print(f"[synth] ERROR: Not a git repository or git not available", file=sys.stderr)
+        raise
 
     # Create branch
     run_git_command(["git", "checkout", "-b", branch_name])
@@ -228,30 +220,32 @@ date_created: {now}
     print(f"[synth] Created synthesis note: {note_path}")
 
     # Update source records (set consolidated_into)
+    modified_record_paths = []
     for doc_id in cluster["doc_ids"]:
         record = records.get(doc_id)
-        if record:
+        if record and record.status:
             record.status.consolidated_into = synth_id
             # Optionally archive
             # record.status.archived = True
 
-    # Save updated records
-    for doc_id in cluster["doc_ids"]:
-        record = records.get(doc_id)
-        if record:
+            # Save updated record
             out_path = records_dir / f"{doc_id}.json"
             record_json = record.model_dump(mode="json", exclude_none=True)
             with open(out_path, "w", encoding="utf-8") as f:
                 json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
 
-    # Git commit
-    run_git_command(["git", "add", str(note_path)])
-    run_git_command(["git", "add", f"{records_dir}/*.json"])
+            modified_record_paths.append(str(out_path))
 
+    # Git add - add each file individually (wildcard doesn't work without shell=True)
+    run_git_command(["git", "add", str(note_path)])
+    for record_path in modified_record_paths:
+        run_git_command(["git", "add", record_path])
+
+    sources_list = "\n".join(f"- {doc_id}" for doc_id in cluster['doc_ids'])
     commit_msg = f"""synth: Consolidate {len(cluster['doc_ids'])} notes about {topic}
 
 Sources:
-{chr(10).join(f'- {doc_id}' for doc_id in cluster['doc_ids'])}
+{sources_list}
 
 Synthesis: {synth_id}
 
