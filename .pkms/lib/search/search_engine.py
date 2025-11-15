@@ -60,11 +60,18 @@ def _get_schema() -> Schema:
     - text: chunk content (indexed AND stored for display)
     - section: heading/section name (stored for display)
     - chunk_index: for ordering within doc
+
+    Uses German stemming analyzer for better search (backofen → ofen).
     """
+    from whoosh.analysis import StemmingAnalyzer
+
+    # German stemming analyzer (backofen → ofen, etc.)
+    german_analyzer = StemmingAnalyzer(lang="de")
+
     return Schema(
         chunk_id=ID(stored=True, unique=True),
         doc_id=ID(stored=True),  # for grouping
-        text=TEXT(stored=True),  # indexed AND stored for display in results
+        text=TEXT(stored=True, analyzer=german_analyzer),  # German stemming
         section=STORED(),  # for display
         chunk_index=STORED(),  # for ordering
     )
