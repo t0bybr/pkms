@@ -38,6 +38,7 @@ date_field = "date_created"  # Options: date_created, date_updated, date_semanti
 
 [embeddings]
 # Embedding model to use
+# Recommended for German: jina-embeddings-v2-base-de
 model = "jina/jina-embeddings-v2-base-de:latest"
 
 # Ollama API endpoint
@@ -51,9 +52,10 @@ bm25_weight = 0.5
 semantic_weight = 0.5
 
 # If the rrf scroe is < 0.01, the results are not shown
-min_rrf_score = 0.0
+min_rrf_score = 0.0005
 
-# Minimum similarity threshold
+# Minimum similarity threshold (0.2 = good balance for German)
+# Lower = more results but noisier, Higher = fewer but more precise
 min_similarity = 0.2
 
 # Maximum hits for BM25 search (for RRF fusion)

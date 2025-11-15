@@ -57,6 +57,7 @@ all = [
 
 [project.scripts]
 pkms-ingest = "tools.ingest:main"
+pkms-update = "tools.update:main"
 pkms-chunk = "tools.chunk:main"
 pkms-link = "tools.link:main"
 pkms-embed = "tools.embed_index:main"
