@@ -135,8 +135,13 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 	"""
 	post = frontmatter.load(path)
 	meta = dict(post.metadata or {})
+
+	# Check for required 'id' field with helpful error message
+	if "id" not in meta:
+		raise KeyError(f"Missing required 'id' field in frontmatter: {path}")
+
 	m = FrontmatterModel(
-		id=meta["id"],  # Required - will raise KeyError if missing
+		id=meta["id"],
 		title=meta.get("title"),
 		aliases=meta.get("aliases", []),
 		tags=meta.get("tags", []),
