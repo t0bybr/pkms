@@ -69,6 +69,7 @@ def _get_search_engine() -> SearchEngine:
         group_limit = search_config.get("group_limit", 3)
         bm25_weight = search_config.get("bm25_weight", 0.5)
         semantic_weight = search_config.get("semantic_weight", 0.5)
+        min_similarity = search_config.get("min_similarity", 0.3)
         min_rrf_score = search_config.get("min_rrf_score", 0.0)
     except Exception:
         # Fallback to defaults
@@ -78,6 +79,7 @@ def _get_search_engine() -> SearchEngine:
         group_limit = 3
         bm25_weight = 0.5
         semantic_weight = 0.5
+        min_similarity = 0.3
         min_rrf_score = 0.0
 
     return SearchEngine(
@@ -91,6 +93,7 @@ def _get_search_engine() -> SearchEngine:
         group_limit=group_limit,
         bm25_weight=bm25_weight,
         semantic_weight=semantic_weight,
+        min_similarity=min_similarity,
         min_rrf_score=min_rrf_score,
     )
 

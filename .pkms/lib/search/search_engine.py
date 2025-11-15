@@ -298,6 +298,7 @@ class SearchEngine:
         group_limit: int = 3,
         bm25_weight: float = 0.5,
         semantic_weight: float = 0.5,
+        min_similarity: float = 0.3,
         min_rrf_score: float = 0.0,
     ):
         """
@@ -311,6 +312,7 @@ class SearchEngine:
         :param group_limit: Max chunks per doc_id in results
         :param bm25_weight: Weight for BM25 results in fusion (0.0-1.0)
         :param semantic_weight: Weight for semantic results in fusion (0.0-1.0)
+        :param min_similarity: Minimum semantic similarity threshold (0.0-1.0)
         :param min_rrf_score: Minimum RRF score to include in results (0.0 = no filtering)
         """
         self.chunks_dir = chunks_dir
@@ -323,6 +325,7 @@ class SearchEngine:
         self.group_limit = group_limit
         self.bm25_weight = bm25_weight
         self.semantic_weight = semantic_weight
+        self.min_similarity = min_similarity
         self.min_rrf_score = min_rrf_score
 
         # Build caches with error handling
