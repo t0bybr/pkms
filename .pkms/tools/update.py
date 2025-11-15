@@ -56,8 +56,8 @@ def update_file(file_path: Path, metadata_dir: Path, verbose: bool = True) -> bo
         file_path = Path(file_path)
         metadata_dir = Path(metadata_dir)
 
-        # Extract ULID from filename
-        slug, ulid = parse_slug_id(file_path.stem)
+        # Extract ULID from filename (parse_slug_id expects Path object)
+        slug, ulid = parse_slug_id(file_path)
 
         if not ulid:
             if verbose:
