@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pkms.local/schemas/chunk.schema.json",
+  "title": "Chunk",
+  "description": "Text chunk with content-addressable ID",
+  "type": "object",
+  "properties": {
+    "doc_id": {
+      "type": "string",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
+      "description": "ULID of parent document"
+    },
+    "chunk_id": {
+      "type": "string",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}:[a-f0-9]{12}$",
+      "description": "Composite ID: doc_id:chunk_hash"
+    },
+    "chunk_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{12}$",
+      "description": "Content-addressable hash (xxhash64 first 12 hex chars)"
+    },
+    "chunk_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Sequential index within document (for ordering)"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Chunk text content"
+    },
+    "tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Token count (for context window management)"
+    },
+    "section": {
+      "type": ["string", "null"],
+      "description": "Heading/section name if applicable"
+    },
+    "subsection": {
+      "type": ["string", "null"],
+      "description": "Sub-heading name if applicable"
+    },
+    "page": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Page number (for PDFs)"
+    },
+    "modality": {
+      "type": "string",
+      "enum": ["text", "caption", "ocr", "figure", "table", "asr", "summary"],
+      "default": "text",
+      "description": "Content modality type"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}$",
+      "description": "ISO 639-1 language code",
+      "examples": ["de", "en", "fr"]
+    }
+  },
+  "required": ["doc_id", "chunk_id", "chunk_hash", "chunk_index", "text", "tokens", "language"],
+  "additionalProperties": false
+}

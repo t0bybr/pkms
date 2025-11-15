@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pkms.local/schemas/embedding_meta.schema.json",
+  "title": "EmbeddingMeta",
+  "description": "Embedding metadata per space (text, image, audio)",
+  "type": "object",
+  "properties": {
+    "text": {
+      "$ref": "#/definitions/SpaceMeta"
+    },
+    "image": {
+      "$ref": "#/definitions/SpaceMeta"
+    },
+    "audio": {
+      "$ref": "#/definitions/SpaceMeta"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "SpaceMeta": {
+      "type": "object",
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "Embedding model name",
+          "examples": ["text-3-large-2025-06", "nomic-embed-text", "clip-vit-large"]
+        },
+        "dim": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Embedding dimension"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp of last embedding update"
+        },
+        "chunk_hashes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{12}$",
+            "description": "12-char hex chunk hash (xxhash64)"
+          },
+          "description": "List of chunk hashes that have embeddings"
+        },
+        "store_path": {
+          "type": "string",
+          "description": "Relative path to embedding storage directory",
+          "examples": ["embeddings/text-3-large-2025-06/", "embeddings/nomic-embed-text/"]
+        }
+      },
+      "required": ["model", "dim", "updated_at", "chunk_hashes"],
+      "additionalProperties": false
+    }
+  }
+}
