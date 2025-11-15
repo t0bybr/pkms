@@ -68,8 +68,8 @@ class Record(BaseModel):
 
     path: str = Field(
         ...,
-        pattern=r"^notes/.+\.md$",
-        description="Relative path to markdown file"
+        pattern=r"^vault/.+\.md$",
+        description="Relative path to markdown file in vault/"
     )
 
     title: str = Field(
@@ -178,7 +178,7 @@ class Record(BaseModel):
                 {
                     "id": "01HAR6DP2M7G1KQ3Y3VQ8C0Q",
                     "slug": "pizza-knusprig",
-                    "path": "notes/pizza-knusprig--01HAR6DP2M7G1KQ3Y3VQ8C0Q.md",
+                    "path": "vault/2025-11/pizza-knusprig--01HAR6DP2M7G1KQ3Y3VQ8C0Q.md",
                     "title": "Pizza – knusprig bei 300°C",
                     "tags": ["kochen", "ofen"],
                     "categories": ["Kochen"],
