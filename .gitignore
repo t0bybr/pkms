@@ -5,3 +5,35 @@ node_modules/
 .claude/
 .codex/
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Data directories
+data/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
