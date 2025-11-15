@@ -39,7 +39,7 @@ class HierarchicalChunker:
         self,
         max_tokens: int = 500,
         overlap_tokens: int = 50,
-        min_chunk_tokens: int = 20,
+        min_chunk_tokens: int = 5,
     ):
         """
         :param max_tokens: Maximum tokens per chunk
@@ -201,13 +201,19 @@ class HierarchicalChunker:
             sub_chunks = self.split_large_section(section)
             all_chunks.extend(sub_chunks)
 
-        # Step 3: Filter out tiny chunks
+        # Step 3: Filter out tiny chunks (but always return at least one chunk)
         filtered_chunks = []
         for chunk in all_chunks:
             tokens = count_tokens(chunk["text"])
             if tokens >= self.min_chunk_tokens:
                 chunk["tokens"] = tokens
                 filtered_chunks.append(chunk)
+
+        if not filtered_chunks and all_chunks:
+            # Keep the largest chunk to avoid returning an empty list
+            largest_chunk = max(all_chunks, key=lambda c: len(c["text"]))
+            largest_chunk["tokens"] = count_tokens(largest_chunk["text"])
+            filtered_chunks.append(largest_chunk)
 
         return filtered_chunks
 

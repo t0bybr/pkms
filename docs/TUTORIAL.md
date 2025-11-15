@@ -445,7 +445,7 @@ class HierarchicalChunker:
         self,
         max_tokens: int = 500,
         overlap_tokens: int = 50,
-        min_chunk_tokens: int = 20,
+        min_chunk_tokens: int = 5,
     ):
         """
         Constructor (runs when creating instance)
