@@ -1,0 +1,84 @@
+# PKMS Configuration
+# Project: Personal Knowledge Management System v0.3
+
+[paths]
+# Inbox for new notes (not yet normalized)
+inbox = "inbox"
+
+# Vault for normalized notes (organized by date)
+vault = "vault"
+
+# Data directory for generated/derived data
+data = "data"
+
+# Metadata (JSON records)
+metadata = "data/metadata"
+
+# Embeddings (numpy arrays)
+embeddings = "data/embeddings"
+
+# Chunks (NDJSON files)
+chunks = "data/chunks"
+
+# Binary attachments (PDFs, images, etc.)
+blobs = "data/blobs"
+
+# Search index (Whoosh)
+index = "data/index"
+
+[vault]
+# Organize notes by date in subdirectories
+organize_by_date = true
+
+# Date format for organization (YYYY-MM for monthly folders)
+date_format = "%Y-%m"
+
+# Date field to use for organization
+date_field = "date_created"  # Options: date_created, date_updated, date_semantic
+
+[embeddings]
+# Embedding model to use
+model = "nomic-embed-text"
+
+# Ollama API endpoint
+ollama_url = "http://localhost:11434"
+
+[search]
+# BM25 weight in hybrid search (0.0 - 1.0)
+bm25_weight = 0.5
+
+# Semantic weight in hybrid search (0.0 - 1.0)
+semantic_weight = 0.5
+
+# Minimum similarity threshold
+min_similarity = 0.3
+
+[relevance]
+# Relevance scoring weights
+weight_recency = 0.4
+weight_links = 0.3
+weight_quality = 0.2
+weight_user = 0.1
+
+# Recency decay (days)
+recency_half_life_days = 90.0
+
+[chunking]
+# Chunking strategy: "fixed" or "semantic"
+strategy = "fixed"
+
+# Chunk size (tokens)
+chunk_size = 512
+
+# Chunk overlap (tokens)
+chunk_overlap = 64
+
+# Minimum chunk size (tokens)
+min_chunk_size = 100
+
+[git]
+# Auto-commit after operations
+auto_commit = false
+
+# Auto-push after commits
+auto_push = false

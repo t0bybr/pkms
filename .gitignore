@@ -28,8 +28,11 @@ wheels/
 *.egg
 MANIFEST
 
-# Data directories
+# Data directories (generated/derived data)
 data/
+
+# Inbox (staging area for unnormalized notes)
+inbox/
 
 # IDE
 .vscode/

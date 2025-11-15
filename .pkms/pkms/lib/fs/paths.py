@@ -115,11 +115,12 @@ def normalize_existing_note(path: Path) -> Path:
 	"""
 	Normalize existing note to PKMS conventions.
 
+	NOTE: ULID is stored ONLY in filename, not in frontmatter.
+
 	Ensures:
-	1. Valid ULID exists (frontmatter or generated)
+	1. Valid ULID exists in filename (or generated)
 	2. Filename matches pattern: {slug}--{ULID}.{ext}
-	3. ULID in filename == ULID in frontmatter
-	4. Slug derived from title (if available)
+	3. Slug derived from title (if available)
 
 	Args:
 		path: Path to existing markdown file
@@ -129,28 +130,27 @@ def normalize_existing_note(path: Path) -> Path:
 
 	Raises:
 		FileNotFoundError: If file doesn't exist
-		ValueError: If frontmatter has invalid ULID
 		FileExistsError: If target rename path already exists
 
 	Example:
 		>>> # File: notes/my-note.md
-		>>> # Frontmatter: title: "Pizza Recipe", id: missing
+		>>> # Frontmatter: title: "Pizza Recipe"
 		>>> path = normalize_existing_note(Path("notes/my-note.md"))
 		>>> print(path)
 		notes/pizza-recipe--01HAR6DP2M7G1KQ3Y3VQ8C0Q.md
 
 	Behavior:
 		- Reads frontmatter and body
-		- Validates/generates ULID (priority: frontmatter > filename > new)
+		- Validates/generates ULID (priority: filename > new)
 		- Validates/generates slug (priority: title > filename > "note")
-		- Writes updated frontmatter (if ULID was added)
+		- Writes frontmatter back (unchanged)
 		- Renames file if needed
 
 	Notes:
 		- Modifies file in-place (writes frontmatter)
 		- Atomic rename (fails if target exists)
 		- Invalid ULID in filename is ignored, new one generated
-		- Invalid ULID in frontmatter raises error (data integrity)
+		- ULID is NEVER in frontmatter (single source of truth = filename)
 	"""
 	if not path.exists():
 		raise FileNotFoundError(path)
@@ -158,23 +158,15 @@ def normalize_existing_note(path: Path) -> Path:
 	slug_from_name, id_from_name = parse_slug_id(path)
 	frontmatter, body = parse_file(str(path))
 
-	# Validate frontmatter ULID (strict)
-	id_from_frontmatter = getattr(frontmatter, "id", None)
-	if id_from_frontmatter and not is_valid_ulid(id_from_frontmatter):
-		raise ValueError(f"Invalid ULID in frontmatter: {id_from_frontmatter}")
-
 	# Validate filename ULID (permissive - just ignore if invalid)
 	if id_from_name and not is_valid_ulid(id_from_name):
 		id_from_name = None
 
-	# Determine final ULID (priority order)
-	if id_from_frontmatter:
-		id_final = id_from_frontmatter
-	elif id_from_name:
+	# Determine final ULID (priority: filename > new)
+	if id_from_name:
 		id_final = id_from_name
 	else:
 		id_final = new_id()
-		frontmatter.id = id_final
 
 	# Determine final slug (priority: title > filename > fallback)
 	title = getattr(frontmatter, "title", None)
@@ -183,7 +175,7 @@ def normalize_existing_note(path: Path) -> Path:
 	else:
 		slug_final = make_slug(slug_from_name or "note")
 
-	# Write frontmatter back (may have new ULID)
+	# Write frontmatter back (unchanged, no ULID in frontmatter)
 	write_file(str(path), frontmatter, body)
 
 	# Build new filename

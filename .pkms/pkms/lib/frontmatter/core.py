@@ -3,9 +3,11 @@ pkms/lib/frontmatter/core.py - Frontmatter Parsing and Writing
 
 Handles YAML frontmatter in markdown files using a structured dataclass model.
 
+NOTE: The ULID is stored ONLY in the filename ({slug}--{ULID}.md), NOT in frontmatter.
+Frontmatter contains only human/LLM-editable metadata.
+
 Frontmatter Format (YAML):
     ---
-    id: 01HAR6DP2M7G1KQ3Y3VQ8C0Q
     title: Pizza Neapolitana Recipe
     tags: [cooking, italian]
     language: de
@@ -15,7 +17,6 @@ Frontmatter Format (YAML):
     # Markdown content here...
 
 Supported Fields:
-- id (required): ULID identifier
 - title: Note title
 - aliases: Alternative names for wikilink resolution
 - tags: Categorization tags
@@ -30,22 +31,28 @@ Usage:
     from pkms.lib.frontmatter.core import parse_file, write_file
 
     # Read file
-    frontmatter, body = parse_file("notes/pizza.md")
+    frontmatter, body = parse_file("notes/pizza--01HAR6DP.md")
     print(frontmatter.title)  # => "Pizza Neapolitana Recipe"
     print(frontmatter.tags)   # => ["cooking", "italian"]
+
+    # ULID comes from filename, not frontmatter
+    from pkms.lib.fs.paths import parse_slug_id
+    slug, ulid = parse_slug_id(Path("notes/pizza--01HAR6DP.md"))
+    print(ulid)  # => "01HAR6DP"
 
     # Modify
     frontmatter.tags.append("favorite")
     frontmatter.language = "de"
 
     # Write back
-    write_file("notes/pizza.md", frontmatter, body)
+    write_file("notes/pizza--01HAR6DP.md", frontmatter, body)
 
 Design Notes:
 - Uses dataclass for type safety and IDE autocomplete
 - Preserves unknown fields in 'extra' dict (round-trip safe)
 - Empty lists/None values are omitted on write (clean YAML)
 - Separates structured fields from arbitrary metadata
+- ULID is NOT in frontmatter (single source of truth = filename)
 """
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
@@ -57,8 +64,9 @@ class FrontmatterModel:
 	"""
 	Structured model for PKMS note frontmatter.
 
+	NOTE: ULID is NOT stored in frontmatter - it's in the filename only.
+
 	Attributes:
-		id: ULID identifier (required, 26 chars)
 		title: Human-readable title
 		aliases: Alternative names for [[wikilink]] resolution
 		tags: Topic tags (e.g., ["python", "tutorial"])
@@ -71,7 +79,6 @@ class FrontmatterModel:
 
 	Example:
 		>>> fm = FrontmatterModel(
-		...     id="01HAR6DP2M7G1KQ3Y3VQ8C0Q",
 		...     title="Pizza Recipe",
 		...     tags=["cooking"],
 		...     language="de"
@@ -79,7 +86,6 @@ class FrontmatterModel:
 		>>> fm.title
 		'Pizza Recipe'
 	"""
-	id: str
 	title: str | None = None
 	aliases: List[str] = field(default_factory=list)
 	tags: List[str] = field(default_factory=list)
@@ -94,6 +100,8 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 	"""
 	Parse markdown file with YAML frontmatter.
 
+	NOTE: ULID is NOT parsed from frontmatter - extract from filename using parse_slug_id().
+
 	Args:
 		path: Path to markdown file (string)
 
@@ -103,20 +111,18 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 		- body: Raw markdown content (without frontmatter)
 
 	Raises:
-		KeyError: If 'id' field is missing from frontmatter
 		FileNotFoundError: If file doesn't exist
 		yaml.YAMLError: If frontmatter is invalid YAML
 
 	Example:
-		>>> # File: notes/pizza.md
+		>>> # File: notes/pizza--01HAR6DP.md
 		>>> # ---
-		>>> # id: 01HAR6DP
 		>>> # title: Pizza Recipe
 		>>> # tags: [cooking]
 		>>> # custom_field: some value
 		>>> # ---
 		>>> # # Content here
-		>>> fm, body = parse_file("notes/pizza.md")
+		>>> fm, body = parse_file("notes/pizza--01HAR6DP.md")
 		>>> fm.title
 		'Pizza Recipe'
 		>>> fm.tags
@@ -127,7 +133,7 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 		'# Content here'
 
 	Notes:
-		- Requires 'id' field (raises KeyError if missing)
+		- Does NOT parse 'id' field (use filename instead)
 		- Unknown fields preserved in 'extra' dict
 		- Empty/missing lists default to []
 		- Empty/missing strings default to None
@@ -136,12 +142,7 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 	post = frontmatter.load(path)
 	meta = dict(post.metadata or {})
 
-	# Check for required 'id' field with helpful error message
-	if "id" not in meta:
-		raise KeyError(f"Missing required 'id' field in frontmatter: {path}")
-
 	m = FrontmatterModel(
-		id=meta["id"],
 		title=meta.get("title"),
 		aliases=meta.get("aliases", []),
 		tags=meta.get("tags", []),
@@ -151,7 +152,7 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 		date_updated=meta.get("date_updated"),
 		date_semantic=meta.get("date_semantic"),
 		extra={k: v for k, v in meta.items() if k not in {
-			"id", "title", "aliases", "tags", "categories",
+			"title", "aliases", "tags", "categories",
 			"language", "date_created", "date_updated", "date_semantic"
 		}}
 	)
@@ -160,6 +161,8 @@ def parse_file(path: str) -> tuple[FrontmatterModel, str]:
 def write_file(path: str, frontmatter_model: FrontmatterModel, body: str) -> None:
 	"""
 	Write markdown file with YAML frontmatter.
+
+	NOTE: ULID is NOT written to frontmatter - it stays in the filename only.
 
 	Args:
 		path: Target file path (string)
@@ -174,17 +177,15 @@ def write_file(path: str, frontmatter_model: FrontmatterModel, body: str) -> Non
 
 	Example:
 		>>> fm = FrontmatterModel(
-		...     id="01HAR6DP",
 		...     title="Pizza Recipe",
 		...     tags=["cooking"],
 		...     language="de"
 		... )
 		>>> body = "# Pizza\\n\\nRecipe here..."
-		>>> write_file("notes/pizza.md", fm, body)
+		>>> write_file("notes/pizza--01HAR6DP.md", fm, body)
 
 		# File contents:
 		# ---
-		# id: 01HAR6DP
 		# title: Pizza Recipe
 		# tags:
 		# - cooking
@@ -199,18 +200,17 @@ def write_file(path: str, frontmatter_model: FrontmatterModel, body: str) -> Non
 		- Merges structured fields + extra fields
 		- Omits None values (clean YAML)
 		- Omits empty lists (tags: [] → omitted)
-		- Preserves 'id' field (required)
+		- Does NOT write 'id' field (use filename)
 		- Writes in binary mode (UTF-8 encoding)
 
 	Notes:
 		- Overwrites existing file without backup
-		- Always includes 'id' field (even if None - will fail)
+		- Does NOT write 'id' field (single source of truth = filename)
 		- Extra fields from frontmatter_model.extra are merged in
 		- Empty lists converted to None before filtering
 		- Uses python-frontmatter library for serialization
 	"""
 	meta = {
-		"id": frontmatter_model.id,
 		"title": frontmatter_model.title,
 		"aliases": frontmatter_model.aliases or None,  # [] → None
 		"tags": frontmatter_model.tags or None,
