@@ -52,6 +52,10 @@ def update_file(file_path: Path, metadata_dir: Path, verbose: bool = True) -> bo
         bool: True if successful, False otherwise
     """
     try:
+        # Ensure file_path and metadata_dir are Path objects
+        file_path = Path(file_path)
+        metadata_dir = Path(metadata_dir)
+
         # Extract ULID from filename
         slug, ulid = parse_slug_id(file_path.stem)
 
@@ -73,7 +77,9 @@ def update_file(file_path: Path, metadata_dir: Path, verbose: bool = True) -> bo
 
     except Exception as e:
         if verbose:
-            print(f"[update] ERROR: Failed to update {file_path.name}: {e}")
+            import traceback
+            print(f"[update] ERROR: Failed to update {file_path}: {e}")
+            traceback.print_exc()
         return False
 
 
