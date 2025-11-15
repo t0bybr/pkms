@@ -19,11 +19,11 @@ import numpy as np
 
 # Import embedding function (assumes embeddings.py in parent)
 try:
-    from lib.embeddings import get_embedding
+    from lib.embeddings import get_embedding, embedding_dim
 except ImportError:
     # Fallback for running standalone
     sys.path.insert(0, str(Path(__file__).parent.parent))
-    from lib.embeddings import get_embedding
+    from lib.embeddings import get_embedding, embedding_dim
 
 
 # Config from environment
@@ -212,7 +212,7 @@ def main():
     print()
 
     # 1. Load chunks
-    print("[1/3] Loading chunks...")
+    print("[1/4] Loading chunks...")
     chunks = load_chunks(CHUNKS_DIR)
     print(f"  → {len(chunks)} chunks loaded")
 
@@ -222,28 +222,19 @@ def main():
 
     # 2. Embed chunks (incremental)
     print()
-    print("[2/3] Embedding chunks (incremental)...")
+    print("[2/4] Embedding chunks (incremental)...")
     stats = embed_chunks(chunks, EMB_DIR, MODEL_NAME, force=False)
     print(f"  → {stats['embedded']} embedded, {stats['skipped']} skipped")
 
-    # 3. Determine embedding dimension (from first .npy)
-    emb_path = Path(EMB_DIR)
-    dim = None
-    for npy_file in emb_path.glob("*.npy"):
-        try:
-            vec = np.load(npy_file)
-            dim = vec.shape[0]
-            break
-        except Exception:
-            continue
-
-    if dim is None:
-        print("[embed_index] WARN: Could not determine embedding dimension")
-        dim = 384  # Fallback
+    # 3. Determine embedding dimension (via test embedding)
+    print()
+    print("[3/4] Determining embedding dimension...")
+    dim = embedding_dim(model=MODEL_NAME)
+    print(f"  → Model '{MODEL_NAME}' has dimension: {dim}")
 
     # 4. Update record embedding_meta
     print()
-    print("[3/3] Updating record embedding_meta...")
+    print("[4/4] Updating record embedding_meta...")
     update_record_embedding_meta(RECORDS_DIR, EMB_DIR, MODEL_NAME, dim)
 
     print()
