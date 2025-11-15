@@ -56,10 +56,11 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 | **Markdown Ingestion** | Parse frontmatter, auto-detect language | `pkms-ingest` |
 | **Semantic Chunking** | Hierarchical (by headings) + semantic splitting | `pkms-chunk` |
 | **Wikilink Resolution** | Bidirectional links with multiple resolution strategies | `pkms-link` |
+| **Embeddings** | Ollama integration with LRU caching and incremental updates | `pkms-embed` |
+| **Search Indexing** | Incremental Whoosh BM25 index builder | `pkms-index` |
 | **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with RRF fusion | `pkms-search` |
 | **Relevance Scoring** | Formula-based: `0.4*recency + 0.3*links + 0.2*quality + 0.1*user` | `pkms-relevance` |
 | **Archive Policy** | Automated archiving based on score + age thresholds | `pkms-archive` |
-| **Embeddings** | Ollama integration with LRU caching and incremental updates | `pkms-embed` |
 | **Git Synthesis** | Branch-based consolidation workflow | `pkms-synth` 🚧 |
 | **Configuration** | Centralized `.pkms/config.toml` with path resolution | Config system |
 
@@ -242,6 +243,9 @@ pkms-link --validate
 # Generate embeddings (requires Ollama)
 pkms-embed
 
+# Build search index (BM25)
+pkms-index
+
 # Update relevance scores
 pkms-relevance
 ```
@@ -285,6 +289,7 @@ pkms-ingest
 pkms-chunk
 pkms-link
 pkms-embed
+pkms-index
 
 # 4. Search your notes
 pkms-search "my topic"
@@ -392,6 +397,31 @@ pkms-embed --force                    # Re-embed all
 - Model pulled: `ollama pull nomic-embed-text`
 
 **Configuration:** See `[embeddings]` in `.pkms/config.toml`
+
+---
+
+### pkms-index
+
+**Build or update the Whoosh search index.**
+
+```bash
+pkms-index              # Incremental update (add new chunks)
+pkms-index --rebuild    # Rebuild entire index from scratch
+pkms-index stats        # Show index statistics
+```
+
+**What it does:**
+- Reads all `.ndjson` chunk files from `data/chunks/`
+- Builds/updates the Whoosh BM25 index for keyword search
+- Incremental by default (only adds new chunks)
+- Use `--rebuild` after structural changes or corruption
+
+**When to run:**
+- After `pkms-chunk` (to make chunks searchable)
+- If search returns no BM25 results (`BM25=N/A`)
+- After deleting/modifying chunk files
+
+**Note:** Search will auto-create the index on first run, but this tool allows manual control.
 
 ---
 
