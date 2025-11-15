@@ -347,9 +347,10 @@ class SearchEngine:
             print(f"[SearchEngine] ERROR: Failed to build chunk map: {e}", file=sys.stderr)
             self.hash_to_chunkid = {}
 
-        print(f"[SearchEngine] Initialized:")
-        print(f"  - {len(self.chunk_hashes)} embeddings loaded")
-        print(f"  - Whoosh index: {index_dir if self.ix else 'UNAVAILABLE'}")
+        import sys
+        print(f"[SearchEngine] Initialized:", file=sys.stderr)
+        print(f"  - {len(self.chunk_hashes)} embeddings loaded", file=sys.stderr)
+        print(f"  - Whoosh index: {index_dir if self.ix else 'UNAVAILABLE'}", file=sys.stderr)
 
     # ---------- Keyword Search (BM25 via Whoosh) ----------
 
