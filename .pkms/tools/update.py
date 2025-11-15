@@ -65,7 +65,7 @@ def update_file(file_path: Path, metadata_dir: Path, verbose: bool = True) -> bo
             return False
 
         # Parse frontmatter
-        frontmatter, body, full_content = parse_file(file_path)
+        frontmatter, body = parse_file(file_path)
 
         # Create metadata record (reuse from ingest.py)
         record = create_record(file_path, ulid, frontmatter, body)
