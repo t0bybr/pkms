@@ -1,8 +1,0 @@
-# Common packages already in base image:
-# - fastapi, uvicorn, numpy, sentence-transformers
-
-# Service-specific packages
-lancedb==0.25.2
-requests==2.32.3
-redis==5.0.7
-rank-bm25==0.2.2

@@ -1,3 +1,0 @@
-# Using pkms-base (preinstalls transformers>=4.49, fastapi, uvicorn, torch, accelerate)
-# Only add service-specific extras here to avoid downgrades.
-qwen-vl-utils==0.0.3

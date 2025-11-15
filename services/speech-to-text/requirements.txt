@@ -1,5 +1,0 @@
-# Common packages already in base image:
-# - fastapi, uvicorn, python-multipart, torch
-
-# Service-specific packages
-openai-whisper==20240927

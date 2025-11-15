@@ -1,5 +1,0 @@
-# Common packages already in base image:
-# - fastapi, uvicorn, python-multipart, pillow, torch, numpy
-
-# Service-specific packages
-open_clip_torch==2.24.0
