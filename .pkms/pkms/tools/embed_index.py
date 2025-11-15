@@ -28,7 +28,7 @@ except ImportError:
 
 # Config from environment
 CHUNKS_DIR = os.getenv("PKMS_CHUNKS_DIR", "data/chunks")
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
+RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
 MODEL_NAME = os.getenv("PKMS_EMBED_MODEL", "nomic-embed-text")
 EMB_BASE_DIR = os.getenv("PKMS_EMB_BASE_DIR", "data/embeddings")
 EMB_DIR = os.path.join(EMB_BASE_DIR, MODEL_NAME)

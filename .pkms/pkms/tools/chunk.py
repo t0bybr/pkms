@@ -1,11 +1,19 @@
 """
-chunk.py - Records → Chunks
+chunk.py - Metadata → Chunks
 
-Plan v0.3 compliant:
-- Reads Record JSONs from data/records/
-- Applies hybrid chunking (hierarchical + semantic)
-- Generates content-hash chunk IDs
-- Writes NDJSON to data/chunks/{doc_id}.ndjson
+PKMS v0.3 Chunking Pipeline:
+
+Workflow:
+1. Reads metadata JSONs from data/metadata/
+2. Applies hybrid chunking (hierarchical + semantic)
+3. Generates content-hash chunk IDs (xxhash64)
+4. Writes NDJSON to data/chunks/{doc_id}.ndjson
+
+Design:
+- Chunks are content-addressable (ID = hash of content)
+- Multiple chunking strategies supported (fixed, semantic)
+- Git-friendly NDJSON format (one chunk per line)
+- Configuration from .pkms/config.toml
 
 Usage:
     python -m pkms.tools.chunk
@@ -14,115 +22,151 @@ Usage:
 
 from __future__ import annotations
 
-import os
 import sys
 import json
 from pathlib import Path
 
 from pkms.lib.chunking import chunk_document
-
-
-# Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
-CHUNKS_DIR = os.getenv("PKMS_CHUNKS_DIR", "data/chunks")
+from pkms.lib.config import get_path, get_chunking_config
 
 
 def load_record(record_path: Path) -> dict:
-    """Load a Record JSON"""
-    with open(record_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+	"""
+	Load metadata record JSON.
+
+	Args:
+		record_path: Path to metadata JSON file
+
+	Returns:
+		dict: Record data
+	"""
+	with open(record_path, "r", encoding="utf-8") as f:
+		return json.load(f)
 
 
 def save_chunks(chunks: list[dict], chunks_dir: Path, doc_id: str):
-    """Save chunks as NDJSON to chunks_dir/{doc_id}.ndjson"""
-    chunks_dir.mkdir(parents=True, exist_ok=True)
+	"""
+	Save chunks as NDJSON.
 
-    out_path = chunks_dir / f"{doc_id}.ndjson"
+	Args:
+		chunks: List of chunk dicts
+		chunks_dir: Output directory
+		doc_id: Document ULID
+	"""
+	chunks_dir.mkdir(parents=True, exist_ok=True)
 
-    with open(out_path, "w", encoding="utf-8") as f:
-        for chunk in chunks:
-            json.dump(chunk, f, ensure_ascii=False)
-            f.write("\n")
+	out_path = chunks_dir / f"{doc_id}.ndjson"
 
-    print(f"[chunk] Saved {len(chunks)} chunks → {out_path}")
+	with open(out_path, "w", encoding="utf-8") as f:
+		for chunk in chunks:
+			json.dump(chunk, f, ensure_ascii=False)
+			f.write("\n")
+
+	print(f"[chunk] Saved {len(chunks)} chunks → {out_path.name}")
 
 
 def chunk_record(record_path: Path, chunks_dir: Path, max_tokens: int):
-    """Process a single Record and generate chunks"""
-    try:
-        record = load_record(record_path)
+	"""
+	Process single metadata record and generate chunks.
 
-        doc_id = record["id"]
-        text = record["full_text"]
-        language = record.get("language", "en")
+	Args:
+		record_path: Path to metadata JSON
+		chunks_dir: Output directory for chunks
+		max_tokens: Maximum tokens per chunk
+	"""
+	try:
+		record = load_record(record_path)
 
-        # Generate chunks
-        chunks = chunk_document(
-            doc_id=doc_id,
-            text=text,
-            language=language,
-            max_tokens=max_tokens,
-        )
+		doc_id = record["id"]
+		text = record["full_text"]
+		language = record.get("language", "en")
 
-        # Save to NDJSON
-        save_chunks(chunks, chunks_dir, doc_id)
+		# Generate chunks
+		chunks = chunk_document(
+			doc_id=doc_id,
+			text=text,
+			language=language,
+			max_tokens=max_tokens,
+		)
 
-    except Exception as e:
-        print(f"[chunk] ERROR: Failed to chunk {record_path}: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc()
+		# Save to NDJSON
+		save_chunks(chunks, chunks_dir, doc_id)
+
+	except Exception as e:
+		print(f"[chunk] ERROR: Failed to chunk {record_path.name}: {e}", file=sys.stderr)
+		import traceback
+		traceback.print_exc()
 
 
-def chunk_all_records(records_dir: Path, chunks_dir: Path, max_tokens: int):
-    """Process all Records in records_dir"""
-    record_files = list(records_dir.glob("*.json"))
+def chunk_all_records(metadata_dir: Path, chunks_dir: Path, max_tokens: int):
+	"""
+	Process all metadata records.
 
-    print(f"[chunk] Found {len(record_files)} records in {records_dir}")
+	Args:
+		metadata_dir: Directory with metadata JSONs
+		chunks_dir: Output directory for chunks
+		max_tokens: Maximum tokens per chunk
+	"""
+	record_files = list(metadata_dir.glob("*.json"))
 
-    for record_path in record_files:
-        chunk_record(record_path, chunks_dir, max_tokens)
+	if not record_files:
+		print(f"[chunk] No metadata files found in {metadata_dir}")
+		return
 
-    print(f"\n[chunk] ✓ Chunked {len(record_files)} records")
+	print(f"[chunk] Found {len(record_files)} metadata files")
+	print()
+
+	for record_path in record_files:
+		chunk_record(record_path, chunks_dir, max_tokens)
+
+	print(f"\n[chunk] ✓ Chunked {len(record_files)} records")
 
 
 def main():
-    import argparse
+	import argparse
 
-    parser = argparse.ArgumentParser(description="Chunk records into smaller pieces")
-    parser.add_argument(
-        "--records-dir",
-        default=RECORDS_DIR,
-        help="Input directory with Record JSONs (default: data/records/)"
-    )
-    parser.add_argument(
-        "--chunks-dir",
-        default=CHUNKS_DIR,
-        help="Output directory for chunk NDJSON files (default: data/chunks/)"
-    )
-    parser.add_argument(
-        "--max-tokens",
-        type=int,
-        default=500,
-        help="Maximum tokens per chunk (default: 500)"
-    )
+	parser = argparse.ArgumentParser(
+		description="Chunk metadata records into smaller pieces"
+	)
+	parser.add_argument(
+		"--metadata-dir",
+		help="Input directory with metadata JSONs (default: from config)"
+	)
+	parser.add_argument(
+		"--chunks-dir",
+		help="Output directory for chunk NDJSON files (default: from config)"
+	)
+	parser.add_argument(
+		"--max-tokens",
+		type=int,
+		help="Maximum tokens per chunk (default: from config)"
+	)
 
-    args = parser.parse_args()
+	args = parser.parse_args()
 
-    records_dir = Path(args.records_dir)
-    chunks_dir = Path(args.chunks_dir)
+	# Load config
+	chunking_config = get_chunking_config()
 
-    if not records_dir.exists():
-        print(f"[chunk] ERROR: Records directory does not exist: {records_dir}", file=sys.stderr)
-        sys.exit(1)
+	# Determine paths
+	metadata_dir = Path(args.metadata_dir) if args.metadata_dir else get_path("metadata")
+	chunks_dir = Path(args.chunks_dir) if args.chunks_dir else get_path("chunks")
 
-    print(f"[chunk] Plan v0.3 Chunking")
-    print(f"  Input:  {records_dir}")
-    print(f"  Output: {chunks_dir}")
-    print(f"  Max tokens: {args.max_tokens}")
-    print()
+	# Determine max_tokens
+	max_tokens = args.max_tokens or chunking_config.get("chunk_size", 512)
 
-    chunk_all_records(records_dir, chunks_dir, args.max_tokens)
+	if not metadata_dir.exists():
+		print(f"[chunk] ERROR: Metadata directory does not exist: {metadata_dir}", file=sys.stderr)
+		sys.exit(1)
+
+	print(f"[chunk] PKMS v0.3 Chunking")
+	print(f"  Strategy: {chunking_config.get('strategy', 'fixed')}")
+	print(f"  Input:    {metadata_dir}")
+	print(f"  Output:   {chunks_dir}")
+	print(f"  Max tokens: {max_tokens}")
+	print()
+
+	chunk_all_records(metadata_dir, chunks_dir, max_tokens)
 
 
 if __name__ == "__main__":
-    main()
+	main()

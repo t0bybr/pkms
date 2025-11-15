@@ -27,7 +27,7 @@ from pkms.lib.records_io import load_all_records, save_records
 
 
 # Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
+RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
 
 # Scoring weights (can be tuned)
 WEIGHT_RECENCY = 0.4
@@ -203,7 +203,7 @@ def main():
     parser.add_argument(
         "--records-dir",
         default=RECORDS_DIR,
-        help="Directory with Record JSONs (default: data/records/)"
+        help="Directory with Record JSONs (default: data/metadata/)"
     )
     parser.add_argument(
         "--min-score",

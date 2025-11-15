@@ -1,31 +1,42 @@
 """
-ingest.py - Markdown → Records
+ingest.py - Inbox → Vault + Metadata
 
-Plan v0.3 compliant:
-- Parses frontmatter (python-frontmatter)
-- Auto-detects language if missing (langdetect)
-- Generates/validates ULIDs
-- Computes hashes (SHA256)
-- Writes Record JSONs to data/records/
+PKMS v0.3 Ingestion Pipeline:
+
+Workflow:
+1. Reads notes from inbox/ (unnormalized)
+2. Normalizes:
+   - Generates ULID (if not in filename)
+   - Creates slug from title
+   - Renames to {slug}--{ULID}.md
+   - Auto-detects language if missing
+3. Moves to vault/YYYY-MM/ (based on date_created)
+4. Creates metadata JSON in data/metadata/{ULID}.json
+
+Design:
+- ULID stored ONLY in filename (single source of truth)
+- Frontmatter contains only human/LLM-editable metadata
+- Inbox is staging area (gitignored)
+- Vault is organized by date (YYYY-MM)
 
 Usage:
-    python -m pkms.tools.ingest notes/
-    python -m pkms.tools.ingest notes/pizza--01HAR6DP.md
+    python -m pkms.tools.ingest                    # Process inbox/
+    python -m pkms.tools.ingest inbox/my-note.md   # Process single file
+    python -m pkms.tools.ingest --source notes/    # Process custom directory
 """
 
 from __future__ import annotations
 
-import os
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 from datetime import datetime, timezone
 import json
 
 # Pydantic models
 from pkms.models import Record, Status
 
-# Existing libraries
+# Filesystem utilities
 from pkms.lib.fs.paths import parse_slug_id, build_note_filename
 from pkms.lib.fs.ids import new_id, is_valid_ulid
 from pkms.lib.fs.slug import make_slug
@@ -34,236 +45,333 @@ from pkms.lib.frontmatter.core import parse_file, write_file, FrontmatterModel
 # Utilities
 from pkms.lib.utils import compute_sha256, detect_language
 
-
 # Config
-NOTES_DIR = os.getenv("PKMS_NOTES_DIR", "notes")
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/records")
+from pkms.lib.config import get_path, get_vault_config
 
 
-def normalize_note(file_path: Path, notes_root: Path) -> tuple[Path, FrontmatterModel, str]:
-    """
-    Normalizes a markdown file:
-    - Ensures valid ULID in frontmatter
-    - Ensures filename matches pattern: slug--ULID.md
-    - Auto-detects language if missing
-    - Returns: (normalized_path, frontmatter, body)
-    """
-    if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+def get_vault_subfolder(date_created: Optional[datetime] = None) -> str:
+	"""
+	Get vault subfolder based on date_created.
 
-    # Parse frontmatter
-    try:
-        frontmatter, body = parse_file(str(file_path))
-    except Exception as e:
-        print(f"[ingest] ERROR: Could not parse {file_path}: {e}")
-        raise
+	Args:
+		date_created: Date to use for organization (defaults to now)
 
-    # Get IDs from filename and frontmatter
-    slug_from_name, id_from_name = parse_slug_id(file_path)
+	Returns:
+		str: Subfolder name (e.g., "2025-11")
 
-    id_from_frontmatter = getattr(frontmatter, "id", None)
+	Example:
+		>>> get_vault_subfolder(datetime(2025, 11, 15))
+		'2025-11'
+	"""
+	vault_config = get_vault_config()
 
-    # Validate ULID in frontmatter
-    if id_from_frontmatter and not is_valid_ulid(id_from_frontmatter):
-        print(f"[ingest] WARN: Invalid ULID in frontmatter: {id_from_frontmatter}")
-        id_from_frontmatter = None
+	if not vault_config.get("organize_by_date", True):
+		return ""
 
-    # Validate ULID in filename
-    if id_from_name and not is_valid_ulid(id_from_name):
-        id_from_name = None
+	date_format = vault_config.get("date_format", "%Y-%m")
+	date = date_created or datetime.now(timezone.utc)
 
-    # Determine final ULID
-    if id_from_frontmatter:
-        id_final = id_from_frontmatter
-    elif id_from_name:
-        id_final = id_from_name
-        frontmatter.id = id_final  # Write back to frontmatter
-    else:
-        id_final = new_id()
-        frontmatter.id = id_final
-
-    # Determine slug
-    title = getattr(frontmatter, "title", None)
-    if title:
-        slug_final = make_slug(title)
-    else:
-        slug_final = make_slug(slug_from_name or "note")
-
-    # Auto-detect language if missing
-    if not frontmatter.language:
-        frontmatter.language = detect_language(body, fallback="en")
-
-    # Write back frontmatter (in case we added id or language)
-    write_file(str(file_path), frontmatter, body)
-
-    # Rename file if needed
-    new_name = build_note_filename(slug_final, id_final, file_path.suffix)
-    new_path = file_path.with_name(new_name)
-
-    if new_path != file_path:
-        if new_path.exists():
-            raise FileExistsError(f"Target already exists: {new_path}")
-        file_path.rename(new_path)
-        print(f"[ingest] Renamed: {file_path.name} → {new_path.name}")
-
-    return new_path, frontmatter, body
+	return date.strftime(date_format)
 
 
-def create_record(file_path: Path, notes_root: Path, frontmatter: FrontmatterModel, body: str) -> Record:
-    """
-    Creates a Record from normalized file
+def normalize_note(
+	file_path: Path,
+	inbox_root: Path
+) -> Tuple[Path, str, FrontmatterModel, str]:
+	"""
+	Normalize note from inbox to vault.
 
-    :param file_path: Absolute path to markdown file
-    :param notes_root: Root directory of notes (for relative path)
-    :param frontmatter: Parsed frontmatter
-    :param body: Markdown content (without frontmatter)
-    :returns: Record instance
-    """
-    # Read full file (with frontmatter) for file_hash
-    with open(file_path, "r", encoding="utf-8") as f:
-        full_file_content = f.read()
+	Steps:
+	1. Parse frontmatter
+	2. Validate/generate ULID (from filename or new)
+	3. Generate slug from title
+	4. Rename file to {slug}--{ULID}.md
+	5. Auto-detect language if missing
+	6. Determine vault subfolder (YYYY-MM)
+	7. Move to vault/
 
-    # Get file stats
-    stat = file_path.stat()
-    created = frontmatter.date_created or datetime.fromtimestamp(stat.st_ctime, tz=timezone.utc).isoformat()
-    updated = datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat()
+	Args:
+		file_path: Path to note in inbox/
+		inbox_root: Root of inbox directory
 
-    # Parse created/updated as datetime
-    if isinstance(created, str):
-        created = datetime.fromisoformat(created.replace("Z", "+00:00"))
-    if isinstance(updated, str):
-        updated = datetime.fromisoformat(updated.replace("Z", "+00:00"))
+	Returns:
+		Tuple[Path, str, FrontmatterModel, str]:
+			- new_path: Path in vault/
+			- ulid: Note ULID (from filename)
+			- frontmatter: Parsed frontmatter
+			- body: Markdown content
 
-    # Parse date_semantic
-    date_semantic = None
-    if frontmatter.date_semantic:
-        if isinstance(frontmatter.date_semantic, str):
-            date_semantic = datetime.fromisoformat(frontmatter.date_semantic.replace("Z", "+00:00"))
-        else:
-            date_semantic = frontmatter.date_semantic
+	Raises:
+		FileNotFoundError: If file doesn't exist
+		FileExistsError: If target path already exists
+	"""
+	if not file_path.exists():
+		raise FileNotFoundError(f"File not found: {file_path}")
 
-    # Build slug from title
-    slug = make_slug(frontmatter.title) if frontmatter.title else "note"
+	# Parse frontmatter
+	try:
+		frontmatter, body = parse_file(str(file_path))
+	except Exception as e:
+		print(f"[ingest] ERROR: Could not parse {file_path}: {e}")
+		raise
 
-    # Relative path
-    rel_path = file_path.relative_to(notes_root)
+	# Get ULID from filename (or generate new)
+	slug_from_name, id_from_name = parse_slug_id(file_path)
 
-    # Hashes
-    content_hash = compute_sha256(body)
-    file_hash = compute_sha256(full_file_content)
+	# Validate ULID in filename
+	if id_from_name and not is_valid_ulid(id_from_name):
+		print(f"[ingest] WARN: Invalid ULID in filename: {id_from_name}")
+		id_from_name = None
 
-    # Initial status
-    status = Status(
-        relevance_score=1.0,  # New docs start with max relevance
-        archived=False,
-    )
+	# Determine final ULID (priority: filename > new)
+	if id_from_name:
+		id_final = id_from_name
+	else:
+		id_final = new_id()
+		print(f"[ingest] Generated ULID: {id_final}")
 
-    # Build Record
-    record = Record(
-        id=frontmatter.id,
-        slug=slug,
-        path=f"notes/{rel_path}",
-        title=frontmatter.title or "Untitled",
-        tags=frontmatter.tags or [],
-        aliases=frontmatter.aliases or [],
-        categories=frontmatter.categories or [],
-        language=frontmatter.language or "en",
-        created=created,
-        updated=updated,
-        date_semantic=date_semantic,
-        full_text=body,
-        links=[],  # Will be filled by link.py
-        backlinks=[],  # Will be filled by link.py
-        content_hash=content_hash,
-        file_hash=file_hash,
-        status=status,
-        doc_type="note",
-    )
+	# Determine slug (priority: title > filename > fallback)
+	title = getattr(frontmatter, "title", None)
+	if title:
+		slug_final = make_slug(title)
+	else:
+		slug_final = make_slug(slug_from_name or "note")
 
-    return record
+	# Auto-detect language if missing
+	if not frontmatter.language:
+		frontmatter.language = detect_language(body, fallback="en")
+		print(f"[ingest] Detected language: {frontmatter.language}")
 
+	# Determine vault subfolder (based on date_created)
+	date_created = None
+	if frontmatter.date_created:
+		if isinstance(frontmatter.date_created, str):
+			date_created = datetime.fromisoformat(frontmatter.date_created.replace("Z", "+00:00"))
+		else:
+			date_created = frontmatter.date_created
 
-def save_record(record: Record, records_dir: Path):
-    """Saves record as JSON to records_dir/{id}.json"""
-    records_dir.mkdir(parents=True, exist_ok=True)
+	subfolder = get_vault_subfolder(date_created)
 
-    out_path = records_dir / f"{record.id}.json"
+	# Build target path in vault/
+	vault_root = get_path("vault")
+	vault_subdir = vault_root / subfolder if subfolder else vault_root
+	vault_subdir.mkdir(parents=True, exist_ok=True)
 
-    # Serialize with indentation
-    record_json = record.model_dump(mode="json", exclude_none=True)
+	new_filename = build_note_filename(slug_final, id_final, file_path.suffix)
+	new_path = vault_subdir / new_filename
 
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
+	# Check for conflicts
+	if new_path.exists():
+		raise FileExistsError(f"Target already exists: {new_path}")
 
-    print(f"[ingest] Saved: {out_path}")
+	# Write frontmatter back (language may have been added)
+	write_file(str(file_path), frontmatter, body)
 
+	# Move to vault/
+	file_path.rename(new_path)
+	print(f"[ingest] Moved: {file_path.name} → {new_path.relative_to(vault_root.parent)}")
 
-def ingest_file(file_path: Path, notes_root: Path, records_dir: Path):
-    """Ingests a single markdown file"""
-    try:
-        # Normalize (ULID, filename, language)
-        normalized_path, frontmatter, body = normalize_note(file_path, notes_root)
-
-        # Create Record
-        record = create_record(normalized_path, notes_root, frontmatter, body)
-
-        # Save
-        save_record(record, records_dir)
-
-    except Exception as e:
-        print(f"[ingest] ERROR: Failed to ingest {file_path}: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc()
+	return new_path, id_final, frontmatter, body
 
 
-def ingest_directory(notes_dir: Path, records_dir: Path):
-    """Ingests all .md files in notes_dir"""
-    md_files = list(notes_dir.rglob("*.md"))
+def create_record(
+	file_path: Path,
+	ulid: str,
+	frontmatter: FrontmatterModel,
+	body: str
+) -> Record:
+	"""
+	Create metadata record from normalized note.
 
-    print(f"[ingest] Found {len(md_files)} markdown files in {notes_dir}")
+	Args:
+		file_path: Absolute path to note in vault/
+		ulid: Note ULID (from filename)
+		frontmatter: Parsed frontmatter
+		body: Markdown content
 
-    for file_path in md_files:
-        ingest_file(file_path, notes_dir, records_dir)
+	Returns:
+		Record: Metadata record
+	"""
+	# Read full file (with frontmatter) for file_hash
+	with open(file_path, "r", encoding="utf-8") as f:
+		full_file_content = f.read()
 
-    print(f"\n[ingest] ✓ Ingested {len(md_files)} files")
+	# Get file stats
+	stat = file_path.stat()
+
+	# Parse dates
+	created = frontmatter.date_created or datetime.fromtimestamp(stat.st_ctime, tz=timezone.utc).isoformat()
+	updated = datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat()
+
+	if isinstance(created, str):
+		created = datetime.fromisoformat(created.replace("Z", "+00:00"))
+	if isinstance(updated, str):
+		updated = datetime.fromisoformat(updated.replace("Z", "+00:00"))
+
+	# Parse date_semantic
+	date_semantic = None
+	if frontmatter.date_semantic:
+		if isinstance(frontmatter.date_semantic, str):
+			date_semantic = datetime.fromisoformat(frontmatter.date_semantic.replace("Z", "+00:00"))
+		else:
+			date_semantic = frontmatter.date_semantic
+
+	# Build slug from title
+	slug = make_slug(frontmatter.title) if frontmatter.title else "note"
+
+	# Relative path from project root
+	vault_root = get_path("vault")
+	rel_path = file_path.relative_to(vault_root.parent)
+
+	# Hashes
+	content_hash = compute_sha256(body)
+	file_hash = compute_sha256(full_file_content)
+
+	# Initial status
+	status = Status(
+		relevance_score=1.0,  # New docs start with max relevance
+		archived=False,
+	)
+
+	# Build Record (ULID from filename, not frontmatter)
+	record = Record(
+		id=ulid,
+		slug=slug,
+		path=str(rel_path),
+		title=frontmatter.title or "Untitled",
+		tags=frontmatter.tags or [],
+		aliases=frontmatter.aliases or [],
+		categories=frontmatter.categories or [],
+		language=frontmatter.language or "en",
+		created=created,
+		updated=updated,
+		date_semantic=date_semantic,
+		full_text=body,
+		links=[],  # Will be filled by link.py
+		backlinks=[],  # Will be filled by link.py
+		content_hash=content_hash,
+		file_hash=file_hash,
+		status=status,
+		doc_type="note",
+	)
+
+	return record
+
+
+def save_record(record: Record, metadata_dir: Path):
+	"""
+	Save metadata record as JSON.
+
+	Args:
+		record: Record to save
+		metadata_dir: Directory for metadata JSONs
+	"""
+	metadata_dir.mkdir(parents=True, exist_ok=True)
+
+	out_path = metadata_dir / f"{record.id}.json"
+
+	# Serialize with indentation
+	record_json = record.model_dump(mode="json", exclude_none=True)
+
+	with open(out_path, "w", encoding="utf-8") as f:
+		json.dump(record_json, f, indent=2, ensure_ascii=False, default=str)
+
+	print(f"[ingest] Saved metadata: {out_path.name}")
+
+
+def ingest_file(file_path: Path, source_root: Path):
+	"""
+	Ingest single file from inbox/ to vault/.
+
+	Args:
+		file_path: Path to markdown file in inbox/
+		source_root: Root directory (inbox/)
+	"""
+	try:
+		metadata_dir = get_path("metadata")
+
+		# Normalize and move to vault/
+		normalized_path, ulid, frontmatter, body = normalize_note(file_path, source_root)
+
+		# Create metadata record
+		record = create_record(normalized_path, ulid, frontmatter, body)
+
+		# Save metadata
+		save_record(record, metadata_dir)
+
+		print(f"[ingest] ✓ Ingested: {ulid}")
+
+	except Exception as e:
+		print(f"[ingest] ERROR: Failed to ingest {file_path}: {e}", file=sys.stderr)
+		import traceback
+		traceback.print_exc()
+
+
+def ingest_directory(source_dir: Path):
+	"""
+	Ingest all .md files from directory.
+
+	Args:
+		source_dir: Source directory (e.g., inbox/)
+	"""
+	md_files = list(source_dir.rglob("*.md"))
+
+	if not md_files:
+		print(f"[ingest] No markdown files found in {source_dir}")
+		return
+
+	print(f"[ingest] Found {len(md_files)} markdown files in {source_dir}")
+	print()
+
+	for file_path in md_files:
+		ingest_file(file_path, source_dir)
+		print()
+
+	print(f"[ingest] ✓ Processed {len(md_files)} files")
 
 
 def main():
-    import argparse
+	import argparse
 
-    parser = argparse.ArgumentParser(description="Ingest markdown files to Record JSONs")
-    parser.add_argument(
-        "path",
-        nargs="?",
-        default=NOTES_DIR,
-        help="Path to markdown file or directory (default: notes/)"
-    )
-    parser.add_argument(
-        "--records-dir",
-        default=RECORDS_DIR,
-        help="Output directory for Record JSONs (default: data/records/)"
-    )
+	parser = argparse.ArgumentParser(
+		description="Ingest notes from inbox/ to vault/ with metadata generation"
+	)
+	parser.add_argument(
+		"path",
+		nargs="?",
+		help="Path to markdown file or directory (default: inbox/)"
+	)
+	parser.add_argument(
+		"--source",
+		help="Source directory override (default: inbox/)"
+	)
 
-    args = parser.parse_args()
+	args = parser.parse_args()
 
-    path = Path(args.path)
-    records_dir = Path(args.records_dir)
+	# Determine source
+	if args.path:
+		path = Path(args.path)
+	elif args.source:
+		path = Path(args.source)
+	else:
+		path = get_path("inbox")
 
-    if not path.exists():
-        print(f"[ingest] ERROR: Path does not exist: {path}", file=sys.stderr)
-        sys.exit(1)
+	if not path.exists():
+		print(f"[ingest] ERROR: Path does not exist: {path}", file=sys.stderr)
+		sys.exit(1)
 
-    print(f"[ingest] Plan v0.3 Ingest")
-    print(f"  Input:  {path}")
-    print(f"  Output: {records_dir}")
-    print()
+	print(f"[ingest] PKMS v0.3 Ingestion")
+	print(f"  Source: {path}")
+	print(f"  Vault:  {get_path('vault')}")
+	print(f"  Metadata: {get_path('metadata')}")
+	print()
 
-    if path.is_file():
-        notes_root = path.parent
-        ingest_file(path, notes_root, records_dir)
-    else:
-        ingest_directory(path, records_dir)
+	if path.is_file():
+		source_root = path.parent
+		ingest_file(path, source_root)
+	else:
+		ingest_directory(path)
 
 
 if __name__ == "__main__":
-    main()
+	main()
