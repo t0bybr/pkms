@@ -38,7 +38,9 @@ date_field = "date_created"  # Options: date_created, date_updated, date_semanti
 
 [embeddings]
 # Embedding model to use
-model = "mxbai-embed-large:latest"
+# Recommended for German: jina-embeddings-v2-base-de
+# Other options: nomic-embed-text:latest, snowflake-arctic-embed2
+model = "jina-embeddings-v2-base-de"
 
 # Ollama API endpoint
 ollama_url = "http://localhost:11434"
@@ -50,8 +52,9 @@ bm25_weight = 0.5
 # Semantic weight in hybrid search (0.0 - 1.0)
 semantic_weight = 0.5
 
-# Minimum similarity threshold
-min_similarity = 0.3
+# Minimum similarity threshold (0.2 = good balance for German)
+# Lower = more results but noisier, Higher = fewer but more precise
+min_similarity = 0.2
 
 # Maximum hits for BM25 search (for RRF fusion)
 max_keyword_hits = 50
