@@ -30,14 +30,14 @@ def _get_schema() -> Schema:
     Fields:
     - chunk_id: unique identifier (doc_id:chunk_hash)
     - doc_id: parent document ULID (for grouping)
-    - text: chunk content (indexed, not stored)
+    - text: chunk content (indexed AND stored for display)
     - section: heading/section name (stored for display)
     - chunk_index: for ordering within doc
     """
     return Schema(
         chunk_id=ID(stored=True, unique=True),
         doc_id=ID(stored=True),  # for grouping
-        text=TEXT(stored=False),  # indexed but not stored (save space)
+        text=TEXT(stored=True),  # indexed AND stored for display in results
         section=STORED(),  # for display
         chunk_index=STORED(),  # for ordering
     )
@@ -97,11 +97,16 @@ def _build_or_open_chunk_index(chunks_dir: str, index_dir: str):
                                 continue
                             try:
                                 chunk = json.loads(line)
+                                # Combine section + text for searchability
+                                section = chunk.get("section", "")
+                                text = chunk["text"]
+                                searchable_text = f"{section}\n{text}" if section else text
+
                                 writer.add_document(
                                     chunk_id=chunk["chunk_id"],
                                     doc_id=chunk["doc_id"],
-                                    text=chunk["text"],
-                                    section=chunk.get("section", ""),
+                                    text=searchable_text,
+                                    section=section,
                                     chunk_index=chunk.get("chunk_index", 0),
                                 )
                             except (json.JSONDecodeError, KeyError) as e:
@@ -286,6 +291,7 @@ class SearchEngine:
                 results_list.append({
                     "chunk_id": hit["chunk_id"],
                     "doc_id": hit["doc_id"],
+                    "text": hit.get("text", ""),
                     "section": hit.get("section", ""),
                     "chunk_index": hit.get("chunk_index", 0),
                     "score": float(hit.score),
@@ -394,6 +400,7 @@ class SearchEngine:
                     "bm25": bm25,
                     "semantic": semantic,
                     "source": source,
+                    "text": kw_meta.get("text", ""),
                     "section": kw_meta.get("section", ""),
                     "chunk_index": kw_meta.get("chunk_index", 0),
                 })
@@ -436,6 +443,7 @@ class SearchEngine:
                     "bm25": r["score"],
                     "semantic": None,
                     "source": "keyword",
+                    "text": r.get("text", ""),
                     "section": r.get("section", ""),
                     "chunk_index": r.get("chunk_index", 0),
                 }

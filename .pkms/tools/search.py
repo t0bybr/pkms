@@ -104,12 +104,31 @@ def _format_human(results: list[dict], query: str, limit: int) -> None:
         semantic = r.get("semantic")
         source = r.get("source", "unknown")
         section = r.get("section", "")
+        text = r.get("text", "")
 
         print(f"\n{i}. {chunk_id}")
         print(f"   Document: {doc_id}")
         print(f"   Section:  {section or '(no section)'}")
         print(f"   Score:    RRF={rrf_score:.4f} | BM25={bm25 or 'N/A'} | Semantic={semantic or 'N/A'}")
         print(f"   Source:   {source}")
+
+        # Display chunk text (truncated if too long)
+        if text:
+            # Remove section from text if it was prepended
+            display_text = text
+            if section and text.startswith(section):
+                display_text = text[len(section):].lstrip("\n")
+
+            # Truncate long text
+            max_len = 200
+            if len(display_text) > max_len:
+                display_text = display_text[:max_len] + "..."
+
+            # Format multiline text with indentation
+            lines = display_text.split("\n")
+            print(f"   Text:     {lines[0]}")
+            for line in lines[1:]:
+                print(f"             {line}")
 
     print("\n" + "=" * 80)
 
@@ -172,6 +191,7 @@ def search(
                     "bm25": r["score"],
                     "semantic": None,
                     "source": "keyword",
+                    "text": r.get("text", ""),
                     "section": r.get("section", ""),
                     "chunk_index": r.get("chunk_index", 0),
                 }
@@ -190,6 +210,7 @@ def search(
                     "bm25": None,
                     "semantic": r["score"],
                     "source": "semantic",
+                    "text": "",  # No text available in semantic-only mode
                     "section": "",
                     "chunk_index": 0,
                 }

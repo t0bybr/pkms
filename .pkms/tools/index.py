@@ -35,14 +35,14 @@ def _get_schema() -> Schema:
     Fields:
     - chunk_id: unique identifier (doc_id:chunk_hash)
     - doc_id: parent document ULID (for grouping)
-    - text: chunk content (indexed, not stored)
+    - text: chunk content (indexed AND stored for display)
     - section: heading/section name (stored for display)
     - chunk_index: for ordering within doc
     """
     return Schema(
         chunk_id=ID(stored=True, unique=True),
         doc_id=ID(stored=True),
-        text=TEXT(stored=False),
+        text=TEXT(stored=True),  # indexed AND stored for display
         section=STORED(),
         chunk_index=STORED(),
     )
@@ -107,11 +107,17 @@ def _index_chunks(chunks_dir: str, index_dir: str, rebuild: bool = False) -> dic
                         chunk = json.loads(line)
                         chunk_id = chunk["chunk_id"]
                         all_chunk_ids.add(chunk_id)
+
+                        # Combine section + text for searchability
+                        section = chunk.get("section", "")
+                        text = chunk["text"]
+                        searchable_text = f"{section}\n{text}" if section else text
+
                         chunk_data.append({
                             "chunk_id": chunk_id,
                             "doc_id": chunk["doc_id"],
-                            "text": chunk["text"],
-                            "section": chunk.get("section", ""),
+                            "text": searchable_text,
+                            "section": section,
                             "chunk_index": chunk.get("chunk_index", 0),
                         })
                     except (json.JSONDecodeError, KeyError) as e:
