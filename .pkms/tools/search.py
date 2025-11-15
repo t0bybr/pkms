@@ -118,7 +118,13 @@ def _format_human(results: list[dict], query: str, limit: int) -> None:
         print(f"\n{i}. {chunk_id}")
         print(f"   Document: {doc_id}")
         print(f"   Section:  {section or '(no section)'}")
-        print(f"   Score:    RRF={rrf_score:.4f} | BM25={bm25 or 'N/A'} | Semantic={semantic or 'N/A'}")
+
+        # Format scores (handle None values)
+        rrf_str = f"{rrf_score:.4f}" if rrf_score is not None else "N/A"
+        bm25_str = f"{bm25:.4f}" if bm25 is not None else "N/A"
+        sem_str = f"{semantic:.4f}" if semantic is not None else "N/A"
+
+        print(f"   Score:    RRF={rrf_str} | BM25={bm25_str} | Semantic={sem_str}")
         print(f"   Source:   {source}")
 
         # Display chunk text (truncated if too long)
@@ -210,21 +216,24 @@ def search(
             # Semantic-only search
             query_vec = get_embedding(query)
             results = engine._semantic_search(query_vec, limit=limit)
-            # Convert to standard format
-            results = [
-                {
-                    "chunk_id": r["chunk_id"],
+            # Convert to standard format and load metadata
+            from lib.search.search_engine import _load_chunk_metadata
+            formatted_results = []
+            for r in results:
+                chunk_id = r["chunk_id"]
+                chunk_meta = _load_chunk_metadata(engine.chunks_dir, chunk_id)
+                formatted_results.append({
+                    "chunk_id": chunk_id,
                     "doc_id": r["doc_id"],
                     "rrf_score": None,
                     "bm25": None,
                     "semantic": r["score"],
                     "source": "semantic",
-                    "text": "",  # No text available in semantic-only mode
-                    "section": "",
-                    "chunk_index": 0,
-                }
-                for r in results
-            ]
+                    "text": chunk_meta.get("text", ""),
+                    "section": chunk_meta.get("section", ""),
+                    "chunk_index": chunk_meta.get("chunk_index", 0),
+                })
+            results = formatted_results
         else:
             # Hybrid search (default)
             results = engine.search(query, k=limit)
