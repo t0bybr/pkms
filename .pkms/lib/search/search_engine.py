@@ -462,30 +462,30 @@ class SearchEngine:
 # Example Usage
 # ------------------------------------------------------------
 
-if __name__ == "__main__":
-    # Dummy embedding function for testing
-    def dummy_embed(text: str) -> np.ndarray:
-        return np.random.rand(384).astype(np.float32)
+# if __name__ == "__main__":
+#     # Dummy embedding function for testing
+#     def dummy_embed(text: str) -> np.ndarray:
+#         return np.random.rand(384).astype(np.float32)
 
-    CHUNKS_DIR = "data/chunks"
-    EMB_DIR = "data/embeddings/nomic-embed-text"
-    INDEX_DIR = "data/whoosh_index"
+#     CHUNKS_DIR = "data/chunks"
+#     EMB_DIR = "data/embeddings/nomic-embed-text"
+#     INDEX_DIR = "data/whoosh_index"
 
-    engine = SearchEngine(
-        chunks_dir=CHUNKS_DIR,
-        emb_dir=EMB_DIR,
-        index_dir=INDEX_DIR,
-        embed_fn=dummy_embed,
-        group_limit=3,
-    )
+#     engine = SearchEngine(
+#         chunks_dir=CHUNKS_DIR,
+#         emb_dir=EMB_DIR,
+#         index_dir=INDEX_DIR,
+#         embed_fn=dummy_embed,
+#         group_limit=3,
+#     )
 
-    results = engine.search("pizza ofen temperatur", k=10)
-    for r in results:
-        print(
-            f"{r['chunk_id']:40} "
-            f"doc={r['doc_id']:26} "
-            f"rrf={r['rrf_score']:.4f} "
-            f"(bm25={r['bm25']}, sem={r['semantic']}) "
-            f"[{r['source']}] "
-            f"§{r['section']}"
-        )
+#     results = engine.search("pizza ofen temperatur", k=10)
+#     for r in results:
+#         print(
+#             f"{r['chunk_id']:40} "
+#             f"doc={r['doc_id']:26} "
+#             f"rrf={r['rrf_score']:.4f} "
+#             f"(bm25={r['bm25']}, sem={r['semantic']}) "
+#             f"[{r['source']}] "
+#             f"§{r['section']}"
+#         )

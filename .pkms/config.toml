@@ -38,7 +38,7 @@ date_field = "date_created"  # Options: date_created, date_updated, date_semanti
 
 [embeddings]
 # Embedding model to use
-model = "nomic-embed-text"
+model = "mxbai-embed-large:latest"
 
 # Ollama API endpoint
 ollama_url = "http://localhost:11434"
