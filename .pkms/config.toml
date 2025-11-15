@@ -53,6 +53,18 @@ semantic_weight = 0.5
 # Minimum similarity threshold
 min_similarity = 0.3
 
+# Maximum hits for BM25 search (for RRF fusion)
+max_keyword_hits = 50
+
+# Maximum hits for semantic search (for RRF fusion)
+max_semantic_hits = 50
+
+# RRF parameter k (usually 60)
+rrf_k = 60
+
+# Maximum chunks per document in results
+group_limit = 3
+
 [relevance]
 # Relevance scoring weights
 weight_recency = 0.4
