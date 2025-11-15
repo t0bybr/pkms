@@ -4,6 +4,8 @@
 pydantic>=2.0.0
 python-frontmatter>=1.0.0
 langdetect>=1.0.9
+python-slugify>=8.0.0
+python-ulid>=2.0.0
 
 # Optional (recommended for better performance)
 xxhash>=3.0.0
