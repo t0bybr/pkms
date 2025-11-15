@@ -67,12 +67,16 @@ def _get_search_engine() -> SearchEngine:
         max_semantic_hits = search_config.get("max_semantic_hits", 50)
         rrf_k = search_config.get("rrf_k", 60)
         group_limit = search_config.get("group_limit", 3)
+        bm25_weight = search_config.get("bm25_weight", 0.5)
+        semantic_weight = search_config.get("semantic_weight", 0.5)
     except Exception:
         # Fallback to defaults
         max_keyword_hits = 50
         max_semantic_hits = 50
         rrf_k = 60
         group_limit = 3
+        bm25_weight = 0.5
+        semantic_weight = 0.5
 
     return SearchEngine(
         chunks_dir=chunks_dir,
@@ -83,6 +87,8 @@ def _get_search_engine() -> SearchEngine:
         max_semantic_hits=max_semantic_hits,
         rrf_k=rrf_k,
         group_limit=group_limit,
+        bm25_weight=bm25_weight,
+        semantic_weight=semantic_weight,
     )
 
 

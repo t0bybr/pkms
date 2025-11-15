@@ -204,6 +204,44 @@ def _build_hash_to_chunkid_map(chunks_dir: str) -> Dict[str, str]:
     return hash_map
 
 
+def _load_chunk_metadata(chunks_dir: str, chunk_id: str) -> Dict[str, any]:
+    """
+    Lädt Chunk-Metadata (text, section, etc.) aus NDJSON files.
+
+    Returns dict with 'text', 'section', 'chunk_index' or empty dict if not found.
+    """
+    chunks_path = Path(chunks_dir)
+    if not chunks_path.exists():
+        return {}
+
+    # Extract doc_id from chunk_id (format: "doc_id:chunk_hash")
+    doc_id = chunk_id.split(":", 1)[0] if ":" in chunk_id else chunk_id
+    ndjson_file = chunks_path / f"{doc_id}.ndjson"
+
+    if not ndjson_file.exists():
+        return {}
+
+    try:
+        with open(ndjson_file, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    chunk = json.loads(line)
+                    if chunk.get("chunk_id") == chunk_id:
+                        return {
+                            "text": chunk.get("text", ""),
+                            "section": chunk.get("section", ""),
+                            "chunk_index": chunk.get("chunk_index", 0),
+                        }
+                except (json.JSONDecodeError, KeyError):
+                    continue
+    except Exception:
+        pass
+
+    return {}
+
+
 # ------------------------------------------------------------
 # SearchEngine (Chunk-basiert)
 # ------------------------------------------------------------
@@ -228,6 +266,8 @@ class SearchEngine:
         max_semantic_hits: int = 50,
         rrf_k: int = 60,
         group_limit: int = 3,
+        bm25_weight: float = 0.5,
+        semantic_weight: float = 0.5,
     ):
         """
         :param chunks_dir: Directory with chunk NDJSON files (data/chunks/)
@@ -238,6 +278,8 @@ class SearchEngine:
         :param max_semantic_hits: Semantic hits for RRF
         :param rrf_k: RRF parameter (usually 60)
         :param group_limit: Max chunks per doc_id in results
+        :param bm25_weight: Weight for BM25 results in fusion (0.0-1.0)
+        :param semantic_weight: Weight for semantic results in fusion (0.0-1.0)
         """
         self.chunks_dir = chunks_dir
         self.emb_dir = emb_dir
@@ -247,6 +289,8 @@ class SearchEngine:
         self.max_semantic_hits = max_semantic_hits
         self.rrf_k = rrf_k
         self.group_limit = group_limit
+        self.bm25_weight = bm25_weight
+        self.semantic_weight = semantic_weight
 
         # Build caches with error handling
         try:
@@ -335,14 +379,20 @@ class SearchEngine:
         top_k: int,
     ) -> List[Tuple[str, float]]:
         """
-        Reciprocal Rank Fusion über chunk_id.
+        Weighted Reciprocal Rank Fusion über chunk_id.
+
+        Applies bm25_weight and semantic_weight to respective result lists.
+        results_lists[0] = keyword results (weight: bm25_weight)
+        results_lists[1] = semantic results (weight: semantic_weight)
         """
         scores: Dict[str, float] = {}
+        weights = [self.bm25_weight, self.semantic_weight]
 
-        for results in results_lists:
+        for list_idx, results in enumerate(results_lists):
+            weight = weights[list_idx] if list_idx < len(weights) else 1.0
             for rank, r in enumerate(results):
                 chunk_id = r["chunk_id"]
-                contrib = 1.0 / (self.rrf_k + rank + 1)
+                contrib = weight * (1.0 / (self.rrf_k + rank + 1))
                 scores[chunk_id] = scores.get(chunk_id, 0.0) + contrib
 
         sorted_chunks = sorted(scores.items(), key=lambda x: x[1], reverse=True)
@@ -393,6 +443,18 @@ class SearchEngine:
                 else:
                     source = "semantic"
 
+                # Get text/section: prefer kw_meta, fallback to sem_meta, then load from file
+                text = kw_meta.get("text") or sem_meta.get("text", "")
+                section = kw_meta.get("section") or sem_meta.get("section", "")
+                chunk_index = kw_meta.get("chunk_index") or sem_meta.get("chunk_index", 0)
+
+                # If still no text (semantic-only results), load from chunk file
+                if not text:
+                    chunk_meta = _load_chunk_metadata(self.chunks_dir, chunk_id)
+                    text = chunk_meta.get("text", "")
+                    section = section or chunk_meta.get("section", "")
+                    chunk_index = chunk_index or chunk_meta.get("chunk_index", 0)
+
                 final_results.append({
                     "chunk_id": chunk_id,
                     "doc_id": doc_id,
@@ -400,9 +462,9 @@ class SearchEngine:
                     "bm25": bm25,
                     "semantic": semantic,
                     "source": source,
-                    "text": kw_meta.get("text", ""),
-                    "section": kw_meta.get("section", ""),
-                    "chunk_index": kw_meta.get("chunk_index", 0),
+                    "text": text,
+                    "section": section,
+                    "chunk_index": chunk_index,
                 })
 
         return final_results
