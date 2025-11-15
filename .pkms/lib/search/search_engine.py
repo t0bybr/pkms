@@ -387,15 +387,21 @@ class SearchEngine:
             return []
 
         sims = _cosine_similarity(query_vec, self.embeddings_normed)
-        top_idx = np.argsort(sims)[::-1][:limit]
+
+        # Filter by minimum similarity threshold FIRST
+        valid_indices = np.where(sims >= self.min_similarity)[0]
+
+        if len(valid_indices) == 0:
+            return []
+
+        # Sort valid indices by score (descending) and take top N
+        valid_scores = sims[valid_indices]
+        sorted_order = np.argsort(valid_scores)[::-1][:limit]
+        top_idx = valid_indices[sorted_order]
 
         results = []
         for idx in top_idx:
             sim_score = float(sims[idx])
-
-            # Filter by minimum similarity threshold
-            if sim_score < self.min_similarity:
-                continue
 
             chunk_hash = self.chunk_hashes[idx]
             chunk_id = self.hash_to_chunkid.get(chunk_hash)
