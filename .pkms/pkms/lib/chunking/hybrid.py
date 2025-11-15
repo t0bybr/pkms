@@ -265,8 +265,8 @@ def chunk_document(
     # Build output dicts
     output_chunks = []
     for idx, chunk in enumerate(chunks):
-        chunk_text = chunk["text"]
-        chunk_hash = compute_chunk_hash(chunk_text)
+        text_content = chunk["text"]
+        chunk_hash = compute_chunk_hash(text_content)
         chunk_id = f"{doc_id}:{chunk_hash}"
 
         output_chunks.append({
@@ -274,8 +274,8 @@ def chunk_document(
             "chunk_id": chunk_id,
             "chunk_hash": chunk_hash,
             "chunk_index": idx,
-            "text": chunk_text,
-            "tokens": chunk.get("tokens", count_tokens(chunk_text)),
+            "text": text_content,
+            "tokens": chunk.get("tokens", count_tokens(text_content)),
             "section": chunk.get("section"),
             "subsection": chunk.get("subsection"),
             "modality": "text",
