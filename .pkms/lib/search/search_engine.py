@@ -388,6 +388,12 @@ class SearchEngine:
 
         results = []
         for idx in top_idx:
+            sim_score = float(sims[idx])
+
+            # Filter by minimum similarity threshold
+            if sim_score < self.min_similarity:
+                continue
+
             chunk_hash = self.chunk_hashes[idx]
             chunk_id = self.hash_to_chunkid.get(chunk_hash)
             if not chunk_id:
@@ -400,7 +406,7 @@ class SearchEngine:
                 "chunk_id": chunk_id,
                 "doc_id": doc_id,
                 "chunk_hash": chunk_hash,
-                "score": float(sims[idx]),
+                "score": sim_score,
             })
 
         return results
