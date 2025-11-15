@@ -224,3 +224,74 @@ def get_git_config() -> Dict[str, Any]:
 	"""
 	config = get_config()
 	return config.get("git", {})
+
+
+def get_config_value(section: str, key: str, env_var: str | None = None, default: Any = None) -> Any:
+	"""
+	Get configuration value with fallback chain: config.toml > ENV > default.
+
+	Args:
+		section: Config section (e.g., "embeddings", "paths")
+		key: Config key within section (e.g., "model", "vault")
+		env_var: Optional environment variable name to check as override
+		default: Default value if not found in config or ENV
+
+	Returns:
+		Configuration value from first available source
+
+	Example:
+		>>> # Reads from config.toml [embeddings] model,
+		>>> # or PKMS_EMBED_MODEL env var,
+		>>> # or defaults to "nomic-embed-text"
+		>>> model = get_config_value("embeddings", "model", "PKMS_EMBED_MODEL", "nomic-embed-text")
+	"""
+	import os
+
+	# 1. Try environment variable (highest priority - allows runtime override)
+	if env_var:
+		env_value = os.getenv(env_var)
+		if env_value is not None:
+			return env_value
+
+	# 2. Try config file
+	try:
+		config = get_config()
+		if section in config and key in config[section]:
+			return config[section][key]
+	except (FileNotFoundError, KeyError):
+		pass
+
+	# 3. Use default
+	return default
+
+
+def get_records_dir() -> str:
+	"""
+	Get metadata/records directory path.
+
+	Convenience function with fallback chain.
+
+	Returns:
+		str: Path to metadata directory
+	"""
+	try:
+		return str(get_path("metadata"))
+	except (FileNotFoundError, KeyError):
+		import os
+		return os.getenv("PKMS_RECORDS_DIR", "data/metadata")
+
+
+def get_chunks_dir() -> str:
+	"""
+	Get chunks directory path.
+
+	Convenience function with fallback chain.
+
+	Returns:
+		str: Path to chunks directory
+	"""
+	try:
+		return str(get_path("chunks"))
+	except (FileNotFoundError, KeyError):
+		import os
+		return os.getenv("PKMS_CHUNKS_DIR", "data/chunks")

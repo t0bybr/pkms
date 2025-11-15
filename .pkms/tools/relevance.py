@@ -24,16 +24,23 @@ from typing import Dict
 
 from models import Record
 from lib.records_io import load_all_records, save_records
+from lib.config import get_records_dir, get_relevance_config
 
 
 # Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
+RECORDS_DIR = get_records_dir()
 
-# Scoring weights (can be tuned)
-WEIGHT_RECENCY = 0.4
-WEIGHT_LINKS = 0.3
-WEIGHT_QUALITY = 0.2
-WEIGHT_USER = 0.1
+# Load relevance config (config.toml overrides these defaults)
+_rel_config = get_relevance_config()
+
+# Scoring weights (from config.toml with fallback to defaults)
+WEIGHT_RECENCY = _rel_config.get("weight_recency", 0.4)
+WEIGHT_LINKS = _rel_config.get("weight_links", 0.3)
+WEIGHT_QUALITY = _rel_config.get("weight_quality", 0.2)
+WEIGHT_USER = _rel_config.get("weight_user", 0.1)
+
+# Recency decay parameter (from config)
+RECENCY_HALF_LIFE_DAYS = _rel_config.get("recency_half_life_days", 90.0)
 
 # Minimum score threshold
 MIN_SCORE_THRESHOLD = 0.15
@@ -44,12 +51,10 @@ def compute_recency_score(record: Record, now: datetime) -> float:
     Recency score based on last update time.
 
     Uses exponential decay: e^(-age_days / half_life)
-    Half-life: 180 days (after 6 months, score is 0.5)
+    Half-life configured in config.toml (default: 90 days)
 
     Returns: 0.0 - 1.0
     """
-    HALF_LIFE_DAYS = 180.0
-
     # Ensure timezone-aware comparison
     updated = record.updated
     if updated.tzinfo is None:
@@ -60,8 +65,8 @@ def compute_recency_score(record: Record, now: datetime) -> float:
     age_seconds = (now - updated).total_seconds()
     age_days = age_seconds / 86400.0
 
-    # Exponential decay
-    score = math.exp(-age_days / HALF_LIFE_DAYS)
+    # Exponential decay (uses global RECENCY_HALF_LIFE_DAYS from config)
+    score = math.exp(-age_days / RECENCY_HALF_LIFE_DAYS)
 
     return max(0.0, min(1.0, score))
 

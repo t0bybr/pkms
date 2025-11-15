@@ -20,17 +20,25 @@ import numpy as np
 # Import embedding function (assumes embeddings.py in parent)
 try:
     from lib.embeddings import get_embedding, embedding_dim
+    from lib.config import get_config_value, get_records_dir, get_chunks_dir, get_path
 except ImportError:
     # Fallback for running standalone
     sys.path.insert(0, str(Path(__file__).parent.parent))
     from lib.embeddings import get_embedding, embedding_dim
+    from lib.config import get_config_value, get_records_dir, get_chunks_dir, get_path
 
 
-# Config from environment
-CHUNKS_DIR = os.getenv("PKMS_CHUNKS_DIR", "data/chunks")
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
-MODEL_NAME = os.getenv("PKMS_EMBED_MODEL", "nomic-embed-text")
-EMB_BASE_DIR = os.getenv("PKMS_EMB_BASE_DIR", "data/embeddings")
+# Config from config.toml with ENV override
+MODEL_NAME = get_config_value("embeddings", "model", "PKMS_EMBED_MODEL", "nomic-embed-text")
+CHUNKS_DIR = get_chunks_dir()
+RECORDS_DIR = get_records_dir()
+
+# Embeddings base directory
+try:
+    EMB_BASE_DIR = str(get_path("embeddings"))
+except (FileNotFoundError, KeyError):
+    EMB_BASE_DIR = os.getenv("PKMS_EMB_BASE_DIR", "data/embeddings")
+
 EMB_DIR = os.path.join(EMB_BASE_DIR, MODEL_NAME)
 
 

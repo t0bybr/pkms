@@ -24,10 +24,11 @@ from collections import defaultdict
 
 from models import Record, Link
 from lib.records_io import load_all_records, save_records
+from lib.config import get_records_dir
 
 
 # Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
+RECORDS_DIR = get_records_dir()
 
 # Wikilink patterns
 WIKILINK_PATTERN = re.compile(r'\[\[([^\]|]+)(?:\|([^\]]+))?\]\]')

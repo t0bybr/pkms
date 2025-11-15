@@ -30,11 +30,17 @@ from models import Record
 from lib.fs.ids import new_id
 from lib.fs.slug import make_slug
 from lib.records_io import load_all_records
+from lib.config import get_records_dir, get_path
 
 
 # Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
-NOTES_DIR = os.getenv("PKMS_NOTES_DIR", "notes")
+RECORDS_DIR = get_records_dir()
+
+# Vault directory (where notes are stored)
+try:
+    NOTES_DIR = str(get_path("vault"))
+except (FileNotFoundError, KeyError):
+    NOTES_DIR = os.getenv("PKMS_NOTES_DIR", "vault")
 
 
 def run_git_command(cmd: List[str], check: bool = True) -> subprocess.CompletedProcess:

@@ -24,10 +24,11 @@ from typing import Dict, List
 
 from models import Record
 from lib.records_io import load_all_records, save_records
+from lib.config import get_records_dir
 
 
 # Config
-RECORDS_DIR = os.getenv("PKMS_RECORDS_DIR", "data/metadata")
+RECORDS_DIR = get_records_dir()
 
 # Default policy
 DEFAULT_MIN_SCORE = 0.3

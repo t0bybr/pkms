@@ -12,7 +12,6 @@ Verwendung:
 
 from __future__ import annotations
 
-import os
 from functools import lru_cache
 from typing import List
 
@@ -26,9 +25,12 @@ except ImportError as e:
         "Bitte mit 'pip install ollama' nachinstallieren."
     ) from e
 
+from lib.config import get_config_value
 
-# Modellname zentral konfigurierbar (Env > Default)
-DEFAULT_MODEL = os.getenv("PKMS_EMBED_MODEL", "nomic-embed-text")
+
+# Modellname zentral konfigurierbar (ENV > config.toml > Default)
+DEFAULT_MODEL = get_config_value("embeddings", "model", "PKMS_EMBED_MODEL", "nomic-embed-text")
+OLLAMA_URL = get_config_value("embeddings", "ollama_url", "OLLAMA_HOST", "http://localhost:11434")
 
 
 def _select_model(model: str | None) -> str:
