@@ -20,7 +20,7 @@ Benefits:
 - Human-readable (compared to UUID)
 
 Usage:
-    from pkms.lib.fs.ids import new_id, is_valid_ulid
+    from lib.fs.ids import new_id, is_valid_ulid
 
     # Generate new ID
     doc_id = new_id()

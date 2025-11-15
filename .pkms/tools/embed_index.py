@@ -1,4 +1,4 @@
-# pkms/tools/embed_index_planv3.py
+# tools/embed_index.py
 """
 Plan v0.3 compliant embedding indexer:
 - Reads chunks from data/chunks/*.ndjson
@@ -19,7 +19,7 @@ import numpy as np
 
 # Import embedding function (assumes embeddings.py in parent)
 try:
-    from pkms.lib.embeddings import get_embedding
+    from lib.embeddings import get_embedding
 except ImportError:
     # Fallback for running standalone
     sys.path.insert(0, str(Path(__file__).parent.parent))

@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 from typing import Dict, Set
 
-from pkms.models import Record
+from models import Record
 
 
 def load_all_records(records_dir: Path) -> Dict[str, Record]:

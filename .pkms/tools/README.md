@@ -11,9 +11,9 @@ Markdown Files
      ↓
 [chunk.py]  → data/chunks/*.ndjson (Chunks)
      ↓
-[embed_index_planv3.py] → data/embeddings/{model}/*.npy (Embeddings)
+[embed_index.py] → data/embeddings/{model}/*.npy (Embeddings)
      ↓
-[search_engine_planv3.py] → Hybrid Search (BM25 + Semantic + RRF)
+[search_engine.py] → Hybrid Search (BM25 + Semantic + RRF)
 ```
 
 ## Tools
@@ -32,13 +32,13 @@ Liest Markdown-Dateien, parsed Frontmatter, generiert Record-JSONs.
 **Usage:**
 ```bash
 # Gesamtes Verzeichnis
-python -m pkms.tools.ingest notes/
+python -m tools.ingest notes/
 
 # Einzelne Datei
-python -m pkms.tools.ingest notes/pizza--01HAR6DP.md
+python -m tools.ingest notes/pizza--01HAR6DP.md
 
 # Custom Output
-python -m pkms.tools.ingest notes/ --records-dir data/records/
+python -m tools.ingest notes/ --records-dir data/records/
 ```
 
 **Input:**
@@ -74,13 +74,13 @@ Chunked Records in kleinere Text-Abschnitte mit Content-Hash IDs.
 **Usage:**
 ```bash
 # Alle Records chunken
-python -m pkms.tools.chunk
+python -m tools.chunk
 
 # Custom Token-Limit
-python -m pkms.tools.chunk --max-tokens 400
+python -m tools.chunk --max-tokens 400
 
 # Custom Pfade
-python -m pkms.tools.chunk --records-dir data/records/ --chunks-dir data/chunks/
+python -m tools.chunk --records-dir data/records/ --chunks-dir data/chunks/
 ```
 
 **Input:**
@@ -102,7 +102,7 @@ python -m pkms.tools.chunk --records-dir data/records/ --chunks-dir data/chunks/
 
 ---
 
-### 3. `embed_index_planv3.py` - Chunks → Embeddings
+### 3. `embed_index.py` - Chunks → Embeddings
 
 Embeddet Chunks und speichert als `.npy` Files.
 
@@ -116,16 +116,16 @@ Embeddet Chunks und speichert als `.npy` Files.
 **Usage:**
 ```bash
 # Alle Chunks embedden
-python -m pkms.tools.embed_index_planv3
+python -m tools.embed_index
 
 # Custom Modell
 export PKMS_EMBED_MODEL=text-embedding-3-large
-python -m pkms.tools.embed_index_planv3
+python -m tools.embed_index
 
 # Custom Pfade
 export PKMS_CHUNKS_DIR=data/chunks
 export PKMS_EMB_BASE_DIR=data/embeddings
-python -m pkms.tools.embed_index_planv3
+python -m tools.embed_index
 ```
 
 **Input:**
@@ -195,20 +195,20 @@ Bei 300°C wird der Teig knusprig.
 " > notes/pizza.md
 
 # 3. Ingest
-python -m pkms.tools.ingest notes/
+python -m tools.ingest notes/
 
 # Output:
 # [ingest] Renamed: pizza.md → pizza-rezept--01HAR6DP2M7G1KQ3Y3VQ8C0Q.md
 # [ingest] Saved: data/records/01HAR6DP2M7G1KQ3Y3VQ8C0Q.json
 
 # 4. Chunk
-python -m pkms.tools.chunk
+python -m tools.chunk
 
 # Output:
 # [chunk] Saved 2 chunks → data/chunks/01HAR6DP2M7G1KQ3Y3VQ8C0Q.ndjson
 
 # 5. Embed (requires Ollama running)
-python -m pkms.tools.embed_index_planv3
+python -m tools.embed_index
 
 # Output:
 # [embed_index] 2 embedded, 0 skipped
@@ -216,8 +216,8 @@ python -m pkms.tools.embed_index_planv3
 
 # 6. Search
 python -c "
-from pkms.lib.search.search_engine_planv3 import SearchEngine
-from pkms.lib.embeddings import get_embedding
+from lib.search.search_engine import SearchEngine
+from lib.embeddings import get_embedding
 
 engine = SearchEngine(
     chunks_dir='data/chunks',

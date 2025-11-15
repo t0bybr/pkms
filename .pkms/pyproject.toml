@@ -56,17 +56,17 @@ all = [
 ]
 
 [project.scripts]
-pkms-ingest = "pkms.tools.ingest:main"
-pkms-chunk = "pkms.tools.chunk:main"
-pkms-link = "pkms.tools.link:main"
-pkms-embed = "pkms.tools.embed_index_planv3:main"
-pkms-relevance = "pkms.tools.relevance:main"
-pkms-archive = "pkms.tools.archive:main"
-pkms-synth = "pkms.tools.synth:main"
+pkms-ingest = "tools.ingest:main"
+pkms-chunk = "tools.chunk:main"
+pkms-link = "tools.link:main"
+pkms-embed = "tools.embed_index:main"
+pkms-relevance = "tools.relevance:main"
+pkms-archive = "tools.archive:main"
+pkms-synth = "tools.synth:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["pkms*"]
+include = ["lib*", "models*", "tools*"]
 exclude = ["tests*", "docs*"]
 
 [tool.black]

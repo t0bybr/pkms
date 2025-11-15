@@ -41,7 +41,7 @@ datamodel-code-generator \
 ### Verwendung
 
 ```python
-from pkms.models.generated import Record, Chunk, Link
+from models.generated import Record, Chunk, Link
 
 # Validierung
 record = Record(**json_data)

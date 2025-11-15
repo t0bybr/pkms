@@ -18,7 +18,7 @@ Example transformations:
     "   ---   " → "note"  # Fallback
 
 Usage:
-    from pkms.lib.fs.slug import make_slug
+    from lib.fs.slug import make_slug
 
     # Basic usage
     slug = make_slug("My Great Idea")

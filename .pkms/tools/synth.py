@@ -26,10 +26,10 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
-from pkms.models import Record
-from pkms.lib.fs.ids import new_id
-from pkms.lib.fs.slug import make_slug
-from pkms.lib.records_io import load_all_records
+from models import Record
+from lib.fs.ids import new_id
+from lib.fs.slug import make_slug
+from lib.records_io import load_all_records
 
 
 # Config

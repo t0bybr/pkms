@@ -52,7 +52,7 @@ Hybrid search implementation mit RRF-Fusion und Chunk-basiertem Retrieval.
 
 ## Komponenten
 
-### 1. `search_engine_planv3.py`
+### 1. `search_engine.py`
 
 Haupt-Suchmaschine mit:
 - **BM25**: Whoosh-Index über Chunks (keyword search)
@@ -60,7 +60,7 @@ Haupt-Suchmaschine mit:
 - **RRF**: Reciprocal Rank Fusion (k=60)
 - **Grouping**: Max 3 Chunks pro doc_id
 
-### 2. `embed_index_planv3.py`
+### 2. `embed_index.py`
 
 Embedding-Builder:
 - Liest Chunks aus `data/chunks/*.ndjson`
@@ -90,18 +90,18 @@ export PKMS_EMB_BASE_DIR=data/embeddings
 
 ```bash
 # 1. Ingest Markdown → Records + Chunks
-python -m pkms.tools.ingest notes/
+python -m tools.ingest notes/
 
 # 2. Chunk Markdown (hybrid: hierarchisch + semantisch)
-python -m pkms.tools.chunk
+python -m tools.chunk
 
 # 3. Embed Chunks → .npy Files
-python -m pkms.tools.embed_index_planv3
+python -m tools.embed_index
 
 # 4. Suche
 python -c "
-from pkms.lib.search.search_engine_planv3 import SearchEngine
-from pkms.lib.embeddings import get_embedding
+from lib.search.search_engine import SearchEngine
+from lib.embeddings import get_embedding
 
 engine = SearchEngine(
     chunks_dir='data/chunks',
@@ -120,8 +120,8 @@ for r in results:
 ### Python API
 
 ```python
-from pkms.lib.search.search_engine_planv3 import SearchEngine
-from pkms.lib.embeddings import get_embedding
+from lib.search.search_engine import SearchEngine
+from lib.embeddings import get_embedding
 
 # Initialize
 engine = SearchEngine(
@@ -216,7 +216,7 @@ check-jsonschema \
 → Run `chunk.py` first to generate chunks from markdown
 
 ### "No embeddings loaded"
-→ Run `embed_index_planv3.py` to generate .npy files
+→ Run `embed_index.py` to generate .npy files
 
 ### "Whoosh index empty"
 → Check `data/chunks/*.ndjson` format (must be valid NDJSON)

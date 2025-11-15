@@ -4,7 +4,7 @@ pkms/lib/config.py - Configuration Management
 Loads and provides access to PKMS configuration from .pkms/config.toml.
 
 Usage:
-    from pkms.lib.config import get_config, get_path
+    from lib.config import get_config, get_path
 
     # Get entire config
     config = get_config()

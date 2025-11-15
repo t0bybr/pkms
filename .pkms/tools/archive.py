@@ -22,8 +22,8 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from typing import Dict, List
 
-from pkms.models import Record
-from pkms.lib.records_io import load_all_records, save_records
+from models import Record
+from lib.records_io import load_all_records, save_records
 
 
 # Config

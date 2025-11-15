@@ -28,7 +28,7 @@ Supported Fields:
 - extra: Arbitrary additional fields (preserved on round-trip)
 
 Usage:
-    from pkms.lib.frontmatter.core import parse_file, write_file
+    from lib.frontmatter.core import parse_file, write_file
 
     # Read file
     frontmatter, body = parse_file("notes/pizza--01HAR6DP.md")
@@ -36,7 +36,7 @@ Usage:
     print(frontmatter.tags)   # => ["cooking", "italian"]
 
     # ULID comes from filename, not frontmatter
-    from pkms.lib.fs.paths import parse_slug_id
+    from lib.fs.paths import parse_slug_id
     slug, ulid = parse_slug_id(Path("notes/pizza--01HAR6DP.md"))
     print(ulid)  # => "01HAR6DP"
 

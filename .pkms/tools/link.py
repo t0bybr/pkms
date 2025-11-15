@@ -22,8 +22,8 @@ from pathlib import Path
 from typing import List, Dict, Optional
 from collections import defaultdict
 
-from pkms.models import Record, Link
-from pkms.lib.records_io import load_all_records, save_records
+from models import Record, Link
+from lib.records_io import load_all_records, save_records
 
 
 # Config

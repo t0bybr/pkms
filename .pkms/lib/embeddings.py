@@ -5,7 +5,7 @@ Aktuell: Ollama-Backend
 Später: leicht austauschbar (OpenAI, lokales Modell, ...)
 
 Verwendung:
-    from pkms.lib.embeddings import get_embedding
+    from lib.embeddings import get_embedding
 
     vec = get_embedding("mein text")
 """
@@ -79,7 +79,7 @@ def get_embedding(text: str, model: str | None = None) -> np.ndarray:
     text -> 1D np.ndarray[float32]
 
     Beispiel:
-        from pkms.lib.embeddings import get_embedding
+        from lib.embeddings import get_embedding
         vec = get_embedding("Hallo Welt")
     """
     model_name = _select_model(model)

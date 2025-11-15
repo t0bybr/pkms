@@ -34,19 +34,19 @@ from datetime import datetime, timezone
 import json
 
 # Pydantic models
-from pkms.models import Record, Status
+from models import Record, Status
 
 # Filesystem utilities
-from pkms.lib.fs.paths import parse_slug_id, build_note_filename
-from pkms.lib.fs.ids import new_id, is_valid_ulid
-from pkms.lib.fs.slug import make_slug
-from pkms.lib.frontmatter.core import parse_file, write_file, FrontmatterModel
+from lib.fs.paths import parse_slug_id, build_note_filename
+from lib.fs.ids import new_id, is_valid_ulid
+from lib.fs.slug import make_slug
+from lib.frontmatter.core import parse_file, write_file, FrontmatterModel
 
 # Utilities
-from pkms.lib.utils import compute_sha256, detect_language
+from lib.utils import compute_sha256, detect_language
 
 # Config
-from pkms.lib.config import get_path, get_vault_config
+from lib.config import get_path, get_vault_config
 
 
 def get_vault_subfolder(date_created: Optional[datetime] = None) -> str:

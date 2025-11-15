@@ -16,7 +16,7 @@ from typing import List, Dict, Optional
 from dataclasses import dataclass
 
 # Utilities
-from pkms.lib.utils import compute_chunk_hash, count_tokens
+from lib.utils import compute_chunk_hash, count_tokens
 
 
 @dataclass

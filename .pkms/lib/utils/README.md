@@ -24,7 +24,7 @@ Shared utility functions used across PKMS tools and libraries.
 
 **Usage:**
 ```python
-from pkms.lib.utils import compute_sha256, compute_chunk_hash
+from lib.utils import compute_sha256, compute_chunk_hash
 
 content_hash = compute_sha256("Pizza bei 300°C")
 # "sha256:abc123..."
@@ -50,7 +50,7 @@ chunk_hash = compute_chunk_hash("Pizza bei 300°C")
 
 **Usage:**
 ```python
-from pkms.lib.utils import detect_language
+from lib.utils import detect_language
 
 lang = detect_language("Das ist ein deutscher Text")
 # "de"
@@ -85,7 +85,7 @@ lang = detect_language("Hi", fallback="en")
 
 **Usage:**
 ```python
-from pkms.lib.utils import count_tokens, estimate_tokens_from_chars
+from lib.utils import count_tokens, estimate_tokens_from_chars
 
 tokens = count_tokens("Das ist ein Test mit mehreren Wörtern.")
 # 12 (with tiktoken) or ~9 (fallback)
@@ -138,7 +138,7 @@ pip install xxhash tiktoken langdetect
 - `compute_chunk_hash()` - generate content-addressable chunk IDs
 - `count_tokens()` - manage chunk sizes
 
-**embed_index_planv3.py:**
+**embed_index.py:**
 - Potentially `count_tokens()` for validation
 
 **Future (link.py, relevance.py, synth.py):**
@@ -150,7 +150,7 @@ pip install xxhash tiktoken langdetect
 
 ```python
 # tests/test_utils.py
-from pkms.lib.utils import compute_sha256, compute_chunk_hash, detect_language, count_tokens
+from lib.utils import compute_sha256, compute_chunk_hash, detect_language, count_tokens
 
 def test_sha256():
     assert compute_sha256("test").startswith("sha256:")

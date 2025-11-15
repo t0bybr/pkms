@@ -1,4 +1,4 @@
-# pkms/lib/search/search_engine_planv3.py
+# lib/search/search_engine.py
 """
 Plan v0.3 compliant search engine:
 - Chunk-based (not document-based)

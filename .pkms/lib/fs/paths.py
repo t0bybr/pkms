@@ -26,7 +26,7 @@ Normalization Rules:
 5. File renamed if needed
 
 Usage:
-    from pkms.lib.fs.paths import normalize_existing_note, new_note_path
+    from lib.fs.paths import normalize_existing_note, new_note_path
     from pathlib import Path
 
     # Parse existing file

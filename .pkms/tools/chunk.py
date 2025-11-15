@@ -26,8 +26,8 @@ import sys
 import json
 from pathlib import Path
 
-from pkms.lib.chunking import chunk_document
-from pkms.lib.config import get_path, get_chunking_config
+from lib.chunking import chunk_document
+from lib.config import get_path, get_chunking_config
 
 
 def load_record(record_path: Path) -> dict:
