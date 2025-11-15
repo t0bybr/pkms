@@ -34,7 +34,7 @@ Usage:
     is_valid_ulid("invalid-id")  # => False
 """
 import re
-import ulid
+from ulid import ULID
 
 # Crockford Base32 alphabet (excludes I, L, O, U to avoid confusion)
 # Valid chars: 0-9, A-H, J-K, M-N, P-T, V-Z
@@ -61,7 +61,7 @@ def new_id() -> str:
 		- Thread-safe
 		- Monotonically increasing (within same millisecond)
 	"""
-	return str(ulid.new())
+	return str(ULID())
 
 
 def is_valid_ulid(value: str) -> bool:

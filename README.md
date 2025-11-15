@@ -41,6 +41,7 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 3. **Agent-Compatible** - Structured schemas for LLM integration
 4. **Hybrid Search** - Combines BM25 keyword + semantic embeddings
 5. **Incremental** - Only reprocess changed files
+6. **Inbox Workflow** - Staging area for unnormalized notes → vault
 
 ---
 
@@ -50,7 +51,9 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 
 | Feature | Description | Tool |
 |---------|-------------|------|
-| **Markdown Ingestion** | Parse frontmatter, auto-detect language, generate ULIDs | `pkms-ingest` |
+| **Inbox → Vault** | Staging workflow with auto-normalization | `pkms-ingest` |
+| **ULID in Filename** | Single source of truth (not in frontmatter) | Automatic |
+| **Markdown Ingestion** | Parse frontmatter, auto-detect language | `pkms-ingest` |
 | **Semantic Chunking** | Hierarchical (by headings) + semantic splitting | `pkms-chunk` |
 | **Wikilink Resolution** | Bidirectional links with multiple resolution strategies | `pkms-link` |
 | **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with RRF fusion | SearchEngine |
@@ -58,6 +61,7 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 | **Archive Policy** | Automated archiving based on score + age thresholds | `pkms-archive` |
 | **Embeddings** | Ollama integration with LRU caching and incremental updates | `pkms-embed` |
 | **Git Synthesis** | Branch-based consolidation workflow | `pkms-synth` 🚧 |
+| **Configuration** | Centralized `.pkms/config.toml` with path resolution | Config system |
 
 ### 🚧 In Progress
 
@@ -74,52 +78,84 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 │                      PKMS Pipeline                          │
 └─────────────────────────────────────────────────────────────┘
 
- Markdown Files          Records            Chunks           Search
-┌──────────────┐      ┌──────────────┐   ┌──────────────┐   ┌──────────┐
-│   notes/     │      │ data/records/│   │ data/chunks/ │   │  Whoosh  │
-│  *.md files  │─────▶│  *.json      │──▶│  *.ndjson    │──▶│  Index   │
-│              │      │              │   │              │   │          │
-│  [[links]]   │      │  Metadata    │   │  Searchable  │   │  BM25    │
-└──────────────┘      └──────────────┘   └──────────────┘   └──────────┘
-                              │                   │               │
-                              │                   ▼               │
-                              │          ┌──────────────┐         │
-                              │          │ data/embed/  │         │
-                              │          │  *.npy       │         │
-                              │          │              │         │
-                              │          │  Vectors     │         │
-                              │          └──────────────┘         │
-                              │                   │               │
-                              ▼                   ▼               ▼
-                       ┌──────────────────────────────────────────┐
-                       │         Hybrid Search Engine             │
-                       │    (BM25 + Semantic + RRF Fusion)        │
-                       └──────────────────────────────────────────┘
+   Inbox              Vault            Metadata          Chunks           Search
+┌──────────┐      ┌────────────┐   ┌────────────┐   ┌──────────────┐   ┌──────────┐
+│ inbox/   │      │ vault/     │   │data/       │   │ data/chunks/ │   │  Whoosh  │
+│  *.md    │─────▶│YYYY-MM/    │──▶│metadata/   │──▶│  *.ndjson    │──▶│  Index   │
+│          │      │  {slug}--  │   │  *.json    │   │              │   │          │
+│Staging   │      │  {ULID}.md │   │            │   │  Searchable  │   │  BM25    │
+└──────────┘      └────────────┘   └────────────┘   └──────────────┘   └──────────┘
+gitignored         git-tracked          │                   │               │
+                                        │                   ▼               │
+                                        │          ┌──────────────┐         │
+                                        │          │ data/embed/  │         │
+                                        │          │  *.npy       │         │
+                                        │          │              │         │
+                                        │          │  Vectors     │         │
+                                        │          └──────────────┘         │
+                                        │                   │               │
+                                        ▼                   ▼               ▼
+                                 ┌──────────────────────────────────────────┐
+                                 │         Hybrid Search Engine             │
+                                 │    (BM25 + Semantic + RRF Fusion)        │
+                                 └──────────────────────────────────────────┘
 ```
 
 ### Directory Structure
 
 ```
 pkms/
-├── notes/                    # 📝 Markdown files (user-managed)
-│   └── slug--ULID.md
-├── data/                     # 💾 Generated data (git-tracked)
-│   ├── records/              # Document metadata (JSON)
-│   ├── chunks/               # Text chunks (NDJSON)
-│   └── embeddings/           # Embeddings (NumPy .npy)
-├── schema/                   # 📋 JSON schemas
-├── pkms/                     # 🐍 Python package
-│   ├── models/               # Pydantic models
-│   ├── lib/                  # Shared libraries
-│   │   ├── chunking/         # Hierarchical + semantic chunking
-│   │   ├── search/           # Hybrid search engine
-│   │   ├── utils/            # Hashing, language, tokens
-│   │   └── records_io.py     # Central record I/O
-│   └── tools/                # CLI tools
-├── tests/                    # 🧪 Unit tests
-├── test_data/                # Test fixtures
-└── pyproject.toml            # Package config
+├── .pkms/                       # ⚙️ Application code & config
+│   ├── config.toml              # Centralized configuration
+│   ├── pyproject.toml           # Python package config
+│   ├── requirements.txt         # Dependencies
+│   └── pkms/                    # Python package
+│       ├── models/              # Pydantic models (Record, Chunk, etc.)
+│       ├── lib/                 # Shared libraries
+│       │   ├── config.py        # Configuration loader
+│       │   ├── fs/              # Filesystem utilities (ULID, slug, paths)
+│       │   ├── frontmatter/     # Frontmatter parsing
+│       │   ├── chunking/        # Hierarchical + semantic chunking
+│       │   ├── search/          # Hybrid search engine
+│       │   ├── utils/           # Hashing, language detection, tokens
+│       │   └── records_io.py    # Central metadata I/O
+│       └── tools/               # CLI tools (ingest, chunk, embed, etc.)
+│
+├── inbox/                       # 📥 Staging (gitignored)
+│   └── *.md                     # Unnormalized notes
+│
+├── vault/                       # 📝 Notes (git-tracked)
+│   ├── 2025-11/                 # Organized by date (YYYY-MM)
+│   │   └── {slug}--{ULID}.md
+│   └── 2025-12/
+│
+├── data/                        # 💾 Generated data (gitignored)
+│   ├── metadata/                # Metadata records (JSON)
+│   │   └── {ULID}.json
+│   ├── chunks/                  # Text chunks (NDJSON)
+│   │   └── {ULID}.ndjson
+│   ├── embeddings/              # Embeddings (NumPy .npy)
+│   │   └── {model}/
+│   │       └── {hash}.npy
+│   ├── blobs/                   # Binary attachments (PDFs, images)
+│   └── index/                   # Search index (Whoosh)
+│
+├── schema/                      # 📋 JSON schemas
+├── tests/                       # 🧪 Unit tests
+├── test_data/                   # Test fixtures
+│
+├── README.md                    # This file
+├── TUTORIAL.md                  # Python basics with PKMS examples
+├── PROBLEMS.md                  # Code review findings
+└── .gitignore
 ```
+
+**Key Changes in v0.3:**
+- ✨ `.pkms/` - Application code separated from content
+- ✨ `inbox/` - Staging area for unnormalized notes (gitignored)
+- ✨ `vault/` - Normalized notes organized by date (YYYY-MM)
+- ✨ `data/metadata/` - Renamed from `data/records/` for clarity
+- ✨ ULID **only in filename**, never in frontmatter
 
 ---
 
@@ -144,8 +180,11 @@ cd pkms
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install with dev dependencies
-pip install -e ".[dev]"
+# Install from .pkms/ directory
+pip install -e .pkms/
+
+# Or install with dev dependencies
+pip install -e ".pkms/[dev]"
 
 # Verify installation
 pkms-ingest --help
@@ -153,18 +192,18 @@ pkms-ingest --help
 
 **Optional Performance Boost:**
 ```bash
-pip install -e ".[performance]"  # Includes xxhash, tiktoken
+pip install -e ".pkms/[performance]"  # Includes xxhash, tiktoken
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Create Your First Note
+### 1. Create Your First Note (in Inbox)
 
 ```bash
-mkdir -p notes
-cat > notes/pizza-recipe.md <<'EOF'
+mkdir -p inbox
+cat > inbox/pizza-recipe.md <<'EOF'
 ---
 title: Pizza Neapolitana Recipe
 tags: [cooking, italian]
@@ -186,14 +225,16 @@ Siehe auch [[ofen-temperatur]] für Details.
 EOF
 ```
 
+**Note:** No `id` field in frontmatter! ULID will be in filename only.
+
 ### 2. Run the Pipeline
 
 ```bash
-# Ingest markdown → Records
-pkms-ingest notes/
+# Ingest: inbox/ → vault/YYYY-MM/ + metadata
+pkms-ingest
 
 # Chunk documents
-pkms-chunk data/records/
+pkms-chunk
 
 # Extract & resolve wikilinks
 pkms-link --validate
@@ -205,15 +246,25 @@ pkms-embed
 pkms-relevance
 ```
 
+**After ingestion:**
+```bash
+ls vault/2025-11/
+# pizza-neapolitana-recipe--01HAR6DP2M7G1KQ3Y3VQ8C0Q.md
+
+ls data/metadata/
+# 01HAR6DP2M7G1KQ3Y3VQ8C0Q.json
+```
+
 ### 3. Search
 
 ```python
-from pkms.lib.search.search_engine_planv3 import SearchEngine
+from pkms.lib.search.search_engine import SearchEngine
 from pkms.lib.embeddings import get_embedding
+from pkms.lib.config import get_path
 
 engine = SearchEngine(
-    chunks_dir="data/chunks",
-    emb_dir="data/embeddings/nomic-embed-text",
+    chunks_dir=str(get_path("chunks")),
+    emb_dir=str(get_path("embeddings") / "nomic-embed-text"),
     embed_fn=get_embedding
 )
 
@@ -229,17 +280,19 @@ for hit in results:
 ### Daily Workflow (Note-Taking)
 
 ```bash
-# 1. Write notes with [[wikilinks]]
-vim notes/new-idea.md
+# 1. Write notes in inbox/ (no ULID needed)
+vim inbox/new-idea.md
 
-# 2. Process pipeline
-pkms-ingest notes/
-pkms-chunk data/records/
+# 2. Ingest → automatically moves to vault/YYYY-MM/
+pkms-ingest
+
+# 3. Process pipeline
+pkms-chunk
 pkms-link
 pkms-embed
 
-# 3. Commit to git
-git add notes/ data/
+# 4. Commit vault/ to git (inbox/ is gitignored)
+git add vault/ data/metadata/
 git commit -m "Add new idea"
 git push
 ```
@@ -264,29 +317,39 @@ pkms-synth --find-clusters
 
 ### pkms-ingest
 
-Parse markdown files and create Record JSONs.
+**Inbox → Vault + Metadata**
+
+Parse markdown files from inbox/, normalize, move to vault/, and create metadata.
 
 ```bash
-pkms-ingest notes/              # Ingest all .md files
-pkms-ingest notes/specific.md   # Single file
+pkms-ingest                     # Process inbox/
+pkms-ingest inbox/specific.md   # Single file
+pkms-ingest --source notes/     # Custom source directory
 ```
 
 **What it does:**
-- Parses frontmatter (YAML)
-- Generates/validates ULIDs
+- Reads notes from `inbox/` (unnormalized)
+- Generates ULID (if not in filename)
+- Creates slug from title
+- Renames to `{slug}--{ULID}.md`
 - Auto-detects language if missing
-- Normalizes filename to `slug--ULID.md`
-- Computes SHA256 hashes
-- Writes Record JSON to `data/records/{ULID}.json`
+- Moves to `vault/YYYY-MM/` (based on `date_created`)
+- Creates metadata JSON in `data/metadata/{ULID}.json`
+
+**ULID Strategy:**
+- Priority: filename > generate new
+- **Never** in frontmatter (single source of truth = filename)
 
 ---
 
 ### pkms-chunk
 
+**Metadata → Chunks**
+
 Split documents into semantic chunks with content-addressable IDs.
 
 ```bash
-pkms-chunk data/records/         # Chunk all records
+pkms-chunk                       # Chunk all metadata
 pkms-chunk --max-tokens 500      # Custom chunk size
 ```
 
@@ -295,14 +358,16 @@ pkms-chunk --max-tokens 500      # Custom chunk size
 2. **Semantic:** Further split large sections by paragraphs
 3. **Content-Hash ID:** `doc_id:xxhash64(text)[:12]`
 
+**Configuration:** See `[chunking]` section in `.pkms/config.toml`
+
 ---
 
 ### pkms-link
 
-Extract and resolve [[wikilinks]] bidirectionally.
+**Extract and resolve [[wikilinks]] bidirectionally.**
 
 ```bash
-pkms-link                 # Process all records
+pkms-link                 # Process all metadata
 pkms-link --validate      # Show broken links
 ```
 
@@ -316,7 +381,7 @@ pkms-link --validate      # Show broken links
 
 ### pkms-embed
 
-Generate embeddings via Ollama (incremental).
+**Generate embeddings via Ollama (incremental).**
 
 ```bash
 pkms-embed                            # Embed new chunks
@@ -328,11 +393,13 @@ pkms-embed --force                    # Re-embed all
 - Ollama running: `ollama serve`
 - Model pulled: `ollama pull nomic-embed-text`
 
+**Configuration:** See `[embeddings]` in `.pkms/config.toml`
+
 ---
 
 ### pkms-relevance
 
-Compute relevance scores using formula.
+**Compute relevance scores using formula.**
 
 ```bash
 pkms-relevance            # Update all scores
@@ -350,11 +417,13 @@ Where:
 - user     = human_edited + agent_reviewed
 ```
 
+**Configuration:** See `[relevance]` in `.pkms/config.toml`
+
 ---
 
 ### pkms-archive
 
-Archive low-relevance old documents.
+**Archive low-relevance old documents.**
 
 ```bash
 pkms-archive --dry-run    # Preview (safe)
@@ -375,7 +444,7 @@ Archive if:
 
 ### pkms-synth
 
-Git-based synthesis workflow (experimental).
+**Git-based synthesis workflow (experimental).**
 
 ```bash
 pkms-synth --find-clusters   # List related notes
@@ -388,37 +457,82 @@ pkms-synth --create 0        # Create synthesis
 
 ## ⚙️ Configuration
 
-### Environment Variables
+### .pkms/config.toml
 
-```bash
-export PKMS_NOTES_DIR=notes
-export PKMS_RECORDS_DIR=data/records
-export PKMS_EMBED_MODEL=nomic-embed-text
-export OLLAMA_HOST=http://localhost:11434
+Centralized configuration file:
+
+```toml
+[paths]
+inbox = "inbox"
+vault = "vault"
+metadata = "data/metadata"
+chunks = "data/chunks"
+embeddings = "data/embeddings"
+blobs = "data/blobs"
+index = "data/index"
+
+[vault]
+organize_by_date = true
+date_format = "%Y-%m"          # YYYY-MM for monthly folders
+date_field = "date_created"    # Options: date_created, date_updated, date_semantic
+
+[embeddings]
+model = "nomic-embed-text"
+ollama_url = "http://localhost:11434"
+
+[search]
+bm25_weight = 0.5
+semantic_weight = 0.5
+min_similarity = 0.3
+
+[relevance]
+weight_recency = 0.4
+weight_links = 0.3
+weight_quality = 0.2
+weight_user = 0.1
+recency_half_life_days = 90.0
+
+[chunking]
+strategy = "fixed"             # Options: fixed, semantic
+chunk_size = 512
+chunk_overlap = 64
+min_chunk_size = 100
+
+[git]
+auto_commit = false
+auto_push = false
 ```
 
-### Relevance Scoring Weights
-
-Edit in `pkms/tools/relevance.py`:
+### Accessing Configuration in Code
 
 ```python
-WEIGHT_RECENCY = 0.4
-WEIGHT_LINKS = 0.3
-WEIGHT_QUALITY = 0.2
-WEIGHT_USER = 0.1
+from pkms.lib.config import get_path, get_vault_config, get_embeddings_config
+
+# Get paths (resolved to absolute Path objects)
+inbox_path = get_path("inbox")
+vault_path = get_path("vault")
+metadata_path = get_path("metadata")
+
+# Get specific config sections
+vault_config = get_vault_config()
+# => {"organize_by_date": True, "date_format": "%Y-%m", ...}
+
+emb_config = get_embeddings_config()
+# => {"model": "nomic-embed-text", "ollama_url": "http://..."}
 ```
 
 ---
 
 ## 📊 Data Formats
 
-### Markdown (Input)
+### Markdown (Vault)
 
 **Filename:** `{slug}--{ULID}.md`
 
+**IMPORTANT:** ULID is **ONLY** in filename, **NOT** in frontmatter!
+
 ```yaml
 ---
-id: 01HAR6DP2M7G1KQ3Y3VQ8C0Q
 title: Pizza Neapolitana Recipe
 tags: [cooking, italian]
 language: de
@@ -427,11 +541,13 @@ language: de
 # Content with [[wikilinks]]
 ```
 
+**Notice:** No `id` field! ULID is extracted from filename.
+
 ---
 
-### Record JSON (Metadata)
+### Metadata JSON
 
-**File:** `data/records/{ULID}.json`
+**File:** `data/metadata/{ULID}.json`
 
 ```json
 {
@@ -439,6 +555,7 @@ language: de
   "slug": "pizza-neapolitana-recipe",
   "title": "Pizza Neapolitana Recipe",
   "language": "de",
+  "path": "vault/2025-11/pizza-neapolitana-recipe--01HAR6DP.md",
   "full_text": "...",
   "content_hash": "sha256:abc123...",
   "status": {
@@ -477,7 +594,7 @@ NumPy binary array, shape `(384,)` for nomic-embed-text
 
 ```bash
 # Install dev dependencies
-pip install -e ".[dev]"
+pip install -e ".pkms/[dev]"
 
 # Run all tests
 pytest
@@ -495,9 +612,9 @@ See `test_data/README.md`:
 ### Code Quality
 
 ```bash
-black pkms/ tests/     # Format
-ruff check pkms/       # Lint
-mypy pkms/             # Type checking
+black .pkms/pkms/ tests/     # Format
+ruff check .pkms/pkms/       # Lint
+mypy .pkms/pkms/             # Type checking
 ```
 
 ---
@@ -506,9 +623,16 @@ mypy pkms/             # Type checking
 
 ### Common Issues
 
-**"No module named 'pydantic'"**
+**"No module named 'pkms'"**
 ```bash
-pip install -e .
+pip install -e .pkms/
+```
+
+**"Could not find .pkms/ directory"**
+```bash
+# Make sure you're running from project root
+cd /path/to/pkms
+pkms-ingest
 ```
 
 **"Ollama connection refused"**
@@ -516,15 +640,16 @@ pip install -e .
 ollama serve
 ```
 
-**"Invalid ULID in frontmatter"**
+**"module 'ulid' has no attribute 'new'"**
 ```bash
-# Remove invalid ID, ingest will regenerate
-pkms-ingest notes/file.md
+# Wrong ulid package - reinstall correct one
+pip uninstall ulid ulid-py
+pip install python-ulid>=2.0.0
 ```
 
 **"Whoosh index locked"**
 ```bash
-rm data/whoosh_index/*.lock
+rm data/index/*.lock
 ```
 
 ### Known Issues
@@ -535,6 +660,7 @@ See [PROBLEMS.md](PROBLEMS.md) for complete list.
 - ✅ Artificial relevance score minimum
 - ✅ Git add wildcard issue in synth.py
 - ✅ Code duplication (now centralized)
+- ✅ ULID in frontmatter (removed - filename only)
 
 **To Be Fixed:**
 - 🚧 N+1 file opens in embed_index.py
@@ -549,13 +675,14 @@ See [PROBLEMS.md](PROBLEMS.md) for complete list.
 
 - **[TUTORIAL.md](TUTORIAL.md)** - Python basics with PKMS examples
 - **[PROBLEMS.md](PROBLEMS.md)** - Code review findings
-- **[plan.md](plan.md)** - Architectural design doc
+- **[plan.md](plan.md)** - Architectural design doc (may be outdated)
 
 ### External Links
 
 - [Ollama](https://ollama.ai/)
 - [Pydantic](https://docs.pydantic.dev/)
 - [Whoosh](https://whoosh.readthedocs.io/)
+- [python-ulid](https://pypi.org/project/python-ulid/)
 
 ---
 
@@ -570,21 +697,34 @@ MIT License - see LICENSE file
 ### v0.3.0 (2025-11-15)
 
 **Added:**
-- Complete pipeline (ingest, chunk, link, embed, relevance, archive, synth)
-- JSON schemas + Pydantic models
-- Hybrid search engine
-- Comprehensive test suite
+- ✨ Inbox → Vault workflow with auto-normalization
+- ✨ ULID only in filename (removed from frontmatter)
+- ✨ `.pkms/` directory structure (code/config separation)
+- ✨ Centralized configuration (`.pkms/config.toml`)
+- ✨ Config system (`pkms/lib/config.py`)
+- ✨ Date-based vault organization (`vault/YYYY-MM/`)
+- ✨ Complete pipeline (ingest, chunk, link, embed, relevance, archive, synth)
+- ✨ JSON schemas + Pydantic models
+- ✨ Hybrid search engine
+- ✨ Comprehensive test suite
+
+**Changed:**
+- 🔄 `data/records/` → `data/metadata/` (clarity)
+- 🔄 Moved code to `.pkms/pkms/`
+- 🔄 Moved config files to `.pkms/`
 
 **Fixed:**
-- ✅ 4 CRITICAL bugs
+- ✅ 4 CRITICAL bugs (see PROBLEMS.md)
 - ✅ Code duplication via `pkms/lib/records_io.py`
 - ✅ Timezone-awareness
 - ✅ Exception handling
+- ✅ ULID API (changed from `ulid.new()` to `ULID()`)
 
 **Documentation:**
-- ✅ README.md
+- ✅ README.md (this file)
 - ✅ PROBLEMS.md
-- ✅ TUTORIAL.md (in progress)
+- ✅ TUTORIAL.md
+- ✅ Comprehensive docstrings
 
 ---
 
