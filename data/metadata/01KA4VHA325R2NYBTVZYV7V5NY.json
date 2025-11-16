@@ -21,16 +21,6 @@
     "relevance_score": 1.0,
     "archived": false
   },
-  "embedding_meta": {
-    "text": {
-      "model": "jina/jina-embeddings-v2-base-de:latest",
-      "dim": 768,
-      "updated_at": "2025-11-15T23:54:35.637120Z",
-      "chunk_hashes": [
-        "b545e79320cd"
-      ]
-    }
-  },
   "facets": {},
   "doc_type": "note"
 }
