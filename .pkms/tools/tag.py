@@ -24,7 +24,12 @@ import json
 import argparse
 from pathlib import Path
 from typing import Optional, List, Dict, Tuple
-import toml
+
+# Python 3.11+ has tomllib in stdlib, older versions need tomli
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 # Add .pkms to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -57,7 +62,8 @@ def load_taxonomy() -> dict:
             }
         }
 
-    return toml.load(taxonomy_file)
+    with open(taxonomy_file, "rb") as f:
+        return tomllib.load(f)
 
 
 def get_allowed_tags(taxonomy: dict) -> List[str]:
