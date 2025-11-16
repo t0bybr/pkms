@@ -1,0 +1,35 @@
+# PKMS Git Attributes
+# Better diffs for structured data files
+
+# JSON files - use json diff driver
+*.json diff=json linguist-language=JSON
+*.ndjson diff=json linguist-language=JSON
+
+# TOML files - use toml diff driver
+*.toml diff=toml linguist-language=TOML
+
+# Markdown files - use markdown diff driver
+*.md diff=markdown linguist-language=Markdown linguist-detectable
+
+# Python files
+*.py diff=python linguist-language=Python
+
+# NumPy binary files - mark as binary (no diff)
+*.npy binary
+
+# Ensure consistent line endings
+* text=auto
+*.sh text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.toml text eol=lf
+
+# Binary files
+*.npy binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary

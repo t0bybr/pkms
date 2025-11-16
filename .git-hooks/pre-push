@@ -1,0 +1,49 @@
+#!/bin/bash
+# PKMS Pre-push Hook
+# Check for pending reviews before pushing
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Color codes
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+PENDING_DIR="data/queue/reviews/pending"
+
+if [ -d "$PENDING_DIR" ]; then
+    PENDING_COUNT=$(ls -1 "$PENDING_DIR"/*.json 2>/dev/null | wc -l)
+
+    if [ "$PENDING_COUNT" -gt 0 ]; then
+        echo ""
+        echo -e "${YELLOW}⚠️  Warning: $PENDING_COUNT pending PKMS review(s)${NC}"
+        echo ""
+
+        if command -v pkms-review &> /dev/null; then
+            echo "Pending reviews:"
+            pkms-review list 2>/dev/null | head -n 20 || true
+        else
+            ls -1 "$PENDING_DIR"/*.json | while read file; do
+                basename "$file"
+            done
+        fi
+
+        echo ""
+        echo -e "${YELLOW}Recommended: Review pending items before pushing${NC}"
+        echo "  Run: pkms-review interactive"
+        echo ""
+
+        read -p "Push anyway? [y/N] " -n 1 -r
+        echo
+
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "Push cancelled. Review pending items with:"
+            echo "  pkms-review interactive"
+            exit 1
+        fi
+    fi
+fi
+
+echo -e "${GREEN}✅ Pre-push check passed${NC}"
+exit 0

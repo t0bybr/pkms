@@ -1,0 +1,27 @@
+# <type>: <summary in 50 characters or less>
+#
+# <Detailed description of changes>
+# - What was changed and why
+# - Any important details
+#
+# Type: feat, fix, docs, refactor, tag, synth, test, chore
+# Scope: vault, metadata, search, taxonomy, config, tools
+#
+# Examples:
+#   feat(search): Add German stemming to BM25 index
+#   fix(tag): Correct taxonomy validation logic
+#   docs: Update README with new tools
+#   tag: Add sourdough, fermentation tags
+#   synth: Merge 5 Python notes into workflow guide
+#
+# Footer (optional):
+# Affects: data/metadata/ | vault/ | .pkms/taxonomy.toml
+# Closes: #123
+# See-also: commit-hash
+# Breaking-change: description
+#
+# Remember:
+# - Use imperative mood ("Add feature" not "Added feature")
+# - First line: 50 chars, imperative, no period
+# - Body: 72 chars per line
+# - Separate subject from body with blank line
