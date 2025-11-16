@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# PKMS Post-Merge Hook
+# Checks for pending reviews after git pull/merge
+#
+# To install:
+#   ln -sf ../../.git-hooks/post-merge .git/hooks/post-merge
+
+# Check for pending reviews
+PENDING_DIR="data/queue/reviews/pending"
+
+if [ -d "$PENDING_DIR" ]; then
+    PENDING_COUNT=$(ls -1 "$PENDING_DIR"/*.json 2>/dev/null | wc -l)
+
+    if [ "$PENDING_COUNT" -gt 0 ]; then
+        echo ""
+        echo "⚠️  PKMS: $PENDING_COUNT review(s) pending"
+        echo "   Run: pkms-review list"
+        echo "   Or:  pkms-review interactive"
+        echo ""
+
+        # Optional: Desktop notification (uncomment if desired)
+        # if command -v notify-send &> /dev/null; then
+        #     notify-send "PKMS" "$PENDING_COUNT review(s) need attention"
+        # elif command -v osascript &> /dev/null; then
+        #     osascript -e "display notification \"$PENDING_COUNT review(s) need attention\" with title \"PKMS\""
+        # fi
+    fi
+fi
