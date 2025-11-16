@@ -1,45 +1,28 @@
-node_modules/
-.venv/
-.DS_Store
-*.log
-.claude/
-.codex/
-.env
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# Data directories
-# Note: metadata/, chunks/, embeddings/, and queue/ are git-tracked
-# Only ignore index (regenerable via pkms-index) and large binary blobs
-data/index/
-data/blobs/
-
-# Inbox (staging area for unnormalized notes)
-inbox/
-
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# PKMS Data - Regenerable artifacts
+# Note: metadata/, chunks/, embeddings/, and queue/ are git-tracked
+data/index/      # Whoosh index (regenerable via pkms-index)
+data/blobs/      # Large binary files (optional storage)
+
+# Staging area for unnormalized notes
+inbox/
+
+# Claude/AI artifacts
+.claude/
+.codex/
+
+# Logs
+*.log
