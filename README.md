@@ -100,7 +100,7 @@ gitignored         git-tracked      git-tracked       git-tracked      gitignore
                                         │          │              │         │
                                         │          │  Vectors     │         │
                                         │          └──────────────┘         │
-                                        │           gitignored               │
+                                        │           git-tracked              │
                                         ▼                   ▼               ▼
                                  ┌──────────────────────────────────────────┐
                                  │         Hybrid Search Engine             │
@@ -135,12 +135,12 @@ pkms/
 │   │   └── {slug}--{ULID}.md
 │   └── 2025-12/
 │
-├── data/                        # 💾 Generated data (partially git-tracked)
+├── data/                        # 💾 Generated data (mostly git-tracked)
 │   ├── metadata/                # Metadata records (JSON) - git-tracked
 │   │   └── {ULID}.json
 │   ├── chunks/                  # Text chunks (NDJSON) - git-tracked
 │   │   └── {ULID}.ndjson
-│   ├── embeddings/              # Embeddings (NumPy .npy) - gitignored
+│   ├── embeddings/              # Embeddings (NumPy .npy) - git-tracked
 │   │   └── {model}/
 │   │       └── {hash}.npy
 │   ├── blobs/                   # Binary attachments - gitignored

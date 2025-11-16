@@ -29,9 +29,8 @@ wheels/
 MANIFEST
 
 # Data directories
-# Note: metadata/ and chunks/ are git-tracked (important for versioning)
-# Only ignore large/regenerable data
-data/embeddings/
+# Note: metadata/, chunks/, and embeddings/ are git-tracked
+# Only ignore index (regenerable via pkms-index) and temporary data
 data/index/
 data/blobs/
 data/queue/
