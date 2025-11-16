@@ -143,9 +143,10 @@ pkms/
 │   ├── embeddings/              # Embeddings (NumPy .npy) - git-tracked
 │   │   └── {model}/
 │   │       └── {hash}.npy
+│   ├── queue/                   # Review queue (pending/approved/rejected) - git-tracked
+│   │   └── reviews/
 │   ├── blobs/                   # Binary attachments - gitignored
-│   ├── index/                   # Search index (Whoosh) - gitignored
-│   └── queue/                   # Review queue - gitignored
+│   └── index/                   # Search index (Whoosh) - gitignored
 │
 ├── schema/                      # 📋 JSON schemas
 ├── tests/                       # 🧪 Unit tests
@@ -996,6 +997,7 @@ MIT License - see LICENSE file
 - 🔄 min_similarity → 0.2 (lowered for better recall)
 - 🔄 Search filtering → Filter before limit (not after)
 - 🔄 Debug output → stderr (for clean JSON output)
+- 🔄 .gitignore → Track metadata, chunks, embeddings, queue (only ignore index, blobs)
 
 **Fixed:**
 - ✅ Semantic search quality for German text

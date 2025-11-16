@@ -29,11 +29,10 @@ wheels/
 MANIFEST
 
 # Data directories
-# Note: metadata/, chunks/, and embeddings/ are git-tracked
-# Only ignore index (regenerable via pkms-index) and temporary data
+# Note: metadata/, chunks/, embeddings/, and queue/ are git-tracked
+# Only ignore index (regenerable via pkms-index) and large binary blobs
 data/index/
 data/blobs/
-data/queue/
 
 # Inbox (staging area for unnormalized notes)
 inbox/
