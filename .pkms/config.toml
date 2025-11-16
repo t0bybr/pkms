@@ -44,6 +44,20 @@ model = "jina/jina-embeddings-v2-base-de:latest"
 # Ollama API endpoint
 ollama_url = "http://localhost:11434"
 
+[llm]
+# Chat model for LLM operations (tagging, summarization, etc.)
+# Recommended: qwen2.5-coder (fast, good at analysis), llama3.1, mistral
+model = "qwen2.5-coder:latest"
+
+# Ollama API endpoint (default: same as embeddings)
+ollama_url = "http://localhost:11434"
+
+# Temperature for LLM calls (0.0 = deterministic, 1.0 = creative)
+temperature = 0.3
+
+# Max tokens for LLM response
+max_tokens = 2000
+
 [search]
 # BM25 weight in hybrid search (0.0 - 1.0)
 bm25_weight = 0.5

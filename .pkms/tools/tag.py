@@ -132,16 +132,20 @@ Guidelines:
 """
 
     try:
-        # Get model from config
-        model = get_config_value("embeddings", "model", "PKMS_EMBED_MODEL", "llama3.1")
-        # Strip model suffix for chat (embeddings use different models)
-        if "embed" in model.lower():
-            model = "llama3.1"  # Fallback to chat model
+        # Get LLM model from config
+        model = get_config_value("llm", "model", "PKMS_LLM_MODEL", "qwen2.5-coder:latest")
+        temperature = get_config_value("llm", "temperature", "PKMS_LLM_TEMPERATURE", 0.3)
+
+        # Get Ollama URL
+        ollama_url = get_config_value("llm", "ollama_url", "OLLAMA_HOST", "http://localhost:11434")
 
         response = ollama.chat(
             model=model,
             messages=[{"role": "user", "content": prompt}],
-            format="json"
+            format="json",
+            options={
+                "temperature": temperature
+            }
         )
 
         result = json.loads(response['message']['content'])
