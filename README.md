@@ -86,12 +86,13 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 
    Inbox              Vault            Metadata          Chunks           Search
 ┌──────────┐      ┌────────────┐   ┌────────────┐   ┌──────────────┐   ┌──────────┐
-│ inbox/   │      │ vault/     │   │data/       │   │ data/chunks/ │   │  Whoosh  │
-│  *.md    │─────▶│YYYY-MM/    │──▶│metadata/   │──▶│  *.ndjson    │──▶│  Index   │
+│ inbox/   │      │ vault/     │   │data/       │   │ data/chunks/ │   │data/index│
+│  *.md    │─────▶│YYYY-MM/    │──▶│metadata/   │──▶│  *.ndjson    │──▶│  Whoosh  │
 │          │      │  {slug}--  │   │  *.json    │   │              │   │          │
 │Staging   │      │  {ULID}.md │   │            │   │  Searchable  │   │  BM25    │
 └──────────┘      └────────────┘   └────────────┘   └──────────────┘   └──────────┘
-gitignored         git-tracked          │                   │               │
+gitignored         git-tracked      git-tracked       git-tracked      gitignored
+                                        │                   │               │
                                         │                   ▼               │
                                         │          ┌──────────────┐         │
                                         │          │ data/embed/  │         │
@@ -99,7 +100,7 @@ gitignored         git-tracked          │                   │               
                                         │          │              │         │
                                         │          │  Vectors     │         │
                                         │          └──────────────┘         │
-                                        │                   │               │
+                                        │           gitignored               │
                                         ▼                   ▼               ▼
                                  ┌──────────────────────────────────────────┐
                                  │         Hybrid Search Engine             │
@@ -134,16 +135,17 @@ pkms/
 │   │   └── {slug}--{ULID}.md
 │   └── 2025-12/
 │
-├── data/                        # 💾 Generated data (gitignored)
-│   ├── metadata/                # Metadata records (JSON)
+├── data/                        # 💾 Generated data (partially git-tracked)
+│   ├── metadata/                # Metadata records (JSON) - git-tracked
 │   │   └── {ULID}.json
-│   ├── chunks/                  # Text chunks (NDJSON)
+│   ├── chunks/                  # Text chunks (NDJSON) - git-tracked
 │   │   └── {ULID}.ndjson
-│   ├── embeddings/              # Embeddings (NumPy .npy)
+│   ├── embeddings/              # Embeddings (NumPy .npy) - gitignored
 │   │   └── {model}/
 │   │       └── {hash}.npy
-│   ├── blobs/                   # Binary attachments (PDFs, images)
-│   └── index/                   # Search index (Whoosh)
+│   ├── blobs/                   # Binary attachments - gitignored
+│   ├── index/                   # Search index (Whoosh) - gitignored
+│   └── queue/                   # Review queue - gitignored
 │
 ├── schema/                      # 📋 JSON schemas
 ├── tests/                       # 🧪 Unit tests

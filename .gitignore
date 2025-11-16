@@ -28,8 +28,13 @@ wheels/
 *.egg
 MANIFEST
 
-# Data directories (generated/derived data)
-data/
+# Data directories
+# Note: metadata/ and chunks/ are git-tracked (important for versioning)
+# Only ignore large/regenerable data
+data/embeddings/
+data/index/
+data/blobs/
+data/queue/
 
 # Inbox (staging area for unnormalized notes)
 inbox/
