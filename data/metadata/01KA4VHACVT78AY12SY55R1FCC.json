@@ -18,6 +18,18 @@
     "relevance_score": 1.0,
     "archived": false
   },
+  "embedding_meta": {
+    "text": {
+      "model": "jina/jina-embeddings-v2-base-de:latest",
+      "dim": 768,
+      "updated_at": "2025-11-15T23:54:35.658251Z",
+      "chunk_hashes": [
+        "c8324a947ba3",
+        "608d748b8913",
+        "9189ac71af79"
+      ]
+    }
+  },
   "facets": {},
   "doc_type": "note"
 }

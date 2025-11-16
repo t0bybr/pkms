@@ -21,6 +21,16 @@
     "relevance_score": 1.0,
     "archived": false
   },
+  "embedding_meta": {
+    "text": {
+      "model": "jina/jina-embeddings-v2-base-de:latest",
+      "dim": 768,
+      "updated_at": "2025-11-15T23:54:35.637729Z",
+      "chunk_hashes": [
+        "28bf7c60d928"
+      ]
+    }
+  },
   "facets": {},
   "doc_type": "note"
 }
