@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACKX36873641TY981FW",
+  "slug": "paperless-ngx-integration-von-papiernotizen",
+  "path": "vault/2025-11/paperless-ngx-integration-von-papiernotizen--01KA4VHACKX36873641TY981FW.md",
+  "title": "Paperless-ngx – Integration von Papiernotizen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.986654Z",
+  "full_text": "# Ziel\n- Physisches Notizbuch behalten\n- Scans landen automatisch in Paperless-ngx\n- Aufgaben/ToDos werden per KI extrahiert\n\n# Idee\n- Scanner/DIY-Buchscanner → Watch-Folder\n- OCR → durchsuchbare PDFs\n- Lokale KI (Ollama) extrahiert:\n  - ToDos\n  - Termine\n  - Tags\n\n# Offene Fragen\n- MCP-Ansatz für Paperless?\n- Wie robust ist OCR bei Handschrift?",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:bd5762024e34fb4dcfe4d30405f3399359492bec3ff0bcf36a002d26357d6973",
+  "file_hash": "sha256:72bbfa1a9511959ea25558f37302aba3bb11ba07f5e1a0bdda2b0669e68f0453",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

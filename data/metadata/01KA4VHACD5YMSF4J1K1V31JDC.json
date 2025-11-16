@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACD5YMSF4J1K1V31JDC",
+  "slug": "ki-vektordatenbanken-uberblick",
+  "path": "vault/2025-11/ki-vektordatenbanken-uberblick--01KA4VHACD5YMSF4J1K1V31JDC.md",
+  "title": "KI & Vektordatenbanken – Überblick",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.981654Z",
+  "full_text": "# Begriffe\n- Embeddings = Zahlenvektoren für Texte/Bilder\n- Vektordatenbank = effiziente Suche in diesen Vektoren\n- BM25 = klassische Stichwortsuche (lexikalisch)\n\n# Erkenntnisse\n- Für mein Setup reicht oft: Filesystem + DuckDB + HNSW\n- Semantische Suche ergänzt, ersetzt aber nicht BM25\n- RRF (Reciprocal Rank Fusion) als einfache Kombination\n\n# Offene Fragen\n- Wie viel bringt Multimodalität in der Praxis?\n- Welche Modelle lokal sinnvoll (Ollama + AMD)?",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:af11067068163e6f2825cb13801c8676e8980e01362683b304c406ac794d8b85",
+  "file_hash": "sha256:2f8472f68b8fa6d5123f581af323706e4b1bea6f91088fffffc9ff8e418efb94",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

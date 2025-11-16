@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9ZV67W4JVVHHCRJ3JZM",
+  "slug": "rom-reiseplan-5-tage",
+  "path": "vault/2025-08/rom-reiseplan-5-tage--01KA4VH9ZV67W4JVVHHCRJ3JZM.md",
+  "title": "Rom Reiseplan 5 Tage",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-24T00:00:00",
+  "updated": "2025-11-15T22:52:51.583657Z",
+  "full_text": "# Rom Reiseplan 5 Tage\n\nItinerary für Rom.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3fb71ba6591f929dbc81dfc6423fc6266766f24ea6f50dcf6314720388c38843",
+  "file_hash": "sha256:afd13a9d5fe222c93b5d2095067b9563633357761d0a8af9755a67a3a13e956c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

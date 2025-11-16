@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA8QFWF9E23DB0RNJ6A7",
+  "slug": "photography-equipment",
+  "path": "vault/2025-10/photography-equipment--01KA4VHA8QFWF9E23DB0RNJ6A7.md",
+  "title": "Photography Equipment",
+  "tags": [
+    "test",
+    "photography"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.869655Z",
+  "full_text": "# Photography Equipment\n\nChoosing photography equipment.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:a6bbe688461f43aa8d5a96a22646f01d12736a37c6739d56b4010c46adf47924",
+  "file_hash": "sha256:277efd85702a4e943a8bccd05b7a0d6ac4f84577927671ea07fdc620cb0fbc42",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA6S3KM2DR5G69AM89S3",
+  "slug": "mechanical-switches",
+  "path": "vault/2025-08/mechanical-switches--01KA4VHA6S3KM2DR5G69AM89S3.md",
+  "title": "Mechanical Switches",
+  "tags": [
+    "test",
+    "keyboard"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.803656Z",
+  "full_text": "# Mechanical Switches\n\nChoosing mechanical keyboard switches.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:deeb6a36e726071dc08f09562f0c92524de08a48fe068939036faba994520acb",
+  "file_hash": "sha256:623473354ac00bd0e9102d78786a5d46201edac845c3185dac0c7f544b23c570",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

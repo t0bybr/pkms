@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9SRW026PJH5F06ZFKAV",
+  "slug": "email-beschwerde",
+  "path": "vault/2025-08/email-beschwerde--01KA4VH9SRW026PJH5F06ZFKAV.md",
+  "title": "Email: Beschwerde",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-07T00:00:00",
+  "updated": "2025-11-15T22:52:51.392658Z",
+  "full_text": "# Email: Beschwerde\n\nKundenservice Beschwerde.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:752f296aa844313407ced8477a85edc39f7d4531c19f7c7aa20ad15943d70d58",
+  "file_hash": "sha256:65cdb7ea044d1d348c73052586e31f4f68b62417a56229fdbbf988688dbc2d92",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

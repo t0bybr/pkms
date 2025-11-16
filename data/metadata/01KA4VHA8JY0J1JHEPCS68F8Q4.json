@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA8JY0J1JHEPCS68F8Q4",
+  "slug": "penpot-api",
+  "path": "vault/2025-10/penpot-api--01KA4VHA8JY0J1JHEPCS68F8Q4.md",
+  "title": "Penpot API",
+  "tags": [
+    "test",
+    "design"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-07T00:00:00",
+  "updated": "2025-11-15T22:52:51.861655Z",
+  "full_text": "# Penpot API\n\nIntegrating with Penpot API.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:892bac6d134409974b60aadd4b2c66baa6cb843bf317a731233a5e71adab46b3",
+  "file_hash": "sha256:67f317e1305fe3f47dcc20bc3e3b2c29a4b314cec1f167aac093293ab03d48b5",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

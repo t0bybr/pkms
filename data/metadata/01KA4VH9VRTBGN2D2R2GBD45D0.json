@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9VRTBGN2D2R2GBD45D0",
+  "slug": "email-projektpartnerschaft",
+  "path": "vault/2025-11/email-projektpartnerschaft--01KA4VH9VRTBGN2D2R2GBD45D0.md",
+  "title": "Email: Projektpartnerschaft",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-04T00:00:00",
+  "updated": "2025-11-15T22:52:51.460658Z",
+  "full_text": "# Email: Projektpartnerschaft\n\nProfessionelle E-Mail zur Anfrage.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:e49b511e17892a1b3d5979582e32cc2dff0e018e1b7d84285ece53bd790b8b66",
+  "file_hash": "sha256:750ad4589a7330a41eccd77479ed243b8ffd66735ccf0cab5dd4833310ea934f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

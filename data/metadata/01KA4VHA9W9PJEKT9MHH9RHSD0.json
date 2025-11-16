@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA9W9PJEKT9MHH9RHSD0",
+  "slug": "systemd-services",
+  "path": "vault/2025-10/systemd-services--01KA4VHA9W9PJEKT9MHH9RHSD0.md",
+  "title": "Systemd Services",
+  "tags": [
+    "test",
+    "linux"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-12T00:00:00",
+  "updated": "2025-11-15T22:52:51.906655Z",
+  "full_text": "# Systemd Services\n\nConfiguring systemd services.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:666925e7e809c7e695782d66dfad3978de741aff44122512e3e727c6e97193f5",
+  "file_hash": "sha256:16cfaa63807244e762e129bef3be3b4b6eafc876d94d838914b6049663db08a6",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

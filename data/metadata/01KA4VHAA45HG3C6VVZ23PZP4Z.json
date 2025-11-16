@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAA45HG3C6VVZ23PZP4Z",
+  "slug": "tailwind-css",
+  "path": "vault/2025-08/tailwind-css--01KA4VHAA45HG3C6VVZ23PZP4Z.md",
+  "title": "Tailwind CSS",
+  "tags": [
+    "test",
+    "css"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-28T00:00:00",
+  "updated": "2025-11-15T22:52:51.910655Z",
+  "full_text": "# Tailwind CSS\n\nTailwind CSS utility patterns.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:aa8c0673438807cf6463060324853e32fcb879bb16844a1ee32d920e48127694",
+  "file_hash": "sha256:820c938946e69b1f416cfa7be61cdf23eaee3bb3bf60ba587ac9fd72d1e4b06a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA3P6T5P59Y94DPM6YJ2",
+  "slug": "docker-container-optimization",
+  "path": "vault/2025-10/docker-container-optimization--01KA4VHA3P6T5P59Y94DPM6YJ2.md",
+  "title": "Docker Container Optimization",
+  "tags": [
+    "test",
+    "container"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-14T00:00:00",
+  "updated": "2025-11-15T22:52:51.706656Z",
+  "full_text": "# Docker Container Optimization\n\nOptimizing Docker containers for production environments.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:4ade716a45320b7836856f15b2c0cd0f2d33fcebc04c6ea62c6ac7346912adab",
+  "file_hash": "sha256:8428e7dbf4b593ec11cca1d50d73eb09c48802abc5e3ef2732a2844bf3128eb2",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

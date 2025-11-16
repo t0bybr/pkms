@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9NEHTQ0F9W7W9SC73VV",
+  "slug": "bewerbung-admin",
+  "path": "vault/2025-08/bewerbung-admin--01KA4VH9NEHTQ0F9W7W9SC73VV.md",
+  "title": "Bewerbung Admin",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-21T00:00:00",
+  "updated": "2025-11-15T22:52:51.251659Z",
+  "full_text": "# Bewerbung Admin\n\nAdministration.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:58482f5f7037856a75255d396387f5044e633dcfdbd582b9cf8b0422cc8afbb7",
+  "file_hash": "sha256:5376c650943e1172beece2f4cd3ea69b16cf12854e48a5b85211a74459c97de4",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

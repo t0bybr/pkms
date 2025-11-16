@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHABG60RMJG9K72J6TCEB",
+  "slug": "web-scraping",
+  "path": "vault/2025-08/web-scraping--01KA4VHABG60RMJG9K72J6TCEB.md",
+  "title": "Web Scraping",
+  "tags": [
+    "test",
+    "web"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-21T00:00:00",
+  "updated": "2025-11-15T22:52:51.954654Z",
+  "full_text": "# Web Scraping\n\nEthical web scraping practices.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:397e75289a373dfa134a6fbf17fded7147b2eb6ed7a46d4f2be4e9de6aedf51a",
+  "file_hash": "sha256:99743b5f386d237844c28a673b432e573f757725b3ca0a32541bfca8dd10e260",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

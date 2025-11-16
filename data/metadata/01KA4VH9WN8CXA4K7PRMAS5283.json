@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9WN8CXA4K7PRMAS5283",
+  "slug": "email-vermittlung",
+  "path": "vault/2025-09/email-vermittlung--01KA4VH9WN8CXA4K7PRMAS5283.md",
+  "title": "Email: Vermittlung",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-28T00:00:00",
+  "updated": "2025-11-15T22:52:51.485658Z",
+  "full_text": "# Email: Vermittlung\n\nBusiness Connection.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3dc8bdba30193bf7fd7a3d2f024772f736e2723dc9efb55fa292a0ccf62cfee5",
+  "file_hash": "sha256:c20b46f78baf1998deda7dd7af4af966017b15bc451f79ad5d7b4ef841e7f212",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

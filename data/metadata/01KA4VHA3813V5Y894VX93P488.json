@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA3813V5Y894VX93P488",
+  "slug": "database-indexing",
+  "path": "vault/2025-10/database-indexing--01KA4VHA3813V5Y894VX93P488.md",
+  "title": "Database Indexing",
+  "tags": [
+    "test",
+    "database"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-24T00:00:00",
+  "updated": "2025-11-15T22:52:51.692656Z",
+  "full_text": "# Database Indexing\n\nDatabase indexing strategies.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:4eb10ae97e0d239fd9503897905fe85e948e5fcb03693b31af90ed21f655c7aa",
+  "file_hash": "sha256:b9aaac92f85006d6733a15b476bd254d412aab1a1f7d7a796a1005bea30e86dc",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9PPS23VMQF41SCMGM4C",
+  "slug": "bewerbung-krankenschwester",
+  "path": "vault/2025-09/bewerbung-krankenschwester--01KA4VH9PPS23VMQF41SCMGM4C.md",
+  "title": "Bewerbung Krankenschwester",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-22T00:00:00",
+  "updated": "2025-11-15T22:52:51.296659Z",
+  "full_text": "# Bewerbung Krankenschwester\n\nPflegefachkraft Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:aa0d6bbf9c027565a38c66ab4afead2203d4576d591f34a25d339f0405001c17",
+  "file_hash": "sha256:05e0ee299e718e8c8a1d721d75e00a17947c273f9bc5712ead9db38624ebf4a3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

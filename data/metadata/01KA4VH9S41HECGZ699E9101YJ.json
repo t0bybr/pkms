@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9S41HECGZ699E9101YJ",
+  "slug": "croissants-rezept",
+  "path": "vault/2025-10/croissants-rezept--01KA4VH9S41HECGZ699E9101YJ.md",
+  "title": "Croissants Rezept",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.373658Z",
+  "full_text": "# Croissants Rezept\n\nFranzösische Backware.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:45701dcac8cc24c3b8dd7503ad9e6a8e2f1df27cf4924b65c797fad4160752e4",
+  "file_hash": "sha256:f91136dbfaad0aba810fe6bd966d773201420a97b18f411bcf8bfe475335e240",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

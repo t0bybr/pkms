@@ -1,0 +1,28 @@
+{
+  "id": "01KA4VHACM86H8VA7RJW3SM8P9",
+  "slug": "pizza-recipe",
+  "path": "vault/2025-11/pizza-recipe--01KA4VHACM86H8VA7RJW3SM8P9.md",
+  "title": "Pizza Recipe",
+  "tags": [
+    "cooking",
+    "italian"
+  ],
+  "aliases": [],
+  "categories": [
+    "Recipes"
+  ],
+  "language": "de",
+  "created": "2025-11-15T23:34:33.771425Z",
+  "updated": "2025-11-15T23:34:33.771425Z",
+  "full_text": "# Pizza Recipe\n\nBei 300°C wird der Pizzastein optimal heiß.\n\n## Zutaten\n\n- 500g Mehl\n- 10g Salz\n- 300ml Wasser\n\n## Zubereitung\n\nDen Teig gut durchkneten und 24h fermentieren lassen.\n\nSiehe auch [[ofen-temperatur]] für Details zur Backtemperatur.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:5674318aa527938c538dd02fa0e5e5a7240559ba049fc2a1bb89f78e46443c2f",
+  "file_hash": "sha256:dad602175e03a001821e4b8b64880d133c49682ba6f580c2eee3705f2eab936f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

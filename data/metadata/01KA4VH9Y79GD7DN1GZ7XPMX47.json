@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9Y79GD7DN1GZ7XPMX47",
+  "slug": "marokko-7-tage",
+  "path": "vault/2025-08/marokko-7-tage--01KA4VH9Y79GD7DN1GZ7XPMX47.md",
+  "title": "Marokko 7 Tage",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-24T00:00:00",
+  "updated": "2025-11-15T22:52:51.532657Z",
+  "full_text": "# Marokko 7 Tage\n\nMorocco Tour.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:c3f1de73a00fd410e5173154baf0a05db8ac2a6ec18cdd8e3e0d3891a2f0e6e9",
+  "file_hash": "sha256:c0f202d3e1bb75880a59cd8318242e839c3f51b10a592e03406d7db008169f84",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

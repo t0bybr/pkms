@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA0XWQXMC91XHWKJF734",
+  "slug": "thai-curry-rezept",
+  "path": "vault/2025-11/thai-curry-rezept--01KA4VHA0XWQXMC91XHWKJF734.md",
+  "title": "Thai Curry Rezept",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.615657Z",
+  "full_text": "# Thai Curry Rezept\n\nAuthentisches Thai-Curry.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3a1c57e8e0893063ae84951910efab750a2ea22b1f13cd19b3bca6e9be8bc7a1",
+  "file_hash": "sha256:8cbce532fd192b597860d06f164cacad113a4a2f82d6bda9e1c88bf6626aca38",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

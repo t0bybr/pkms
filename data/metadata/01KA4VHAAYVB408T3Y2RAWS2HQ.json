@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAAYVB408T3Y2RAWS2HQ",
+  "slug": "vector-database-comparison",
+  "path": "vault/2025-08/vector-database-comparison--01KA4VHAAYVB408T3Y2RAWS2HQ.md",
+  "title": "Vector Database Comparison",
+  "tags": [
+    "test",
+    "database"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-10T00:00:00",
+  "updated": "2025-11-15T22:52:51.937654Z",
+  "full_text": "# Vector Database Comparison\n\nChoosing the right vector database.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:14de3f623b922b3619bad33650af4ac02d4b90c54c5809582d2dfc8a73aebce0",
+  "file_hash": "sha256:4bf117cdb787a52b4ba6747e1b990cc1cc52b6ed6efc42920614c61b79e554c7",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

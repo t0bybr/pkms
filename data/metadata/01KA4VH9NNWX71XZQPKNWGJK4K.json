@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9NNWX71XZQPKNWGJK4K",
+  "slug": "bewerbung-content-creator",
+  "path": "vault/2025-10/bewerbung-content-creator--01KA4VH9NNWX71XZQPKNWGJK4K.md",
+  "title": "Bewerbung Content Creator",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-28T00:00:00",
+  "updated": "2025-11-15T22:52:51.256659Z",
+  "full_text": "# Bewerbung Content Creator\n\nSocial Media Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:bb449d789dfc0c4a1373aa81e9c2b83ef980550e0b93e23d54435a2a3230d687",
+  "file_hash": "sha256:2cdd024cd375e6535bc672238b020751a886e68fbd18db26acbb4954c9f82fee",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

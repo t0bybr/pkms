@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9QRMN9VQ55V8XCB7B2V",
+  "slug": "bewerbung-softwareentwickler",
+  "path": "vault/2025-10/bewerbung-softwareentwickler--01KA4VH9QRMN9VQ55V8XCB7B2V.md",
+  "title": "Bewerbung Softwareentwickler",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-18T00:00:00",
+  "updated": "2025-11-15T22:52:51.323659Z",
+  "full_text": "# Bewerbung Softwareentwickler\n\nTech Job.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:296cf2e74f3e612894ef05efd9ca412797bb42e161e437409110f9f4ffb897c7",
+  "file_hash": "sha256:8dd7aee7b978803e51f7570caa44618042aaa2ad4680c2b31b3f2b8118526d1a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

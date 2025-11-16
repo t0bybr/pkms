@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA9F3BX7NDVYVK0AZQD6",
+  "slug": "qmk-firmware",
+  "path": "vault/2025-10/qmk-firmware--01KA4VHA9F3BX7NDVYVK0AZQD6.md",
+  "title": "QMK Firmware",
+  "tags": [
+    "test",
+    "keyboard"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-16T00:00:00",
+  "updated": "2025-11-15T22:52:51.890655Z",
+  "full_text": "# QMK Firmware\n\nCustomizing QMK firmware for keyboards.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:aace35fd8e5991d3eff4992cad47c4df763e577a51309119c937e3ecf090aca8",
+  "file_hash": "sha256:bc2d06f128a4cb0c9443c4765a3ca88ea55053dd4d50602de4d0e0dc54ef609c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

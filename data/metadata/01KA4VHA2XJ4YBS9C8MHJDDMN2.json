@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA2XJ4YBS9C8MHJDDMN2",
+  "slug": "cosine-similarity",
+  "path": "vault/2025-10/cosine-similarity--01KA4VHA2XJ4YBS9C8MHJDDMN2.md",
+  "title": "Cosine Similarity",
+  "tags": [
+    "test",
+    "ml"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-24T00:00:00",
+  "updated": "2025-11-15T22:52:51.681656Z",
+  "full_text": "# Cosine Similarity\n\nImplementing cosine similarity.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:e1a28dca1baa29af0c7011beab4de503da574e2ae30a3eb464c3978d0da4bf0e",
+  "file_hash": "sha256:dda8ae299696ff869a4b8a2b7af2a0fce4179feb1140bf5eaca5c26132a3cd2a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

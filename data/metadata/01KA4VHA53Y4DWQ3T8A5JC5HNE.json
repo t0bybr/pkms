@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA53Y4DWQ3T8A5JC5HNE",
+  "slug": "infrastructure-as-code",
+  "path": "vault/2025-10/infrastructure-as-code--01KA4VHA53Y4DWQ3T8A5JC5HNE.md",
+  "title": "Infrastructure as Code",
+  "tags": [
+    "test",
+    "iac"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-14T00:00:00",
+  "updated": "2025-11-15T22:52:51.763656Z",
+  "full_text": "# Infrastructure as Code\n\nInfrastructure as Code patterns.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:5dd347707cdf7a4561faddacc9f6d05ec385e2fd255f9506085e1cfd7e1cca7c",
+  "file_hash": "sha256:a09eba7a4ff41cdc7c7c0d85f8d767bfeeab388a13044dc148a3c0414c698be8",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

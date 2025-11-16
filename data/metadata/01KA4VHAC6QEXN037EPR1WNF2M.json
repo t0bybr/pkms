@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC6QEXN037EPR1WNF2M",
+  "slug": "home-assistant-jalousie-blueprint-gedanken",
+  "path": "vault/2025-11/home-assistant-jalousie-blueprint-gedanken--01KA4VHAC6QEXN037EPR1WNF2M.md",
+  "title": "Home Assistant – Jalousie-Blueprint Gedanken",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.974654Z",
+  "full_text": "# Features\n- Kurz-/Langdruck Taster\n- Tilt-Modus (2x Hoch zum Umschalten)\n- State Machine:\n  - `IDLE`\n  - `MOVING_UP`\n  - `MOVING_DOWN`\n  - `TILT_ACTIVE`\n\n# Anforderungen\n- Logo/MQTT sauber entkoppeln\n- Tilt deaktivieren, wenn andere Fahrt endet",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:1d18c5c3915716598e8d6df3af9fb403b02956ce093c3cdecca1f5945de2b907",
+  "file_hash": "sha256:9c79be2c52a41eca77e49827dee13947beffd1b54fa234291b55ccd346a52cc6",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

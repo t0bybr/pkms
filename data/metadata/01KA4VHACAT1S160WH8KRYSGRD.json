@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACAT1S160WH8KRYSGRD",
+  "slug": "home-assistant-tts-wetter-fur-kinder",
+  "path": "vault/2025-11/home-assistant-tts-wetter-fur-kinder--01KA4VHACAT1S160WH8KRYSGRD.md",
+  "title": "Home Assistant – TTS Wetter für Kinder",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.978654Z",
+  "full_text": "# Idee\n- Jeden Morgen personalisierte Wetteransage\n- Einfach erklärt für Kinder (z. B. „Heute brauchst du eine Mütze“)\n\n# Bausteine\n- Wetterdaten aus HA-Sensoren\n- Template für Text („Wenn Regen > X → Regenjacke-Hinweis“)\n- TTS über Google / lokale Engine\n- Ausgabe über Nest-Lautsprecher im Kinderzimmer\n\n# ToDo\n- Textvarianten, damit es nicht langweilig wird",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:1c038fd2273878cda91c7a4bfdcdcc1f9628873ca0b056c72faf4d2c24029860",
+  "file_hash": "sha256:5f76b7cff49801d801b304d2eac78c716dca8ed54264d4acd1697bf7e2ec52e0",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

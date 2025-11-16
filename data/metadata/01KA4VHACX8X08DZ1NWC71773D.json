@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACX8X08DZ1NWC71773D",
+  "slug": "trackball-firmware-zmk-pim447",
+  "path": "vault/2025-11/trackball-firmware-zmk-pim447--01KA4VHACX8X08DZ1NWC71773D.md",
+  "title": "Trackball Firmware – ZMK + PIM447",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.996654Z",
+  "full_text": "# Problem\n- ZMK-Treiber für PIM447 Trackball\n- Symptom: Keyboard hängt, sobald Trackball berührt wird\n\n# Hypothesen\n- SPI-Konfiguration falsch (Mode, Clock)\n- Interrupt-Pin nicht richtig deglitched\n- Power-Management / Sleep-Mode vom Sensor?\n\n# To Investigate\n- Minimal-Firmware nur für Trackball auf Testboard\n- Logic Analyzer an MOSI/MISO/CLK/CS hängen\n- Vergleich mit Beispielcode von Pimoroni",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3899c484701081e8d28648637047936d400db59566ebbe5c116c8efd1ac0a405",
+  "file_hash": "sha256:626c89cbcf5b3bd9bbbac7bd5f682ca49c52b2ea5eac79c51984d9e86c418cfa",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

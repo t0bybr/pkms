@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9YW10APPQTD376NDG6E",
+  "slug": "pasta-carbonara-rezept",
+  "path": "vault/2025-09/pasta-carbonara-rezept--01KA4VH9YW10APPQTD376NDG6E.md",
+  "title": "Pasta Carbonara Rezept",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-26T00:00:00",
+  "updated": "2025-11-15T22:52:51.558657Z",
+  "full_text": "# Pasta Carbonara Rezept\n\nKlassisches italienisches Rezept.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:0069d29cf0f5183faf9a1c19cba5ec4c06ee5c7fceb4b4242a124c0005eaa99b",
+  "file_hash": "sha256:ac1554e3d7992700bb0ab588dbb1b8c17eb4e2a9a1532399d7aad70e96a3e239",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

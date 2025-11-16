@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC9W6NT85K5N36P7JW7",
+  "slug": "home-assistant-morgenroutine-kinderzimmer",
+  "path": "vault/2025-11/home-assistant-morgenroutine-kinderzimmer--01KA4VHAC9W6NT85K5N36P7JW7.md",
+  "title": "Home Assistant – Morgenroutine Kinderzimmer",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.977654Z",
+  "full_text": "# Idee\n- Licht langsam hochdimmen ab 06:45\n- Leise Musik oder Hörspiel um 06:50\n- Status an Wand-Tablet: *„Guten Morgen, Lea & Finn“*\n- Wetter-Widget + Hinweis: Regen = Gummistiefel-Icon\n\n# Offene Fragen\n- Trigger über Wochentage vs. Schultage?\n- Wie Abwesenheit / Ferien berücksichtigen?\n- Separate Profile für Lea/Finn nötig?",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:86c441e39759f09bd6111a2f094c0c4f813d4bf5b0777f080b9081650154ae7a",
+  "file_hash": "sha256:6f3751178f5d6cf6817a62bfec3de92e9ef89d4f89dd5d5be2cd5d9867e1b714",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

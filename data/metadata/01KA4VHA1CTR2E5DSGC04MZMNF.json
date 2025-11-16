@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA1CTR2E5DSGC04MZMNF",
+  "slug": "amd-gpu-ml",
+  "path": "vault/2025-09/amd-gpu-ml--01KA4VHA1CTR2E5DSGC04MZMNF.md",
+  "title": "AMD GPU ML",
+  "tags": [
+    "test",
+    "gpu"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-22T00:00:00",
+  "updated": "2025-11-15T22:52:51.632657Z",
+  "full_text": "# AMD GPU ML\n\nOptimizing ML for AMD GPUs.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:f3668abd4c61d09a89d11a8057bc316aa2811e4b1f60372d143ebae26a29fcc5",
+  "file_hash": "sha256:f4b0aceadf1f1b182f99f547f2a65276fa815a359e3b25fb9792123042a6441c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

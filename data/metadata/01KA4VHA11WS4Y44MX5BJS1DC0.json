@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA11WS4Y44MX5BJS1DC0",
+  "slug": "tiramisu-dessert",
+  "path": "vault/2025-11/tiramisu-dessert--01KA4VHA11WS4Y44MX5BJS1DC0.md",
+  "title": "Tiramisu Dessert",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-02T00:00:00",
+  "updated": "2025-11-15T22:52:51.626657Z",
+  "full_text": "# Tiramisu Dessert\n\nItalienisches Tiramisu.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:f31cd8625f20139476ae2d15a60d48704f020c4935472a57b85a3b8ac3680f81",
+  "file_hash": "sha256:ec74bc1551f697ee6b33cb832aeb08a58ce29c4700555859089f66f0afea12ab",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

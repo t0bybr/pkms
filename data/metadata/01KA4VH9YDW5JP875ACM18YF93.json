@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9YDW5JP875ACM18YF93",
+  "slug": "moussaka-auflauf",
+  "path": "vault/2025-10/moussaka-auflauf--01KA4VH9YDW5JP875ACM18YF93.md",
+  "title": "Moussaka Auflauf",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.540657Z",
+  "full_text": "# Moussaka Auflauf\n\nGriechisches Gericht.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:228ee4908e6df978f5146baa5590618223d33d5a07e8268944cca237338ada4d",
+  "file_hash": "sha256:65fe436c31cff66774b20a8940d6a29389844060b7bf4fcafb22095b64eac48f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

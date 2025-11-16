@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA62SFJWYYR12EDPMEA5",
+  "slug": "llm-prompting",
+  "path": "vault/2025-08/llm-prompting--01KA4VHA62SFJWYYR12EDPMEA5.md",
+  "title": "LLM Prompting",
+  "tags": [
+    "test",
+    "ai"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-19T00:00:00",
+  "updated": "2025-11-15T22:52:51.784656Z",
+  "full_text": "# LLM Prompting\n\nEffective prompt engineering.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:dfc8cea65d4da19d46a5a00726374a8fdcf245a4c304bdbe87a5a3c7d2300d90",
+  "file_hash": "sha256:5df07e1d539d5488a71531d769a9010106f14a6d026d262f9932ec1bb096053d",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

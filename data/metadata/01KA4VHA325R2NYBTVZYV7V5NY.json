@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA325R2NYBTVZYV7V5NY",
+  "slug": "crewai-agents",
+  "path": "vault/2025-10/crewai-agents--01KA4VHA325R2NYBTVZYV7V5NY.md",
+  "title": "CrewAI Agents",
+  "tags": [
+    "test",
+    "ai"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-05T00:00:00",
+  "updated": "2025-11-15T22:52:51.686656Z",
+  "full_text": "# CrewAI Agents\n\nDesigning CrewAI agents.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:0e794539d9465a19b17545f5a26e60794b0310c4112691bb1159ba9dedd21cbe",
+  "file_hash": "sha256:2ce16da1649e3a68925bfcf616141b6d429d918f2bf87affc665b172a3465340",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

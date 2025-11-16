@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9NTB8C250Q3XXQ8WH3Q",
+  "slug": "bewerbung-eventmanager",
+  "path": "vault/2025-10/bewerbung-eventmanager--01KA4VH9NTB8C250Q3XXQ8WH3Q.md",
+  "title": "Bewerbung Eventmanager",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-19T00:00:00",
+  "updated": "2025-11-15T22:52:51.263659Z",
+  "full_text": "# Bewerbung Eventmanager\n\nEvent Organization.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:e3e6ff26735499f7b7ee5514510ab5722091e8fdcf6bdda5e1ee9fb8fa7f281a",
+  "file_hash": "sha256:c6eaff3577bfc2c235d959dd66a410d104856b180731bf09611a8fa66ea3b96d",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

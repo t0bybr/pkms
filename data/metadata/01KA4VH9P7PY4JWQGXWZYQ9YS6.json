@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9P7PY4JWQGXWZYQ9YS6",
+  "slug": "bewerbung-grafikdesigner",
+  "path": "vault/2025-09/bewerbung-grafikdesigner--01KA4VH9P7PY4JWQGXWZYQ9YS6.md",
+  "title": "Bewerbung Grafikdesigner",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-10T00:00:00",
+  "updated": "2025-11-15T22:52:51.277659Z",
+  "full_text": "# Bewerbung Grafikdesigner\n\nKreative Bewerbung.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:c65239a176d2cb537adf361b0f71d0d924c73baa4c64226730dfa189b457e5cf",
+  "file_hash": "sha256:013a893f9b495b656773986df08ea4a6741a48edbb74f82a363e554263911095",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

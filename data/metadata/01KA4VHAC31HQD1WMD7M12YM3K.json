@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC31HQD1WMD7M12YM3K",
+  "slug": "drohnenfotografie-projektideen",
+  "path": "vault/2025-11/drohnenfotografie-projektideen--01KA4VHAC31HQD1WMD7M12YM3K.md",
+  "title": "Drohnenfotografie – Projektideen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.971654Z",
+  "full_text": "# Ziele\n- Kombination aus Drohne + 3D-Druck + Topografie\n- Eigene Kunstwerke aus Landschaft + Höhenprofilen\n\n# Ideen\n- Flug über Kocher-Tal mit leicht versetzter Flugbahn für Fotogrammetrie\n- Höhenmodell generieren (z. B. mit Open-Source-Tools)\n- Relief als 3D-Druck, ggf. mit eingefasster Fotografie oben drauf\n\n# Offene Punkte\n- Rechtliche Aspekte Flugzonen Schwäbisch Hall\n- Workflow vom RAW-Foto zum druckbaren Mesh",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:d3da9e3ac9d9d10f91cd0202071046ea8e7481f2de24e472ea327170562109dc",
+  "file_hash": "sha256:e234c9afef7a231b023afa413b2f7c191e042ae12130cf7eb26e702a04041d9f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

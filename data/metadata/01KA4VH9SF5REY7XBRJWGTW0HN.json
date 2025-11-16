@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9SF5REY7XBRJWGTW0HN",
+  "slug": "email-beratung",
+  "path": "vault/2025-09/email-beratung--01KA4VH9SF5REY7XBRJWGTW0HN.md",
+  "title": "Email: Beratung",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-11T00:00:00",
+  "updated": "2025-11-15T22:52:51.382658Z",
+  "full_text": "# Email: Beratung\n\nConsulting Request.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:57258fb3bd128ba0e9912361286084363ddb9cccd5d327a73cae5cbfafe4af1a",
+  "file_hash": "sha256:7e1b4e14ee07fde94a9b39d951055a1702d97a6c2171fb82ef52132c26dc9ef9",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

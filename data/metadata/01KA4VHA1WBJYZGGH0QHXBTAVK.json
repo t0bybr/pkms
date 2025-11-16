@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA1WBJYZGGH0QHXBTAVK",
+  "slug": "bash-scripting",
+  "path": "vault/2025-11/bash-scripting--01KA4VHA1WBJYZGGH0QHXBTAVK.md",
+  "title": "Bash Scripting",
+  "tags": [
+    "test",
+    "bash"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-10T00:00:00",
+  "updated": "2025-11-15T22:52:51.647657Z",
+  "full_text": "# Bash Scripting\n\nWriting robust Bash scripts.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:6fe724e07c3fe84f26630317781c7019b52ed1a1a404a6007f9fbba08e8f8415",
+  "file_hash": "sha256:26f164f7510a958d973ece4c006fe5c87a81c79b78696f949509e70bdb281784",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

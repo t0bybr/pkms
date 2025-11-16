@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9Q957EBRWNFJMZ14WMV",
+  "slug": "bewerbung-marketing",
+  "path": "vault/2025-08/bewerbung-marketing--01KA4VH9Q957EBRWNFJMZ14WMV.md",
+  "title": "Bewerbung Marketing",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.308659Z",
+  "full_text": "# Bewerbung Marketing\n\nMarketing Manager.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:9ecc2788b6a51f12f7ad6eb27b7f22c36b0d169362672b586dcd7612428056aa",
+  "file_hash": "sha256:1ef22e61916595f408374061551bef30358b919bbb7816f7703f09182a6bb862",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

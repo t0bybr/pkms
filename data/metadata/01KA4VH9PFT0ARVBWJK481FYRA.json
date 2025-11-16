@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9PFT0ARVBWJK481FYRA",
+  "slug": "bewerbung-jurist",
+  "path": "vault/2025-08/bewerbung-jurist--01KA4VH9PFT0ARVBWJK481FYRA.md",
+  "title": "Bewerbung Jurist",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.284659Z",
+  "full_text": "# Bewerbung Jurist\n\nLegal Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:2a5aa5a0fe93badf784cd380e6994915a89c78e9cd3420c671e764a07f60f39a",
+  "file_hash": "sha256:f64c611363779c1b8e4fe8d7ce4f01591d255e86ddb809fca5186b92f0e11658",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

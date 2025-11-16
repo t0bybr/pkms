@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAAG99H9C6C9XVVMGK5M",
+  "slug": "typescript-types",
+  "path": "vault/2025-09/typescript-types--01KA4VHAAG99H9C6C9XVVMGK5M.md",
+  "title": "TypeScript Types",
+  "tags": [
+    "test",
+    "typescript"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-08T00:00:00",
+  "updated": "2025-11-15T22:52:51.924655Z",
+  "full_text": "# TypeScript Types\n\nTypeScript advanced type features.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:0120b422b95af9e717e9cb917aea04f15ac55fa4a8f4ae5f516fb123eeae42a6",
+  "file_hash": "sha256:f963143a3e5097b7fde461f28a916f3b8c32abdcbb2e44992769560070e39e39",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

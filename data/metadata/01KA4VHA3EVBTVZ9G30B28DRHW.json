@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA3EVBTVZ9G30B28DRHW",
+  "slug": "design-tokens",
+  "path": "vault/2025-11/design-tokens--01KA4VHA3EVBTVZ9G30B28DRHW.md",
+  "title": "Design Tokens",
+  "tags": [
+    "test",
+    "design"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.700656Z",
+  "full_text": "# Design Tokens\n\nDesign token systems.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:fa37eede46f4dff3ac4d82454378d797cd5718dcc83a749bffaff9aaa9ec2f67",
+  "file_hash": "sha256:150bd03eb8c632bceb4b9b91dae7f54a88aff33f798ca90b0fcb91abbeb746f3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

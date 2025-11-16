@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9TDD6BT4FC2564G6VD7",
+  "slug": "email-feedback",
+  "path": "vault/2025-08/email-feedback--01KA4VH9TDD6BT4FC2564G6VD7.md",
+  "title": "Email: Feedback",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-26T00:00:00",
+  "updated": "2025-11-15T22:52:51.408658Z",
+  "full_text": "# Email: Feedback\n\nProduct Feedback.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:7e87e6266e5556c6b4bddc68576edf348408df632cf9772f1f9f61d397f8b815",
+  "file_hash": "sha256:592b488f11810589d1c1e9d8beb4488392aa224ddae315dc7fc71371a2f8f1a6",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

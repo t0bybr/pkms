@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9V4XTDB2EP1ZJ7T5AEG",
+  "slug": "email-geschaft",
+  "path": "vault/2025-11/email-geschaft--01KA4VH9V4XTDB2EP1ZJ7T5AEG.md",
+  "title": "Email: Geschäft",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-04T00:00:00",
+  "updated": "2025-11-15T22:52:51.433658Z",
+  "full_text": "# Email: Geschäft\n\nBusiness Meeting.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:2cb30988966bcc8463605f8e7ef3b6bd8bc2149ee765b839627f2c67e9ab62cf",
+  "file_hash": "sha256:fffc9eacacc59516d127e15343734c3474dc556f289aa89863d63c9eec36af7c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

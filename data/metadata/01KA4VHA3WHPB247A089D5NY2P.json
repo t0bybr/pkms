@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA3WHPB247A089D5NY2P",
+  "slug": "embedded-systems",
+  "path": "vault/2025-10/embedded-systems--01KA4VHA3WHPB247A089D5NY2P.md",
+  "title": "Embedded Systems",
+  "tags": [
+    "test",
+    "embedded"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-01T00:00:00",
+  "updated": "2025-11-15T22:52:51.712656Z",
+  "full_text": "# Embedded Systems\n\nProgramming embedded systems.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:b01c864d49cc09fdf374efff5a002aeca2b4fc4d853b9ada253eaa23bb1c6c11",
+  "file_hash": "sha256:f4a069818593b7027b617dc9a7f46d1445a5062c1a592829ca237f2ff04cb2f3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

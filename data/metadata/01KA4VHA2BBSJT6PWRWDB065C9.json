@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA2BBSJT6PWRWDB065C9",
+  "slug": "ci-cd-pipeline",
+  "path": "vault/2025-08/ci-cd-pipeline--01KA4VHA2BBSJT6PWRWDB065C9.md",
+  "title": "CI/CD Pipeline",
+  "tags": [
+    "test",
+    "devops"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-21T00:00:00",
+  "updated": "2025-11-15T22:52:51.668656Z",
+  "full_text": "# CI/CD Pipeline\n\nDesigning effective CI/CD pipelines.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:1ed15ad5b022d1d35a0bebc6a6ae4f64bd0481e580dd0b9a1c6e6c9843d2e16d",
+  "file_hash": "sha256:ccbdc00534b727e169cf5b1fcd045beca81127bd657a0f0f1e4e7c1ed99933d9",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

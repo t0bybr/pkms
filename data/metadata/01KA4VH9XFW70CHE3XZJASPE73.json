@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9XFW70CHE3XZJASPE73",
+  "slug": "kalifornien-roadtrip",
+  "path": "vault/2025-09/kalifornien-roadtrip--01KA4VH9XFW70CHE3XZJASPE73.md",
+  "title": "Kalifornien Roadtrip",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-05T00:00:00",
+  "updated": "2025-11-15T22:52:51.508657Z",
+  "full_text": "# Kalifornien Roadtrip\n\nPacific Coast.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:344b29f9ca8b5d0ce4dcd47eaabf517a6813f50ad039a4d6033550c4e024f8c0",
+  "file_hash": "sha256:49ef101b18c3903ef81a44e2120e8c61076caf978ef976e5f20cc8da13bec5b3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

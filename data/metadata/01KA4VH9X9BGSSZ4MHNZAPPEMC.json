@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9X9BGSSZ4MHNZAPPEMC",
+  "slug": "japan-kulturreise",
+  "path": "vault/2025-08/japan-kulturreise--01KA4VH9X9BGSSZ4MHNZAPPEMC.md",
+  "title": "Japan Kulturreise",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.501657Z",
+  "full_text": "# Japan Kulturreise\n\n2-Wochen Japan Tour.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:32540e7ed539d5900d0d36bcf03c06b4d1651744a73fa6e336e2d1e55732ee0b",
+  "file_hash": "sha256:46614af30aae8217ba57f2b70d8929241339db18f317f4610743545f35fd4875",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

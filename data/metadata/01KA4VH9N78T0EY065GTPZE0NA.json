@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9N78T0EY065GTPZE0NA",
+  "slug": "barcelona-wochenende",
+  "path": "vault/2025-08/barcelona-wochenende--01KA4VH9N78T0EY065GTPZE0NA.md",
+  "title": "Barcelona Wochenende",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.245659Z",
+  "full_text": "# Barcelona Wochenende\n\n3-Tage Reiseplan.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:1318eac96048910e22f684fc8d8266ba9594a551a4f66a5ccf0ed77535e32238",
+  "file_hash": "sha256:4e018f19b3561dce0bc838f1ad2ccc381ebb3a036cb81c4f73faff4bd38c5a75",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

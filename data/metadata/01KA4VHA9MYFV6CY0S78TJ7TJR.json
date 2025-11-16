@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA9MYFV6CY0S78TJ7TJR",
+  "slug": "react-performance",
+  "path": "vault/2025-09/react-performance--01KA4VHA9MYFV6CY0S78TJ7TJR.md",
+  "title": "React Performance",
+  "tags": [
+    "test",
+    "react"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-11T00:00:00",
+  "updated": "2025-11-15T22:52:51.898655Z",
+  "full_text": "# React Performance\n\nReact performance optimization techniques.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:90078eb6f409db6037f536e1dd34ad0ae2e7563fb8de4d7070451f50b1d71575",
+  "file_hash": "sha256:8f01f30417160bd7b558837fb5758b98aeff1044b4bfac905cd29974ab0487c2",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

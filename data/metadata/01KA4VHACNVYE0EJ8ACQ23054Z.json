@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACNVYE0EJ8ACQ23054Z",
+  "slug": "pkms-architektur-notizen-dateibasiert",
+  "path": "vault/2025-11/pkms-architektur-notizen-dateibasiert--01KA4VHACNVYE0EJ8ACQ23054Z.md",
+  "title": "PKMS – Architektur-Notizen (Dateibasiert)",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.989654Z",
+  "full_text": "# Leitplanken\n- KISS: Möglichst wenig Technik, maximaler Nutzen\n- Alles sind Dateien (Markdown, JSON, evtl. DuckDB als Index)\n- Kein Vendor-Lock-In, keine proprietären Clouds\n\n# Struktur-Idee\n- `knowledge/notes/*.md` für Inhalt\n- `knowledge/.schemas/*.json` für Formate\n- `knowledge/.tools/` für kleine Helferskripte (search, validate, embed)\n\n# Offene Punkte\n- Link-Syntax (UUID im Dateinamen vs. WikiLinks)\n- Frontmatter-Minimum vs. „Rich“ Frontmatter",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:bd82c0bd5b6e8bd5bffda9e46bcbe6b328d641b47d0a145744e6110c9f4f53dd",
+  "file_hash": "sha256:0a352cae2963c356952fbdd7fc7ce11b821df5b9bf2de24a55b1d11b2083c23c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

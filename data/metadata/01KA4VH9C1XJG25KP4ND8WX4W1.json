@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9C1XJG25KP4ND8WX4W1",
+  "slug": "agypten-antike",
+  "path": "vault/2025-09/agypten-antike--01KA4VH9C1XJG25KP4ND8WX4W1.md",
+  "title": "Ägypten Antike",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.237659Z",
+  "full_text": "# Ägypten Antike\n\nHistorical Tour.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:68b707240dc2e53db725def9d280e09bad01cfd28330ed4f6e0b4ede7dee611d",
+  "file_hash": "sha256:ec6db1ee5d578aca30900d6d01207a4414adcce5bc52d454b38dcf489d23970f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

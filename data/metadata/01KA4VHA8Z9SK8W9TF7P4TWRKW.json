@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA8Z9SK8W9TF7P4TWRKW",
+  "slug": "podman-vs-docker",
+  "path": "vault/2025-08/podman-vs-docker--01KA4VHA8Z9SK8W9TF7P4TWRKW.md",
+  "title": "Podman vs Docker",
+  "tags": [
+    "test",
+    "container"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-07T00:00:00",
+  "updated": "2025-11-15T22:52:51.874655Z",
+  "full_text": "# Podman vs Docker\n\nArchitectural differences between Podman and Docker.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:c2e9036174cc6ab5f8d81f3d6336ceea6d2aff9ecb5c647623b0ef1c7343fdd8",
+  "file_hash": "sha256:204bc6415b1c536897950f48e798712db4700f206fa5afa6cbd61284c0daf5b7",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACFNND3Y96YT1Z1JNP8",
+  "slug": "llm-prompts-ocr-bereinigung",
+  "path": "vault/2025-11/llm-prompts-ocr-bereinigung--01KA4VHACFNND3Y96YT1Z1JNP8.md",
+  "title": "LLM-Prompts – OCR-Bereinigung",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.982654Z",
+  "full_text": "# Ziel\n- Aus OCR-Texten saubere Markdown-Briefe machen\n- Frontmatter + Inhalt strikt trennen\n\n# Regeln\n- Inhalt des Originalschreibens bewahren\n- Nur OCR-Fehler + Formatierung korrigieren\n- Keine inhaltlichen Ergänzungen, außer klaren Metadaten\n\n# Offene Punkte\n- Prompts so formulieren, dass auch kleinere Modelle (Phi, Mistral) es verstehen",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:4009198eae99c8c8bd2eebb17e3274b70f357fb912c0d26a3cba2cad1ad56fbb",
+  "file_hash": "sha256:6db1b0ddb98f05ec80722d5f992e3949757c3a91b7f7557e8d0124d6b4bda9b7",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

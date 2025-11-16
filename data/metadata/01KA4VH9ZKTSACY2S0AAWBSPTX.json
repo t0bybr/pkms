@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9ZKTSACY2S0AAWBSPTX",
+  "slug": "risotto-pilze",
+  "path": "vault/2025-08/risotto-pilze--01KA4VH9ZKTSACY2S0AAWBSPTX.md",
+  "title": "Risotto Pilze",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-14T00:00:00",
+  "updated": "2025-11-15T22:52:51.577657Z",
+  "full_text": "# Risotto Pilze\n\nItalienisches Risotto.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:b28699f79549f69235f320959ee149124af7bc81139d1baf2709009582295baf",
+  "file_hash": "sha256:ec628f1bf872cf5d4dd3bc6d7349329e62409730f2e8e9961b6688a5f45f3cbc",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

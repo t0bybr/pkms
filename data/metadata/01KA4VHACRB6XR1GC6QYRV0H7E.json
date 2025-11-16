@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACRB6XR1GC6QYRV0H7E",
+  "slug": "pkms-dateinamen-uuid-konzept",
+  "path": "vault/2025-11/pkms-dateinamen-uuid-konzept--01KA4VHACRB6XR1GC6QYRV0H7E.md",
+  "title": "PKMS – Dateinamen & UUID-Konzept",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.992654Z",
+  "full_text": "# Idee\n- Format: `slug.uuid8.ext`\n- Beispiel: `local-llm-setup.01HD3M7G8Z4ZN1YT4W6P1ZP6C9.md`\n\n# Vorteile\n- Menschlich lesbar + trotzdem eindeutig\n- UUID Teil erlaubt stabile Referenzen in Embeddings, JSON, etc.\n- Umbennenbar, solange UUID gleich bleibt\n\n# ToDo\n- Utilities: `rename_with_uuid.py`\n- Tests mit vorhandenen Notizen",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:165cf719c4669ffa4608c0605228530f4c053a054f7bbefdc5ae16541d9f03ed",
+  "file_hash": "sha256:ffa1d867a58bc106b82b2a46578604ed4bce0457b15addc13d4f1d042416861e",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

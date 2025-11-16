@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAAP4F1WFNTER85E63PT",
+  "slug": "typo3-extensions",
+  "path": "vault/2025-10/typo3-extensions--01KA4VHAAP4F1WFNTER85E63PT.md",
+  "title": "TYPO3 Extensions",
+  "tags": [
+    "test",
+    "typo3"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-27T00:00:00",
+  "updated": "2025-11-15T22:52:51.932655Z",
+  "full_text": "# TYPO3 Extensions\n\nDeveloping TYPO3 extensions.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:b1fb1ae8b5b7d60e68665993cd9e8a93cc09846fcb5f78b395a879c4b2cc0bc3",
+  "file_hash": "sha256:6b41164eb1a4099050bc013499e8787f873d6deb451edeac7aa693efb1974fde",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

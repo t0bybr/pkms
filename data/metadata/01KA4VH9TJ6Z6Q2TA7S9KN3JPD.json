@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9TJ6Z6Q2TA7S9KN3JPD",
+  "slug": "email-fortbildung",
+  "path": "vault/2025-09/email-fortbildung--01KA4VH9TJ6Z6Q2TA7S9KN3JPD.md",
+  "title": "Email: Fortbildung",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-02T00:00:00",
+  "updated": "2025-11-15T22:52:51.416658Z",
+  "full_text": "# Email: Fortbildung\n\nWeiterbildungsantrag.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:ff8ebffe71ba62c44a22551b928b72a4ec4e18dfa5fa01a8d5bbc4df93b46515",
+  "file_hash": "sha256:a72a7e06725483b95eb604f62b2463947e8e0c007a4be9bed347f964b8794b88",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

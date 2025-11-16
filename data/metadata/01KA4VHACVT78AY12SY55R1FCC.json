@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACVT78AY12SY55R1FCC",
+  "slug": "split-keyboard-layout-experimente",
+  "path": "vault/2025-11/split-keyboard-layout-experimente--01KA4VHACVT78AY12SY55R1FCC.md",
+  "title": "Split Keyboard – Layout-Experimente",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.995654Z",
+  "full_text": "# Ausgangslage\n- Inspiration: Corne / Sweep\n- Besonderheit: Trackball rechts integriert\n- Idee: Ring- und kleiner Finger eher rotieren statt neigen\n\n# Experimente\n- Spaltenversatz pro Finger testen (OpenSCAD Mockup?)\n- Home-Row-Mods wie auf Cheapino V2\n- Extra Thumb-Cluster-Taste für „Layer Nav/Mouse“\n\n# Offene Punkte\n- MCU: XIAO vs. nRF-Board?\n- USB-C Buchsen-Führung im Gehäuse",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:fac69f1e4536c59d6470136f9f3026c6d4c4c14466593bc78052be23bd08f791",
+  "file_hash": "sha256:c5fc2d7db644bf282d2cae013ea743f2a1274bf20d7c79ea01698a14c43a3605",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

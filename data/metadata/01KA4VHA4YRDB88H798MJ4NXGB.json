@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA4YRDB88H798MJ4NXGB",
+  "slug": "http-caching",
+  "path": "vault/2025-10/http-caching--01KA4VHA4YRDB88H798MJ4NXGB.md",
+  "title": "HTTP Caching",
+  "tags": [
+    "test",
+    "web"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-29T00:00:00",
+  "updated": "2025-11-15T22:52:51.745656Z",
+  "full_text": "# HTTP Caching\n\nProper HTTP caching strategies.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3ef283ea04a452ff7ef7cdd55e841a11241e65227bf2800ef8f4060a90db926c",
+  "file_hash": "sha256:bb5c93ab5c5ea9c038901904815c27117d3389c3b15f91e0fdda1c409ec2439d",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

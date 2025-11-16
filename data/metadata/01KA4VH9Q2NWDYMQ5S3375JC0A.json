@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9Q2NWDYMQ5S3375JC0A",
+  "slug": "bewerbung-lehrerin",
+  "path": "vault/2025-08/bewerbung-lehrerin--01KA4VH9Q2NWDYMQ5S3375JC0A.md",
+  "title": "Bewerbung Lehrerin",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-12T00:00:00",
+  "updated": "2025-11-15T22:52:51.303659Z",
+  "full_text": "# Bewerbung Lehrerin\n\nSchulposition.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:cf3a5e944e791e0636a910eb6c6487e3b7bfebfac29aaf49a62e5df129169bc3",
+  "file_hash": "sha256:5024b3e1a98d26b115c8b589021404b3cd5edbb6b2d4ea937305da50f05f7dea",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHABMYS2JMV9CHD3G33W6",
+  "slug": "yaml-configuration",
+  "path": "vault/2025-09/yaml-configuration--01KA4VHABMYS2JMV9CHD3G33W6.md",
+  "title": "YAML Configuration",
+  "tags": [
+    "test",
+    "config"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-27T00:00:00",
+  "updated": "2025-11-15T22:52:51.964654Z",
+  "full_text": "# YAML Configuration\n\nManaging YAML configurations.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:06c9f87302e4478c8c6cba211eb96f712f3c89ee7a0f3f0abebb8c417805be52",
+  "file_hash": "sha256:b5e6bfbb39c59a2950bfdac68bbf589c870fe71b48d7f3055392ebe753dcb7d2",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

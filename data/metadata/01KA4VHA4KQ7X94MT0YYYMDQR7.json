@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA4KQ7X94MT0YYYMDQR7",
+  "slug": "home-assistant-automation",
+  "path": "vault/2025-11/home-assistant-automation--01KA4VHA4KQ7X94MT0YYYMDQR7.md",
+  "title": "Home Assistant Automation",
+  "tags": [
+    "test",
+    "homeautomation"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-07T00:00:00",
+  "updated": "2025-11-15T22:52:51.736656Z",
+  "full_text": "# Home Assistant Automation\n\nCreating effective Home Assistant automations.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:f1f50ded057319f157ca8c031d22f46219140ac2299a0a302cb7d8bd22529863",
+  "file_hash": "sha256:9874ac52fed73f3f8afaeee2bb1ef6aea7cdd63406cd239cbceaa9cc70089994",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

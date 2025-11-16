@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACT1BWVGHT0SYD5F837",
+  "slug": "react-ui-thermodrucker-oberflache",
+  "path": "vault/2025-11/react-ui-thermodrucker-oberflache--01KA4VHACT1BWVGHT0SYD5F837.md",
+  "title": "React UI – Thermodrucker Oberfläche",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.993654Z",
+  "full_text": "# Ziele\n- Startseite mit zwei Optionen:\n  - „Vorlage laden“\n  - „Neu beginnen“\n- Editor mit Blöcken (Text, Bild, QR-Code)\n\n# Technisches\n- Vite + React\n- Erstmal ohne Druckeransteuerung, nur Layout/Export\n- JSON-Schema für die „Blöcke“ definieren\n\n# ToDo\n- Minimal-UI entwerfen\n- Später: ESC/POS-Anbindung über Backend",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:224ff4dbf81660631afadf9f00b75823e90d9f2bfe45bd72b08976fa87c36efc",
+  "file_hash": "sha256:a5b94ea5c31b6a3a4402728ecaeb60e4604732ec6caebccb34b4e7414ecac14c",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

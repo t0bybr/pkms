@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHABXP3P7K5P0X6A7AAP4",
+  "slug": "3d-druck-unkonventionelle-brennholz-losungen",
+  "path": "vault/2025-11/3d-druck-unkonventionelle-brennholz-losungen--01KA4VHABXP3P7K5P0X6A7AAP4.md",
+  "title": "3D-Druck – Unkonventionelle Brennholz-Lösungen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.965654Z",
+  "full_text": "# Idee\n- Statt klassischem Holzstapel: modulare 3D-gedruckte Halter\n- Wabenstruktur oder Hex-Module, die man an der Wand befestigt\n\n# Notizen\n- Belastung beachten (3D-Druck nur als Halter, nicht tragendes Element)\n- Kombination mit Metallprofilen / Holzleisten\n- Kann auch dekorativ sein (z. B. organische Formen)\n\n# Nächste Schritte\n- Kleine Prototyp-Module drucken und Belastung testen",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:26217fd4ad95a445f467fcbe77cbda2106d3f4ea8aa1dc627ae65f085533adb8",
+  "file_hash": "sha256:eed7d50e10abd52a208ebb8d8ef730efbcad7519a8e56ef888d13b05acfa91f6",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

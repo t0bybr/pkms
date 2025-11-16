@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9Z8QWV0WS0AY726DH5P",
+  "slug": "ratatouille-gemuse",
+  "path": "vault/2025-09/ratatouille-gemuse--01KA4VH9Z8QWV0WS0AY726DH5P.md",
+  "title": "Ratatouille Gemüse",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-18T00:00:00",
+  "updated": "2025-11-15T22:52:51.569657Z",
+  "full_text": "# Ratatouille Gemüse\n\nFranzösisches Gericht.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:16b89dc333f9002c510a4a808654cdf0e29afbdbc07538df69e7eced9d5a4c9e",
+  "file_hash": "sha256:c1ac52e90b26d7b2fbf1034ba5660a7b0393ba367f1d136003e44923b9f897b2",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

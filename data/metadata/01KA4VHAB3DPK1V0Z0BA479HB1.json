@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAB3DPK1V0Z0BA479HB1",
+  "slug": "vs-code-setup",
+  "path": "vault/2025-09/vs-code-setup--01KA4VHAB3DPK1V0Z0BA479HB1.md",
+  "title": "VS Code Setup",
+  "tags": [
+    "test",
+    "editor"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-19T00:00:00",
+  "updated": "2025-11-15T22:52:51.945655Z",
+  "full_text": "# VS Code Setup\n\nSetting up VS Code extensions.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:f9627356aec39ba8a25b82a5e378b7a3bbf40ad011d24268cff4c00b87169f0f",
+  "file_hash": "sha256:17179ba32991cb51d753d88535ec2e0fe7ec98acd4c6486a138eb53676c2e5d5",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA7K63RGPYJVRSAYEDDZ",
+  "slug": "node-red-flow-design",
+  "path": "vault/2025-08/node-red-flow-design--01KA4VHA7K63RGPYJVRSAYEDDZ.md",
+  "title": "Node-RED Flow Design",
+  "tags": [
+    "test",
+    "nodered"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-31T00:00:00",
+  "updated": "2025-11-15T22:52:51.832655Z",
+  "full_text": "# Node-RED Flow Design\n\nDesigning maintainable Node-RED flows.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:aaf999551ef597f229ed50c15daa7bc6402be6a0dada7ae7f3a639d2e50679cb",
+  "file_hash": "sha256:459f4925b8e538226b1450c70e42eb4a0c02dc904501919e085b931966638155",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

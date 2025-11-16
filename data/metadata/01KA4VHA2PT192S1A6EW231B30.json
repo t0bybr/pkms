@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA2PT192S1A6EW231B30",
+  "slug": "container-registry",
+  "path": "vault/2025-10/container-registry--01KA4VHA2PT192S1A6EW231B30.md",
+  "title": "Container Registry",
+  "tags": [
+    "test",
+    "container"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-12T00:00:00",
+  "updated": "2025-11-15T22:52:51.675656Z",
+  "full_text": "# Container Registry\n\nSetting up private container registries.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:69be45a03c070484f15b3d7463adea26390d528e0d22ae6dff80445b7bb588b5",
+  "file_hash": "sha256:43133c6ce1f4987282b7e2f9b9aa8633af5053eb79b86794fa32e4dafc7630ae",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

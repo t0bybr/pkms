@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA82NKMV6AQ2TPTR3WBD",
+  "slug": "ollama-local-setup",
+  "path": "vault/2025-11/ollama-local-setup--01KA4VHA82NKMV6AQ2TPTR3WBD.md",
+  "title": "Ollama Local Setup",
+  "tags": [
+    "test",
+    "ai"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-11T00:00:00",
+  "updated": "2025-11-15T22:52:51.844655Z",
+  "full_text": "# Ollama Local Setup\n\nSetting up Ollama locally provides a powerful way to run LLMs.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:178aad9f91643da4366904f3d8807231766bca84e018f90dc0ebbb262133344f",
+  "file_hash": "sha256:37d19f6b44290f4d20ca1ebd31589e3e4d97aa0f74d00068b316419d60317759",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

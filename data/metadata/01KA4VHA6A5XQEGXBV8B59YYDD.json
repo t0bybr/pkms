@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA6A5XQEGXBV8B59YYDD",
+  "slug": "log-analysis",
+  "path": "vault/2025-08/log-analysis--01KA4VHA6A5XQEGXBV8B59YYDD.md",
+  "title": "Log Analysis",
+  "tags": [
+    "test",
+    "devops"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-27T00:00:00",
+  "updated": "2025-11-15T22:52:51.794656Z",
+  "full_text": "# Log Analysis\n\nEffective log analysis techniques.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:62c82da8bf8d0db0a543a4e9cffc57177d361e11608eeb13a169e4356598488f",
+  "file_hash": "sha256:e8f860ee259aa9124ea8c58f09ece8e127b2a6d577d7f70cf4155537061ee2bd",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

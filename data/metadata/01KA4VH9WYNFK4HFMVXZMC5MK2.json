@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9WYNFK4HFMVXZMC5MK2",
+  "slug": "gazpacho-suppe",
+  "path": "vault/2025-10/gazpacho-suppe--01KA4VH9WYNFK4HFMVXZMC5MK2.md",
+  "title": "Gazpacho Suppe",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-27T00:00:00",
+  "updated": "2025-11-15T22:52:51.490658Z",
+  "full_text": "# Gazpacho Suppe\n\nSpanische Kaltsuppe.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:fa6873073f446531d108140f849aa36dfad9151bc9876929c56dfc96499a1316",
+  "file_hash": "sha256:e0ca285c8cc7c3bff6641a654cf5b2094315bb64ca3caf6511191aa3189d4091",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

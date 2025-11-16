@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9WEBYG00Q6CEX6RYSJY",
+  "slug": "email-urlaub-anfordern",
+  "path": "vault/2025-08/email-urlaub-anfordern--01KA4VH9WEBYG00Q6CEX6RYSJY.md",
+  "title": "Email: Urlaub anfordern",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.476658Z",
+  "full_text": "# Email: Urlaub anfordern\n\nHöfliche Urlaubsanfrage.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:1f9bf94c985aa829117660996171945438f310b98aeb3c93f477b71df1fc9703",
+  "file_hash": "sha256:0a0f540f9ce53072c9c1af759a00f74f1515dd532672a3348e98a143a915e1a3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

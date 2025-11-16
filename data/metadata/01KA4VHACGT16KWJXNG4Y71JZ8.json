@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACGT16KWJXNG4Y71JZ8",
+  "slug": "lokale-ki-hardware-uberlegungen",
+  "path": "vault/2025-11/lokale-ki-hardware-uberlegungen--01KA4VHACGT16KWJXNG4Y71JZ8.md",
+  "title": "Lokale KI-Hardware – Überlegungen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.984654Z",
+  "full_text": "# Rahmen\n- Fokus: Datenschutz + Bastelspaß\n- Budget limitiert, keine Enterprise-GPUs\n\n# Notizen\n- 4B-Modelle mit Vision brauchen schnell ~40–50 GB RAM/GPU\n- 70B-Modelle in 4-Bit sind zwar theoretisch kleiner,\n  brauchen aber trotzdem sehr viel VRAM + Bandbreite\n- Realistische Zielklasse: 7B–14B mit guter Quantisierung\n\n# TODO\n- Konkrete Benchmarks mit Ollama + Vulkan\n- Energieverbrauch vs. Nutzen abwägen",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:301497cfe643499d537a1a813437c73debd9df9d4d726df64bd5d06cb85482fa",
+  "file_hash": "sha256:30653e0de3cdbc91bbe8d8c12d9d32413ce7a33fe80efb7a5dc14663687b005a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

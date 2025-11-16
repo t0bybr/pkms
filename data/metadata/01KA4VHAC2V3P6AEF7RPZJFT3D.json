@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC2V3P6AEF7RPZJFT3D",
+  "slug": "diy-buchscanner-setup-ideen",
+  "path": "vault/2025-11/diy-buchscanner-setup-ideen--01KA4VHAC2V3P6AEF7RPZJFT3D.md",
+  "title": "DIY-Buchscanner – Setup-Ideen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.969654Z",
+  "full_text": "# Hardware-Optionen\n- Smartphone mit Root + Automatisierung\n- Alternativ: ältere Kompaktkamera (Sony RX100 / Canon G-Serie)\n- Ständer + LED-Licht, möglichst einfach\n\n# Automatisierung\n- Knopfdruck:\n  - Licht an\n  - Foto\n  - Upload in überwachten Ordner (Pi / NAS)\n- Paperless-ngx verarbeitet automatisch\n\n# Nächste Schritte\n- Provisorischen Aufbau im Arbeitszimmer testen",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:e801761aea57bb00876199c4868b6340e5149774f4a39bce1324934983021535",
+  "file_hash": "sha256:5f807d1f4bbe6253f5bc1107687831460fef2480925da76f9b2185de3962dab2",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

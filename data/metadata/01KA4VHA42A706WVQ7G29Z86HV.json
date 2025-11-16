@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA42A706WVQ7G29Z86HV",
+  "slug": "embedding-search",
+  "path": "vault/2025-11/embedding-search--01KA4VHA42A706WVQ7G29Z86HV.md",
+  "title": "Embedding Search",
+  "tags": [
+    "test",
+    "ml"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-08T00:00:00",
+  "updated": "2025-11-15T22:52:51.717656Z",
+  "full_text": "# Embedding Search\n\nOptimizing embedding searches.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:fdf14e73af53de85d5ae4ca92255b63719d2a2df48c77dc384ed3f03fcbaca9b",
+  "file_hash": "sha256:566a3f1f2eacfaca93ded2fcfd3e706c06af6b7052f5df918d02167ffaaf3deb",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

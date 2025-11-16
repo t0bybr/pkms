@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA5WWX9JZ3ZF6H4H44XA",
+  "slug": "linux-monitoring",
+  "path": "vault/2025-11/linux-monitoring--01KA4VHA5WWX9JZ3ZF6H4H44XA.md",
+  "title": "Linux Monitoring",
+  "tags": [
+    "test",
+    "linux"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-14T00:00:00",
+  "updated": "2025-11-15T22:52:51.776656Z",
+  "full_text": "# Linux Monitoring\n\nSystem monitoring on Linux.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:74dc21fe48b47216a75f897ae5b599778ba47c9376105dd2d22b1ff2403fa739",
+  "file_hash": "sha256:53ef33077e4fd1394b369a799053641278ddc02d9ebba0fa4ba6bfd333b5cef1",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

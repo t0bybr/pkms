@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9RHXK55BV6PV73R19CR",
+  "slug": "costa-rica-abenteuer",
+  "path": "vault/2025-08/costa-rica-abenteuer--01KA4VH9RHXK55BV6PV73R19CR.md",
+  "title": "Costa Rica Abenteuer",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.354659Z",
+  "full_text": "# Costa Rica Abenteuer\n\nAdventure Travel Plan.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:8471e84e4ba6faca80456ce3cf7fb4cbee4ae89d06420a840c68ec9c0b6be318",
+  "file_hash": "sha256:fdf42f12243282acaebe2ba93c869845e94499538e5f4dc1e2d2c8bb87a79adc",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

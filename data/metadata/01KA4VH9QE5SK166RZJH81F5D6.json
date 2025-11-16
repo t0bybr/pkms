@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9QE5SK166RZJH81F5D6",
+  "slug": "bewerbung-projektmanager",
+  "path": "vault/2025-09/bewerbung-projektmanager--01KA4VH9QE5SK166RZJH81F5D6.md",
+  "title": "Bewerbung Projektmanager",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-09-27T00:00:00",
+  "updated": "2025-11-15T22:52:51.318659Z",
+  "full_text": "# Bewerbung Projektmanager\n\nBewerbungsschreiben für PM Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:e01075667ad4b50d78582e294b5b18b0db7e2020e5b050b6cd396a2063a8e32e",
+  "file_hash": "sha256:d863b17443709c86c2d378fc25ebdb8babb5292473a13bc3838409d5f5ef3c80",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

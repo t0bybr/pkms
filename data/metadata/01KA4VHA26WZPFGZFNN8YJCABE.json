@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA26WZPFGZFNN8YJCABE",
+  "slug": "chromadb-integration",
+  "path": "vault/2025-10/chromadb-integration--01KA4VHA26WZPFGZFNN8YJCABE.md",
+  "title": "ChromaDB Integration",
+  "tags": [
+    "test",
+    "database"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.657656Z",
+  "full_text": "# ChromaDB Integration\n\nIntegrating ChromaDB for embeddings.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:340eaa29f3c34483cf245b5f7be17537fc39b37f473e261af2aaba447264665c",
+  "file_hash": "sha256:4f3cad525657f9f0bab71bbc28d81d43f33cd945c6824b71d1a94158e6461c31",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

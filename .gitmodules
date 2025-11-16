@@ -1,3 +1,3 @@
 [submodule ".pkms"]
 	path = .pkms
-	url = /var/home/t0bybr/containers/pkms-core
+	url = git@github.com:t0bybr/pkms-core.git

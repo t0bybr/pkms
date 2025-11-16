@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9XNKH3NGZA4PQE3SHS4",
+  "slug": "kanada-rockies",
+  "path": "vault/2025-08/kanada-rockies--01KA4VH9XNKH3NGZA4PQE3SHS4.md",
+  "title": "Kanada Rockies",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-19T00:00:00",
+  "updated": "2025-11-15T22:52:51.516658Z",
+  "full_text": "# Kanada Rockies\n\nMountain Adventure.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:0cc337dbc7a16d39dc885d1f5fa91175d84c9229686c65338a852486c9b39335",
+  "file_hash": "sha256:b07eb75be6ff3bc8e37c4bebfc0f1699506d719cc8829101342602458cdf32e0",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

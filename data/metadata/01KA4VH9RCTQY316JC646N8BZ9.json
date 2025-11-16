@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9RCTQY316JC646N8BZ9",
+  "slug": "chocolate-chip-cookies",
+  "path": "vault/2025-10/chocolate-chip-cookies--01KA4VH9RCTQY316JC646N8BZ9.md",
+  "title": "Chocolate Chip Cookies",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-25T00:00:00",
+  "updated": "2025-11-15T22:52:51.344659Z",
+  "full_text": "# Chocolate Chip Cookies\n\nKlassische Cookies.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:7cc1fb325b4ea8b1552b426430881ac136c1b44cb8317b6d4ca4b54646784f16",
+  "file_hash": "sha256:c908621b174c7d1adadee5e74613b1f0f106bc3c014e3a506fe6a968a23ba1af",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

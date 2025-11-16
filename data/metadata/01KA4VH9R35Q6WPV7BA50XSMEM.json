@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9R35Q6WPV7BA50XSMEM",
+  "slug": "bewerbung-vertrieb",
+  "path": "vault/2025-11/bewerbung-vertrieb--01KA4VH9R35Q6WPV7BA50XSMEM.md",
+  "title": "Bewerbung Vertrieb",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-11T00:00:00",
+  "updated": "2025-11-15T22:52:51.338659Z",
+  "full_text": "# Bewerbung Vertrieb\n\nSales Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:04cb7a5a75d0a09f92a3bcc679bf8d8597e2b0ae3897dcf5371fe383310ed3a3",
+  "file_hash": "sha256:98112130fc9e98b7e1b7eac43bea710562ec118f9976c6294db2de991ec035c6",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

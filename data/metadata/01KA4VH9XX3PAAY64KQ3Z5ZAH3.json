@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9XX3PAAY64KQ3Z5ZAH3",
+  "slug": "lamington-kuchen",
+  "path": "vault/2025-10/lamington-kuchen--01KA4VH9XX3PAAY64KQ3Z5ZAH3.md",
+  "title": "Lamington Kuchen",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-17T00:00:00",
+  "updated": "2025-11-15T22:52:51.525657Z",
+  "full_text": "# Lamington Kuchen\n\nAustralisches Gebäck.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:cecd8cf2a489482a5e99433d9f1a6b5b40515963824527ddb487420d0b88da35",
+  "file_hash": "sha256:ccef82b72fe463a73051be8381c38e6b6ca98044afd83f2095f57d79bb84fa9a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

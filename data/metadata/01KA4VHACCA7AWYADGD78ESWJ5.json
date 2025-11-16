@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACCA7AWYADGD78ESWJ5",
+  "slug": "kinder-morgentimer-ampel-idee",
+  "path": "vault/2025-11/kinder-morgentimer-ampel-idee--01KA4VHACCA7AWYADGD78ESWJ5.md",
+  "title": "Kinder-Morgentimer – Ampel-Idee",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.979654Z",
+  "full_text": "# Konzept\n- Lampe als Ampel:\n  - Grün: noch viel Zeit\n  - Gelb: langsam fertig machen\n  - Rot: losgehen!\n\n# Umsetzung\n- Home Assistant Automation mit Zeitplan\n- Optional: Gong/Signal alle 5 Minuten\n- Visualisierung im Kinderzimmer + Flur\n\n# ToDo\n- Farbbedeutung gemeinsam mit Kindern definieren",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:d1fed04b874dad76bb03a9d6067b186646036b5787244fdd1292a9c09fa1993e",
+  "file_hash": "sha256:1813edbf123f80cb57c110c182c67ef161ab982654c32a798d6a11b3b136510d",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

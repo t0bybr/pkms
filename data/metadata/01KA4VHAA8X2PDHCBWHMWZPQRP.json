@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHAA8X2PDHCBWHMWZPQRP",
+  "slug": "testing-strategies",
+  "path": "vault/2025-10/testing-strategies--01KA4VHAA8X2PDHCBWHMWZPQRP.md",
+  "title": "Testing Strategies",
+  "tags": [
+    "test",
+    "testing"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-12T00:00:00",
+  "updated": "2025-11-15T22:52:51.918655Z",
+  "full_text": "# Testing Strategies\n\nComprehensive testing approaches.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:469585fff958ff7ec4e20502d4d3b372e0767d80972f854ac19a059e739362c5",
+  "file_hash": "sha256:3b0f25ad44abdc467c3e0b7022cf95b4c97b83e3ebb431f06cf15498f94092ab",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

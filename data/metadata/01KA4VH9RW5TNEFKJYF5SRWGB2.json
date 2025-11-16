@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9RW5TNEFKJYF5SRWGB2",
+  "slug": "croissants-backen",
+  "path": "vault/2025-09/croissants-backen--01KA4VH9RW5TNEFKJYF5SRWGB2.md",
+  "title": "Croissants backen",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-04T00:00:00",
+  "updated": "2025-11-15T22:52:51.362659Z",
+  "full_text": "# Croissants backen\n\nFranzösische Backware.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:c60d35a3d4c7d3b812d60d9ad89197c026809f607c0ebf3dcd93127dbc53d70c",
+  "file_hash": "sha256:0b12158378d2a98adee637aa7f67072a344a8e3b1597fccc4c45ad3166e125cd",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

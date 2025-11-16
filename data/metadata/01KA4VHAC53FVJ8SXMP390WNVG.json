@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC53FVJ8SXMP390WNVG",
+  "slug": "drohnen-fotogrammetrie-grober-workflow",
+  "path": "vault/2025-11/drohnen-fotogrammetrie-grober-workflow--01KA4VHAC53FVJ8SXMP390WNVG.md",
+  "title": "Drohnen-Fotogrammetrie – Grober Workflow",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.972654Z",
+  "full_text": "# Schritte\n1. Flugplanung (Höhe, Überlappung, Raster)\n2. Bilderfassung (RAW falls möglich)\n3. Alignment und Punktwolke\n4. Mesh + Textur\n5. Export in STL/OBJ für 3D-Druck\n\n# Tools (Kandidaten)\n- OpenDroneMap\n- Meshroom\n- CloudCompare (Nachbearbeitung)\n\n# ToDo\n- Testlauf mit kleiner Szene (Spielplatz / Wiese)",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:9b4ae33572d4c213aaa41043b921ba8e161f91ee6778f47461f40f67b01188df",
+  "file_hash": "sha256:8a76962f38a41d528d143ffc6cacfb8990d8b3aa30c32fbb1158c0bd35136263",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

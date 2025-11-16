@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHACQAWYJRERXJZDQE34Y",
+  "slug": "pkms-cli-tool-ideen",
+  "path": "vault/2025-11/pkms-cli-tool-ideen--01KA4VHACQAWYJRERXJZDQE34Y.md",
+  "title": "PKMS – CLI-Tool Ideen",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.990654Z",
+  "full_text": "# Name\n- `pkms` als Haupt-CLI\n\n# Subcommands\n- `pkms new` – neue Notiz mit Template + UUID\n- `pkms ingest` – Dateien einlesen, indexieren\n- `pkms search` – BM25 + Embeddings + RRF\n- `pkms doctor` – Konsistenzcheck (Links, Frontmatter, etc.)\n\n# Wunsch\n- Möglichst wenig Abhängigkeiten\n- Konfiguration über einfache YAML/JSON-Datei",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:ca86d88d43bdff0364588aff54e1907e4a54c8d1d0791e5707b9769ebc689cb6",
+  "file_hash": "sha256:a5aa198ff1e76ad64200ddfc462191c82c438aa02d870d69dc828a00fe2dc82b",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

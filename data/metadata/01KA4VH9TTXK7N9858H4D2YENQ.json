@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9TTXK7N9858H4D2YENQ",
+  "slug": "email-gehaltserhohung",
+  "path": "vault/2025-09/email-gehaltserhohung--01KA4VH9TTXK7N9858H4D2YENQ.md",
+  "title": "Email: Gehaltserhöhung",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-09-05T00:00:00",
+  "updated": "2025-11-15T22:52:51.426658Z",
+  "full_text": "# Email: Gehaltserhöhung\n\nAnfrage für Gehaltserhöhung.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:40151f463c00dfd98ec8da68ed929b845d58301979d04e14b865aac113c6fb93",
+  "file_hash": "sha256:7e38e15ac5045041864f750370a2291d1a5f3ed7fa36a56bd05a9f9dbd423523",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

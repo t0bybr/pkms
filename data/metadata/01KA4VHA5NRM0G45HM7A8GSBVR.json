@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA5NRM0G45HM7A8GSBVR",
+  "slug": "kubernetes-pods",
+  "path": "vault/2025-08/kubernetes-pods--01KA4VHA5NRM0G45HM7A8GSBVR.md",
+  "title": "Kubernetes Pods",
+  "tags": [
+    "test",
+    "k8s"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.770656Z",
+  "full_text": "# Kubernetes Pods\n\nManaging Kubernetes pods effectively.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:2dd550312cc6f818c38213471bcc281325399881633373f6ba6efcd28820a190",
+  "file_hash": "sha256:c56dfb416a9b728dc610ff6d29f45fb236e872034f03dece37e8f2621b8b97c4",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

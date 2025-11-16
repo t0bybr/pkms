@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9VJBQMB41Y668QJ8NA6",
+  "slug": "email-mentoring",
+  "path": "vault/2025-10/email-mentoring--01KA4VH9VJBQMB41Y668QJ8NA6.md",
+  "title": "Email: Mentoring",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-14T00:00:00",
+  "updated": "2025-11-15T22:52:51.446658Z",
+  "full_text": "# Email: Mentoring\n\nNetzwerk-Anfrage.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:9072e2b13354b1eb851f84e1464b588cab1233f371b769bdbef51e219a84bf4d",
+  "file_hash": "sha256:df02b1400ae69395524a0e95fb7f561cda1ee501a8791561783819fe67f50803",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

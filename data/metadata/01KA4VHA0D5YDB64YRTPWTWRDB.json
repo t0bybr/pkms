@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA0D5YDB64YRTPWTWRDB",
+  "slug": "skandinavien-nordlichter",
+  "path": "vault/2025-10/skandinavien-nordlichter--01KA4VHA0D5YDB64YRTPWTWRDB.md",
+  "title": "Skandinavien Nordlichter",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.604657Z",
+  "full_text": "# Skandinavien Nordlichter\n\nWinter Aurora Tour.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:279ef811ec0e04b4a98be23f854afc30eac9ef0dd9921c6dd7b6dda98db6cce0",
+  "file_hash": "sha256:fbfb88230b60395d68d8a8eb08ea04b5f49800b2999daa066958bba6e00696c3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

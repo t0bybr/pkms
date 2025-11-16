@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA7THNY16K8BH6RVSSGV",
+  "slug": "ocr-pipeline",
+  "path": "vault/2025-10/ocr-pipeline--01KA4VHA7THNY16K8BH6RVSSGV.md",
+  "title": "OCR Pipeline",
+  "tags": [
+    "test",
+    "ocr"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-06T00:00:00",
+  "updated": "2025-11-15T22:52:51.840655Z",
+  "full_text": "# OCR Pipeline\n\nBuilding robust OCR pipelines.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:8562bf822098f14eff81f9fe95232dc25d4f48d7e4ade14299ba9b855d0c0292",
+  "file_hash": "sha256:1e5a12fbb783095ea898125f51fe2f5654fbcf655043d96e74772f535ffe5de3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

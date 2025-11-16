@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9VBE7TGMBJQZBZ3C76G",
+  "slug": "email-kundigung",
+  "path": "vault/2025-11/email-kundigung--01KA4VH9VBE7TGMBJQZBZ3C76G.md",
+  "title": "Email: Kündigung",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-10T00:00:00",
+  "updated": "2025-11-15T22:52:51.441658Z",
+  "full_text": "# Email: Kündigung\n\nProfessionelle Kündigung.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:3924b8fc15a8b0e3b4564d21bedc7c1c0b192ad2ffe384fa3e0744a15bb30940",
+  "file_hash": "sha256:798d869894760e86dfdee5598471decf4965d6a739f0e755529b47ce69d60a7b",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

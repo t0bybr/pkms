@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9W6NTQJDN3GFE52QHXG",
+  "slug": "email-termin-verschieben",
+  "path": "vault/2025-10/email-termin-verschieben--01KA4VH9W6NTQJDN3GFE52QHXG.md",
+  "title": "Email: Termin verschieben",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-10-06T00:00:00",
+  "updated": "2025-11-15T22:52:51.468658Z",
+  "full_text": "# Email: Termin verschieben\n\nHöfliche Verschiebung.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:2dd957d48c7c6eac6d5ab1393668beeff015a6d7f97731bbb8b39e4567a096bf",
+  "file_hash": "sha256:33e6134b4fd9886e6b985de09fbb7747abe794022a3cf9aa88434aac53a7906a",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

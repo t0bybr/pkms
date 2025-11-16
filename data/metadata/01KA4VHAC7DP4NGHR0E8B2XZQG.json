@@ -1,0 +1,23 @@
+{
+  "id": "01KA4VHAC7DP4NGHR0E8B2XZQG",
+  "slug": "home-assistant-jalousien-windsicherung",
+  "path": "vault/2025-11/home-assistant-jalousien-windsicherung--01KA4VHAC7DP4NGHR0E8B2XZQG.md",
+  "title": "Home Assistant – Jalousien Windsicherung",
+  "tags": [],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-11-15T00:00:00",
+  "updated": "2025-11-15T22:52:51.975654Z",
+  "full_text": "# Ziel\n- Bei starkem Wind alle Jalousien in Sicherheitsposition fahren\n- Automationen sollen lokale Taster weiterhin erlauben, aber mit Limit\n\n# Notizen\n- Winddaten aktuell über Shelly + Logo → MQTT → Home Assistant\n- Schwellenwert z. B. 40 km/h Böen\n- State Machine im Blueprint:\n  - `NORMAL`\n  - `WIND_PROTECT`\n  - `MANUAL_OVERRIDE`\n\n# TODO\n- Hysterese für Windschwelle, damit es nicht flackert\n- Visualisierung im Dashboard (Icon + Textstatus)",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:a3c5f5e00dac4a6960c0065e0d5d4f707e1fa458966125a0db4ba617a9ca5ed0",
+  "file_hash": "sha256:d9f9e9fff125f6d38a8862ea05776ea73e2c935118b2b3ae0a538875cdd4c850",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

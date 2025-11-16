@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA46HX4KHX6GBV30BYWR",
+  "slug": "error-handling",
+  "path": "vault/2025-09/error-handling--01KA4VHA46HX4KHX6GBV30BYWR.md",
+  "title": "Error Handling",
+  "tags": [
+    "test",
+    "programming"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-09-17T00:00:00",
+  "updated": "2025-11-15T22:52:51.725656Z",
+  "full_text": "# Error Handling\n\nRobust error handling patterns.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:5c38fdcecc8d46aade3712dd4f82ece9de09fbd91146709f3c34f032219acdf5",
+  "file_hash": "sha256:8d12bf68df566d77d619e09792b2502c45c18dd201d014284fdee266aab182b3",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

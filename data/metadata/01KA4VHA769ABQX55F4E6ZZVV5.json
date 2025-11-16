@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA769ABQX55F4E6ZZVV5",
+  "slug": "modbus-protocol",
+  "path": "vault/2025-08/modbus-protocol--01KA4VHA769ABQX55F4E6ZZVV5.md",
+  "title": "Modbus Protocol",
+  "tags": [
+    "test",
+    "iot"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-20T00:00:00",
+  "updated": "2025-11-15T22:52:51.821656Z",
+  "full_text": "# Modbus Protocol\n\nImplementing Modbus communication.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:62e9c7b5f5ed45dd82f86f46b3f46adca8c371ce79b56824de367d66d4b0caad",
+  "file_hash": "sha256:c7d14d1f4e6369034d08dfb383bee3ffb9827ace46675c3edce16f9fe96e4120",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

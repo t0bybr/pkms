@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHABB0M1ETRC3NTV1VNZP",
+  "slug": "wcag-accessibility",
+  "path": "vault/2025-11/wcag-accessibility--01KA4VHABB0M1ETRC3NTV1VNZP.md",
+  "title": "WCAG Accessibility",
+  "tags": [
+    "test",
+    "accessibility"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-11-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.950655Z",
+  "full_text": "# WCAG Accessibility\n\nMeeting WCAG 2.2 standards.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:d803d355af95f291b20702187f54c9110880cd7b4223c50395e2109bae4f3c07",
+  "file_hash": "sha256:074a4eaaef4e0f724980212ab8521460a298a5a6715e55e16f2b9e9812e8c395",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

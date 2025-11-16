@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9T2DVWFBXMTN85KK4V1",
+  "slug": "email-dankschreiben",
+  "path": "vault/2025-08/email-dankschreiben--01KA4VH9T2DVWFBXMTN85KK4V1.md",
+  "title": "Email: Dankschreiben",
+  "tags": [
+    "test",
+    "emails"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-08-26T00:00:00",
+  "updated": "2025-11-15T22:52:51.403658Z",
+  "full_text": "# Email: Dankschreiben\n\nNach Vorstellungsgespräch.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:4459956a07c4dd994ae471544648fb45ba0f8d269fc5acd0b3d97f45ca9d5a5a",
+  "file_hash": "sha256:a39209a374acdc07f38b25b2f141b3b620e0268e813b05d7afcabf47cab90df1",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

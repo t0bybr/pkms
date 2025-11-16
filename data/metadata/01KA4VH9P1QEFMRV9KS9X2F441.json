@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9P1QEFMRV9KS9X2F441",
+  "slug": "bewerbung-finanzanalyst",
+  "path": "vault/2025-10/bewerbung-finanzanalyst--01KA4VH9P1QEFMRV9KS9X2F441.md",
+  "title": "Bewerbung Finanzanalyst",
+  "tags": [
+    "test",
+    "bewerbungen"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-09T00:00:00",
+  "updated": "2025-11-15T22:52:51.269659Z",
+  "full_text": "# Bewerbung Finanzanalyst\n\nFinance Position.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:eed27c1056d126994bb75e054a06a2ff36a0f300625d7993253cfc88333bef42",
+  "file_hash": "sha256:5cf45a81a0070fbea91cd090d9892ebe415db5b9a5cac95f278762017650bd75",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA99BXYV1X1RERD10HYF",
+  "slug": "python-venv",
+  "path": "vault/2025-08/python-venv--01KA4VHA99BXYV1X1RERD10HYF.md",
+  "title": "Python Venv",
+  "tags": [
+    "test",
+    "python"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-08-13T00:00:00",
+  "updated": "2025-11-15T22:52:51.885655Z",
+  "full_text": "# Python Venv\n\nManaging Python virtual environments.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:bfe4cbcceb6187da7b6383aa358c3a23e895ca546c9a0cb6eaceb38ffda36128",
+  "file_hash": "sha256:27ea758f069131612890b1b024e827e8491fd530eafa1ab4205fabca7f55132f",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

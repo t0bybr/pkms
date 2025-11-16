@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA00VJE8R36XDXMD6W5F",
+  "slug": "schnitzel-wien",
+  "path": "vault/2025-09/schnitzel-wien--01KA4VHA00VJE8R36XDXMD6W5F.md",
+  "title": "Schnitzel Wien",
+  "tags": [
+    "test",
+    "rezepte"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "de",
+  "created": "2025-09-02T00:00:00",
+  "updated": "2025-11-15T22:52:51.595657Z",
+  "full_text": "# Schnitzel Wien\n\nÖsterreichisches Gericht.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:49ba6e71a441c9d678fac46799b59bf61d4b13f0c438fac57dfcf40896c96646",
+  "file_hash": "sha256:9efd1c0e38fe036c22e44efbaddffa773195123d78ed6fbdd2f429a43f9b8c01",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

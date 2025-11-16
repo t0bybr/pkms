@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VH9YPX68BWHPJ7H181XS8",
+  "slug": "neuseeland-rundreise",
+  "path": "vault/2025-10/neuseeland-rundreise--01KA4VH9YPX68BWHPJ7H181XS8.md",
+  "title": "Neuseeland Rundreise",
+  "tags": [
+    "test",
+    "reiseplaning"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-17T00:00:00",
+  "updated": "2025-11-15T22:52:51.546657Z",
+  "full_text": "# Neuseeland Rundreise\n\n3-Week NZ Trip.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:fc1667a3df0c409fe55d2b1bac8f39d6383d66347e06d36efd3ea138bad4b393",
+  "file_hash": "sha256:2440959583b18ed1bb86511c8a98aba8f5b81fdecd17987b656d10ca6a8a0c2b",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}

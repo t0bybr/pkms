@@ -1,0 +1,26 @@
+{
+  "id": "01KA4VHA86ZKKY5E2Y01XP29CF",
+  "slug": "open-source-licenses",
+  "path": "vault/2025-10/open-source-licenses--01KA4VHA86ZKKY5E2Y01XP29CF.md",
+  "title": "Open Source Licenses",
+  "tags": [
+    "test",
+    "opensource"
+  ],
+  "aliases": [],
+  "categories": [],
+  "language": "en",
+  "created": "2025-10-07T00:00:00",
+  "updated": "2025-11-15T22:52:51.856655Z",
+  "full_text": "# Open Source Licenses\n\nUnderstanding open source licenses.\n\nThis is a test file for documentation purposes.",
+  "links": [],
+  "backlinks": [],
+  "content_hash": "sha256:4bb88e8f28248afc33ab70ab074add415b7cd6f24e02e9dddb6c15ac8b046508",
+  "file_hash": "sha256:b0088f8a9ab844678d6f6b263df82ff4b7e1c556fe45ffee9c846da35ce5ce90",
+  "status": {
+    "relevance_score": 1.0,
+    "archived": false
+  },
+  "facets": {},
+  "doc_type": "note"
+}
