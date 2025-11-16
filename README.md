@@ -1,10 +1,10 @@
 # PKMS - Personal Knowledge Management System
 
-**Version:** 0.3.0
+**Version:** 0.3.1
 **Status:** Alpha - Active Development
 **License:** MIT
 
-A versioned, agent-compatible knowledge management system with hybrid search, semantic chunking, and git-based synthesis workflows.
+A versioned, agent-compatible knowledge management system with hybrid search, semantic chunking, automated tagging, review queues, and MCP agent integration.
 
 ---
 
@@ -17,11 +17,12 @@ A versioned, agent-compatible knowledge management system with hybrid search, se
 5. [Quick Start](#-quick-start)
 6. [Workflow](#-workflow)
 7. [CLI Tools](#️-cli-tools)
-8. [Configuration](#️-configuration)
-9. [Data Formats](#-data-formats)
-10. [Development](#-development)
-11. [Troubleshooting](#-troubleshooting)
-12. [Resources](#-resources)
+8. [Agent Integration](#-agent-integration)
+9. [Configuration](#️-configuration)
+10. [Data Formats](#-data-formats)
+11. [Development](#-development)
+12. [Troubleshooting](#-troubleshooting)
+13. [Resources](#-resources)
 
 ---
 
@@ -52,17 +53,21 @@ PKMS v0.3 is a **Personal Knowledge Management System** designed for:
 | Feature | Description | Tool |
 |---------|-------------|------|
 | **Inbox → Vault** | Staging workflow with auto-normalization | `pkms-ingest` |
+| **Vault Updates** | Update metadata for existing vault files | `pkms-update` |
 | **ULID in Filename** | Single source of truth (not in frontmatter) | Automatic |
 | **Markdown Ingestion** | Parse frontmatter, auto-detect language | `pkms-ingest` |
 | **Semantic Chunking** | Hierarchical (by headings) + semantic splitting | `pkms-chunk` |
 | **Wikilink Resolution** | Bidirectional links with multiple resolution strategies | `pkms-link` |
 | **Embeddings** | Ollama integration with LRU caching and incremental updates | `pkms-embed` |
-| **Search Indexing** | Incremental Whoosh BM25 index builder | `pkms-index` |
-| **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with RRF fusion | `pkms-search` |
+| **Search Indexing** | Incremental Whoosh BM25 index with German stemming | `pkms-index` |
+| **Hybrid Search** | BM25 (Whoosh) + Cosine (NumPy) with weighted RRF fusion | `pkms-search` |
+| **LLM Tagging** | Automated tag suggestions using Ollama with taxonomy control | `pkms-tag` |
+| **Review Queue** | Git-native approval workflow for automated operations | `pkms-review` |
 | **Relevance Scoring** | Formula-based: `0.4*recency + 0.3*links + 0.2*quality + 0.1*user` | `pkms-relevance` |
 | **Archive Policy** | Automated archiving based on score + age thresholds | `pkms-archive` |
+| **MCP Server** | Model Context Protocol server for AI agent integration | MCP Server |
 | **Git Synthesis** | Branch-based consolidation workflow | `pkms-synth` 🚧 |
-| **Configuration** | Centralized `.pkms/config.toml` with path resolution | Config system |
+| **Configuration** | Centralized `.pkms/config.toml` with ENV override support | Config system |
 
 ### 🚧 In Progress
 
@@ -345,6 +350,33 @@ pkms-ingest --source notes/     # Custom source directory
 
 ---
 
+### pkms-update
+
+**Update metadata for existing vault files**
+
+Update metadata records for notes already in the vault (without moving them).
+
+```bash
+pkms-update                          # Update all vault files
+pkms-update vault/2025-11/note.md    # Update single file
+pkms-update vault/2025-11/           # Update specific directory
+```
+
+**What it does:**
+- Reads existing notes from `vault/`
+- Parses frontmatter and content
+- Updates metadata JSON in `data/metadata/{ULID}.json`
+- Does NOT move files (unlike `pkms-ingest`)
+
+**When to use:**
+- After manually editing vault notes
+- After changing frontmatter (tags, title, etc.)
+- When metadata is out of sync with content
+
+**Note:** Use `pkms-ingest` for inbox → vault, use `pkms-update` for vault → metadata updates.
+
+---
+
 ### pkms-chunk
 
 **Metadata → Chunks**
@@ -451,6 +483,100 @@ pkms-search info                                 # Show engine stats
 
 ---
 
+### pkms-tag
+
+**Automated tagging with LLM assistance**
+
+Use Ollama to analyze notes and suggest tags based on content and taxonomy.
+
+```bash
+pkms-tag                         # Tag all notes (interactive mode)
+pkms-tag vault/note.md           # Tag single note
+pkms-tag --only-empty            # Only notes without tags
+pkms-tag --queue                 # Queue suggestions for review
+pkms-tag --auto                  # Apply tags automatically (use with caution!)
+pkms-tag --verify                # Re-analyze existing tags
+pkms-tag --suggest-new           # Allow suggesting tags not in taxonomy
+```
+
+**Modes:**
+- **Interactive (default):** Show suggestions, ask for approval
+- **Queue (`--queue`):** Create review for later approval (automated workflows)
+- **Auto (`--auto`):** Apply tags directly without review (use carefully!)
+
+**What it does:**
+1. Reads note title and content
+2. Sends to Ollama LLM with taxonomy context
+3. Gets tag and category suggestions with confidence score
+4. Shows suggestions for approval (or queues/auto-applies based on mode)
+5. Updates frontmatter if approved
+
+**Requirements:**
+- Ollama running with a chat model (e.g., `qwen2.5-coder:latest`)
+- Taxonomy file: `.pkms/taxonomy.toml`
+
+**Configuration:** See `[llm]` in `.pkms/config.toml`
+
+**Example output:**
+```
+File: pizza-recipe.md
+Title: Pizza Neapolitana
+
+Suggested tags:     cooking, italian, recipe, pizza
+Suggested category: cooking
+Confidence:         0.89
+
+[a]pprove / [r]eject / [e]dit / [s]kip:
+```
+
+---
+
+### pkms-review
+
+**Review queue for automated operations**
+
+Manage pending reviews created by automated tools (like `pkms-tag --queue`).
+
+```bash
+pkms-review list              # Show all pending reviews
+pkms-review interactive       # Review pending items interactively
+pkms-review show <id>         # Show specific review details
+pkms-review approve <id>      # Approve specific review
+pkms-review reject <id>       # Reject specific review
+```
+
+**What it does:**
+- Lists pending reviews created by automated operations
+- Shows details about suggested changes
+- Allows approval/rejection of changes
+- Automatically applies approved changes (e.g., updating taxonomy)
+
+**Review types:**
+- `tag_approval` - New tag suggestions from `pkms-tag`
+- (More types can be added by tools)
+
+**Example workflow:**
+```bash
+# 1. Auto-tag notes (creates review)
+pkms-tag --queue
+
+# 2. Review suggestions
+pkms-review list
+# → 1 pending: tag_approval_20251116_143022 (5 new tags)
+
+# 3. Approve interactively
+pkms-review interactive
+# → Shows each new tag with usage count
+# → [a]pprove / [r]eject for each
+
+# 4. Changes are applied automatically
+# → taxonomy.toml updated with approved tags
+```
+
+**Configuration:** Reviews stored in `data/queue/reviews/`
+
+---
+
 ### pkms-relevance
 
 **Compute relevance scores using formula.**
@@ -509,6 +635,79 @@ pkms-synth --create 0        # Create synthesis
 
 ---
 
+## 🤖 Agent Integration
+
+PKMS can be integrated with AI agents via the **Model Context Protocol (MCP)** server. This allows agents like Cline (VSCode) or Claude Desktop to search, read, and update your knowledge base.
+
+### MCP Server
+
+The MCP server exposes 5 core tools:
+
+| Tool | Description |
+|------|-------------|
+| `search` | Search the knowledge base (hybrid BM25 + semantic) |
+| `get_note` | Retrieve specific note by ULID |
+| `list_notes` | List all notes with optional filters |
+| `update_metadata` | Update metadata for vault files |
+| `rebuild_indexes` | Rebuild search indexes |
+
+### Quick Setup
+
+**1. Install MCP dependencies:**
+```bash
+pip install -e ".pkms/[mcp]"
+```
+
+**2. Configure your agent:**
+
+**For Cline (VSCode):**
+```json
+{
+  "mcpServers": {
+    "pkms": {
+      "command": "python",
+      "args": ["/absolute/path/to/pkms/.pkms/mcp_server.py"],
+      "env": {
+        "PKMS_ROOT": "/absolute/path/to/pkms"
+      }
+    }
+  }
+}
+```
+
+**For Claude Desktop:**
+```json
+{
+  "mcpServers": {
+    "pkms": {
+      "command": "python",
+      "args": ["/absolute/path/to/pkms/.pkms/mcp_server.py"],
+      "env": {
+        "PKMS_ROOT": "/absolute/path/to/pkms"
+      }
+    }
+  }
+}
+```
+
+**3. Restart your agent** and start using PKMS tools!
+
+### Example Usage
+
+Once configured, you can ask your agent:
+
+- "Search for notes about pizza recipes"
+- "Show me the note with ULID 01HAR6DP..."
+- "List all notes from November 2025"
+- "Update metadata for all vault files"
+- "Rebuild the search index"
+
+### Advanced Setup
+
+See **[.pkms/MCP_SETUP.md](.pkms/MCP_SETUP.md)** for detailed setup instructions, troubleshooting, and Docker integration.
+
+---
+
 ## ⚙️ Configuration
 
 ### .pkms/config.toml
@@ -538,14 +737,23 @@ date_format = "%Y-%m"          # YYYY-MM for monthly folders
 date_field = "date_created"    # Options: date_created, date_updated, date_semantic
 
 [embeddings]
-model = "nomic-embed-text"
+# Recommended for German: jina/jina-embeddings-v2-base-de:latest
+model = "jina/jina-embeddings-v2-base-de:latest"
 ollama_url = "http://localhost:11434"
+
+[llm]
+# Chat model for LLM operations (tagging, summarization, etc.)
+# Recommended: qwen2.5-coder (fast, good at analysis), llama3.1, mistral
+model = "qwen2.5-coder:latest"
+ollama_url = "http://localhost:11434"
+temperature = 0.3           # Lower = more deterministic (0.0-1.0)
+max_tokens = 2000
 
 [search]
 bm25_weight = 0.5           # Weight for BM25 in hybrid search (0.0-1.0)
 semantic_weight = 0.5       # Weight for semantic in hybrid search (0.0-1.0)
-min_similarity = 0.3        # Minimum semantic similarity threshold
-min_rrf_score = 0.0         # Minimum RRF score to show (0.01 filters noise)
+min_similarity = 0.2        # Minimum semantic similarity threshold (lowered for better recall)
+min_rrf_score = 0.0005      # Minimum RRF score to show (filters noise)
 max_keyword_hits = 50       # Max BM25 results before fusion
 max_semantic_hits = 50      # Max semantic results before fusion
 rrf_k = 60                  # RRF parameter (higher = smoother fusion)
@@ -745,6 +953,8 @@ See [PROBLEMS.md](PROBLEMS.md) for complete list.
 ### Documentation
 
 - **[TUTORIAL.md](TUTORIAL.md)** - Python basics with PKMS examples
+- **[TAGGING_GUIDE.md](TAGGING_GUIDE.md)** - Automated tagging, taxonomy, and review workflows
+- **[.pkms/MCP_SETUP.md](.pkms/MCP_SETUP.md)** - MCP server setup for agent integration
 - **[PROBLEMS.md](PROBLEMS.md)** - Code review findings
 - **[plan.md](plan.md)** - Architectural design doc (may be outdated)
 
@@ -764,6 +974,39 @@ MIT License - see LICENSE file
 ---
 
 ## 📝 Changelog
+
+### v0.3.1 (2025-11-16)
+
+**Added:**
+- ✨ **pkms-update** - Update metadata for existing vault files
+- ✨ **pkms-tag** - LLM-based automated tagging with Ollama
+- ✨ **pkms-review** - Git-native review queue for automated operations
+- ✨ **MCP Server** - Model Context Protocol server for agent integration
+- ✨ **taxonomy.toml** - Controlled vocabulary for consistent tagging
+- ✨ **[llm]** config section - Separate chat model configuration
+- ✨ **German stemming** - Whoosh BM25 with German language support
+- ✨ **Weighted RRF** - Configurable weights for hybrid search fusion
+- ✨ **Git hooks** - post-merge hook for review notifications
+- ✨ **Cline integration** - user-prompt-submit-hook for review checks
+
+**Changed:**
+- 🔄 Embedding model → `jina/jina-embeddings-v2-base-de:latest` (German-optimized)
+- 🔄 min_similarity → 0.2 (lowered for better recall)
+- 🔄 Search filtering → Filter before limit (not after)
+- 🔄 Debug output → stderr (for clean JSON output)
+
+**Fixed:**
+- ✅ Semantic search quality for German text
+- ✅ pkms-update Path object handling
+- ✅ parse_file unpacking (2 values, not 3)
+- ✅ min_similarity filtering order
+- ✅ SearchEngine missing min_similarity parameter
+
+**Documentation:**
+- ✅ Updated README.md with new tools
+- ✅ Added MCP_SETUP.md for agent integration
+- ✅ Added review queue workflow documentation
+- ✅ Updated configuration examples
 
 ### v0.3.0 (2025-11-15)
 
