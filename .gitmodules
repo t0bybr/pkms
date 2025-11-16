@@ -1,0 +1,3 @@
+[submodule ".pkms"]
+	path = .pkms
+	url = /var/home/t0bybr/containers/pkms-core
